@@ -1,6 +1,7 @@
 h1 {
     font-size: 1400%;
     color: tomato;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
 h3 {
@@ -13,7 +14,7 @@ h3 {
 }
 
 a:hover {
-    box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 0 2vh 0 rgba(0, 0, 0, 0), 0 0 2vh 0 rgba(0, 0, 0, 0);
 }
 
 div {
