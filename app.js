@@ -15,11 +15,12 @@ const express = require('express');
 const path = require('path');
 const io = require('socket.io')(http);
 const bcrypt = require('bcryptjs');
-const saltRounds = 10;
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+const saltRounds = 10;
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // Ser tilll så att cookie / session data går att avläsas
 app.use(cookieParser());
@@ -48,12 +49,11 @@ app.get('/register', function (req, res) {
 });
 
 // Register post 
-app.post('/register', function (req, res) {
-  let registrationPasswordInput = data.registerPassword;
-  let registrationPasswordInputRepete = data.registerRepetePassword;
-  let registrationUsernameInput = data.registerUsername;
+app.post('/register', urlencodedParser, function (req, res) {
+  let registrationPasswordInput = req.body.registerPassword;
+  let registrationPasswordInputRepete = req.body.registerPasswordRepete;
+  let registrationUsernameInput = req.body.registerUsername;
   registerAccountFunction(registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput);
-
 
   // REGISTER FUNCTIONS
   // Checks if inputs have correct format and if so then creates account
@@ -88,18 +88,23 @@ app.post('/register', function (req, res) {
     let checkPassMatchRegistrationVariable = checkPasswordMatchRegistration(registrationPasswordInput, registrationPasswordInputRepete);
     let checkUsernameRegistrationFormatVariable = checkUsernameFormatRegistration(registrationUsernameInput);
     let checkPasswordRegistrationVariable = checkPasswordRegistration(registrationPasswordInput);
-    console.log(checkUsernameRegistrationVariable);
+    console.log(registrationPasswordInput);
+    let resultObj = {
+      registrationPasswordInputError: checkPasswordRegistrationVariable,
+      registrationPasswordInputRepeteError: checkPassMatchRegistrationVariable,
+      registrationUsernameInputError: checkUsernameRegistrationVariable,
+      registrationUsernameInputFormatError: checkUsernameRegistrationFormatVariable,
+    };
+    console.log(JSON.stringify(resultObj));
 
     if (checkPassMatchRegistrationVariable && checkUsernameRegistrationVariable && checkPasswordRegistrationVariable && checkUsernameFormatRegistration) {
-      //socket.emit('registerSuccess', {});
+
       registerNewUser(registrationPasswordInput, registrationUsernameInput);
+      res.send(JSON.stringify(resultObj));
+      res.end();
     } else {
-      /*socket.emit('registerAttemptFail', {
-        registerPasswordResponse: checkPasswordRegistrationVariable,
-        registerRepetePasswordResponse: checkPassMatchRegistrationVariable,
-        registerUsernameResponse: checkUsernameRegistrationVariable,
-        registerUsernameResponseFormat: checkUsernameRegistrationFormatVariable
-      });*/
+      res.send(JSON.stringify(resultObj));
+      res.end();
     }
   }
 });
@@ -225,6 +230,7 @@ function checkUsernameFormatRegistration(registrationUsernameInput) {
 // Om det är det returnar den true annar returnar den false
 function checkPasswordRegistration(registrationPasswordInput) {
   let regExCheckFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  console.log(registrationPasswordInput+ "asdasdasdasdsa");
   if (regExCheckFormat.test(registrationPasswordInput)) {
     return true;
   } else return false;

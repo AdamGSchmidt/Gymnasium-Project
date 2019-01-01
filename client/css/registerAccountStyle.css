@@ -26,7 +26,6 @@
   border: solid black 1px;
   box-shadow: 0 0 5vh 0 rgba(0, 0, 0, 0.24), 0 0 5vh 0 rgba(0, 0, 0, 0.19);
   visibility: hidden;
-  /* Ändra denna */
 }
 
 #registerBtn {
@@ -36,10 +35,15 @@
   position: absolute;
   top: 73%;
   background-color: tomato;
+  border-style: none;
 }
 
 #registerBtn:hover {
   box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#registerBtn:focus {
+  outline: none;
 }
 
 #loginLink:hover {
