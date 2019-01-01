@@ -1,0 +1,111 @@
+#loginBtn {
+  width: 80%;
+  height: 6vh;
+  left: 10%;
+  position: absolute;
+  top: 73%;
+}
+
+#regestrationLink:hover {
+  text-decoration: underline;
+  text-decoration-color: #777777;
+  color: #777777;
+}
+
+#regestrationLinkContainer {
+  width: 80%;
+  position: absolute;
+  top: 87%;
+  text-align: center;
+  left: 10%;
+}
+
+#regestrationLink {
+  text-align: center;
+  left: 20%;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 90%;
+}
+
+#inputTitle {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 150%;
+}
+
+#usernameInput {
+  top: 12vh;
+}
+
+#passwordInput {
+  top: 22vh;
+}
+
+#indexCanvisContainer {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  left: 7.5%;
+  border-radius: 4%;
+}
+
+#indexCanvas {
+  border-radius: 4%;
+  border: 1px groove black;
+}
+
+#inputSection {
+  width: 45%;
+  height: 80%;
+  position: absolute;
+  top: 5vh;
+  left: 55%;
+}
+
+#showcaseSectionIndex {
+  width: 55%;
+  height: 80%;
+  position: absolute;
+  top: 5vh;
+  left: 0%;
+}
+
+#loginSection {
+  border: 1px groove black;
+  height: 66vh;
+  width: 60%;
+  position: absolute;
+  top: 20vh;
+  left: 20%;
+  border-radius: 4%;
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#inputErrorSection {
+  width: 80%;
+  height: 10%;
+  position: absolute;
+  top: 55%;
+  left: 10%;
+  font-size: 80%;
+}
+
+.inputBorder {
+  border: 1px groove black;
+}
+
+.indexInput {
+  width: 80%;
+  height: 6vh;
+  margin: 0px;
+  padding: 0%;
+  padding-left: 4%;
+  box-sizing: border-box;
+  left: 10%;
+  position: absolute;
+}

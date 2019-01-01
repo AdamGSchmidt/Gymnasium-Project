@@ -1,0 +1,206 @@
+#registerAccountContainer {
+  height: 66vh;
+  width: 100%;
+  position: absolute;
+  top: 17%;
+}
+
+#registerAccountInputSection {
+  width: 36%;
+  height: 100%;
+  position: absolute;
+  left: 32%;
+  background-color: white;
+  border: solid black 1px;
+  border-radius: 4%;
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#registerAccountSuccessMessage {
+  position: absolute;
+  background-color: white;
+  width: 30%;
+  height: 40%;
+  top: 30%;
+  left: 35%;
+  border: solid black 1px;
+  box-shadow: 0 0 5vh 0 rgba(0, 0, 0, 0.24), 0 0 5vh 0 rgba(0, 0, 0, 0.19);
+  visibility: hidden;
+  /* Ändra denna */
+}
+
+#registerBtn {
+  width: 70%;
+  height: 8%;
+  left: 15%;
+  position: absolute;
+  top: 73%;
+  background-color: tomato;
+}
+
+#registerBtn:hover {
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#loginLink:hover {
+  text-decoration: underline;
+  text-decoration-color: #777777;
+  color: #777777;
+}
+
+#loginLinkContainer {
+  width: 80%;
+  position: absolute;
+  top: 87%;
+  text-align: center;
+  left: 10%;
+}
+
+#loginLink {
+  text-align: center;
+  left: 20%;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 90%;
+}
+
+.registerInput {
+  height: 8%;
+  margin: 0px;
+  padding: 0%;
+  padding-left: 4%;
+  box-sizing: border-box;
+  left: 15%;
+  position: absolute;
+}
+
+#passwordRepeatInputRegister {
+  top: 58.5%;
+  width: 70%;
+}
+
+#passwordInputRegister {
+  top: 35%;
+  width: 70%;
+}
+
+#passwordRegisterTooltip {
+  background-color: tomato;
+  visibility: hidden;
+  position: absolute;
+  width: fit-content;
+  padding-left: 2%;
+  padding-right: 1%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  height: auto;
+  left: 87%;
+  top: 34%;
+  text-align: left;
+  font-size: 70%;
+  font-weight: 500;
+  color: black;
+  border-radius: 4%;
+  border: solid black 1px;
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+/*passwordRegisterTooltip är tooltip box och tooltip text */
+#passwordInputRegister:focus+#passwordRegisterTooltip {
+  visibility: visible;
+}
+
+#passwordRegisterTooltip::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  /* To the left of the tooltip */
+  margin-top: -8%;
+  border-width: thick;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+
+#usernameInputRegister {
+  top: 18%;
+  width: 70%;
+}
+
+#registerInputTitle {
+  position: absolute;
+  top: 6%;
+  width: 100%;
+  text-align: center;
+  font-size: 150%;
+  height: 8%;
+}
+
+#usernameErrorMessageSection {
+  height: 7%;
+  top: 26.5%;
+}
+
+#passwordErrorMessageSection {
+  height: 12%;
+  top: 44%;
+}
+
+#passwordRepeteErrorMessageSection {
+  height: 4%;
+  top: 67%;
+}
+
+.errorMessageRegister {
+  position: absolute;
+  font-size: 80%;
+  width: 70%;
+  left: 15%;
+}
+
+#registerSuccessLink {
+  text-decoration: none;
+  color: black;
+  height: 100%;
+  width: 100%;
+  background-color: tomato;
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-bottom: 5%;
+  padding-top: 5%;
+  align-self: center;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+#registerSuccessLinkContainer {
+  width: 80%;
+  height: 20%;
+  position: absolute;
+  left: 10%;
+  top: 55%;
+  text-align: center;
+}
+
+#registerSuccessLink:hover {
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#registerSuccessMessageTitle {
+  position: absolute;
+  top: 16%;
+  width: 100%;
+  text-align: center;
+  font-size: 150%;
+  height: 8%;
+  font-weight: bolder;
+}
+
+#registerCanvasContainer {
+  width: 100%;
+  height: 100vh;
+}
