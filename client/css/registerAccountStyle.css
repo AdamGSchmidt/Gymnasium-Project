@@ -36,6 +36,8 @@
   top: 73%;
   background-color: tomato;
   border-style: none;
+  font-weight: bold;
+  font-size: 120%;
 }
 
 #registerBtn:hover {
