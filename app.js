@@ -32,6 +32,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+console.log(app.session);
 
 // Ser till att static filer i client som registerAccount.html går att nå
 const clientPath = path.resolve(__dirname, 'client/');
@@ -40,7 +41,6 @@ app.use(express.static(clientPath));
 // Start är index, när man kommer till sidan så börjar man på index
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/client/index.html');
-  // console.log(req.session);
 });
 
 // Register får rätt fil
@@ -112,6 +112,14 @@ app.post('/register', urlencodedParser, function (req, res) {
 // Lyssna efter anslutningar
 http.listen(3000, function () {
   console.log('listening on :3000');
+});
+
+app.get('/404', function(req, res) {
+  res.sendFile(__dirname + '/client/html/404.html');
+});
+
+app.get('*', function(req, res) {
+  res.redirect('/404');
 });
 
 console.log("SERVER START");
@@ -230,7 +238,7 @@ function checkUsernameFormatRegistration(registrationUsernameInput) {
 // Om det är det returnar den true annar returnar den false
 function checkPasswordRegistration(registrationPasswordInput) {
   let regExCheckFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-  console.log(registrationPasswordInput+ "asdasdasdasdsa");
+  console.log(registrationPasswordInput + "asdasdasdasdsa");
   if (regExCheckFormat.test(registrationPasswordInput)) {
     return true;
   } else return false;
