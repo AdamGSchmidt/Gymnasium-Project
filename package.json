@@ -1,5 +1,5 @@
 {
-  "name": "project_v1.01",
+  "name": "gymnasiumproject",
   "version": "1.0.0",
   "description": "project",
   "main": "app.js",
@@ -17,5 +17,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Adam Schmidt",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamGSchmidt/Gymnasium-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AdamGSchmidt/Gymnasium-Project/issues"
+  },
+  "homepage": "https://github.com/AdamGSchmidt/Gymnasium-Project#readme"
 }
