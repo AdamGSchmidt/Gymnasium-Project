@@ -139,16 +139,16 @@
 <body onresize=resize()>
     <div id="loginContainer">
         <section id="loginSection">
-            <section id="inputSection">
+            <form id="inputSection" action="javascript:login()">
                 <p id="inputTitle">Account Login</p>
                 <input type="text" placeholder="Username" spellcheck="false" class="indexInput inputBorder" id="usernameInput">
                 <input type="password" placeholder="Password" class="indexInput inputBorder" id="passwordInput">
                 <section id="inputErrorSection"></section>
-                <button id="loginBtn" class="inputBtn" onclick=login()>Login</button>
+                <input type="submit" value="Login" id="loginBtn" class="inputBtn">
                 <div id='regestrationLinkContainer'>
                     <a href="/register" id="regestrationLink">Register Acount ></a>
                 </div>
-            </section>
+            </form>
             <section id="showcaseSectionIndex">
                 <div id="indexCanvisContainer">
                     <canvas id="indexCanvas"></canvas>

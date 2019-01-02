@@ -15,17 +15,3 @@ input:focus {
   outline-style: auto;
   outline-width: 10px
 }
-
-button {
-  background-color: tomato;
-  padding: 1%;
-  font-weight: bold;
-  font-size: 120%;
-  border-style: solid;
-  border-color: black;
-  border-width: 1px;
-}
-
-button:hover {
-  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
-}

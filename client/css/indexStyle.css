@@ -4,6 +4,18 @@
   left: 10%;
   position: absolute;
   top: 73%;
+  background-color: tomato;
+  border-style: none;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+#loginBtn:hover {
+  box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#loginBtn:focus {
+  outline: none;
 }
 
 #regestrationLink:hover {
