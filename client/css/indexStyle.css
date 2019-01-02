@@ -8,6 +8,7 @@
   border-style: none;
   font-weight: bold;
   font-size: 120%;
+  border: solid black 1px;
 }
 
 #loginBtn:hover {

@@ -29,6 +29,7 @@
 }
 
 #registerBtn {
+  border: solid black 1px;
   width: 70%;
   height: 8%;
   left: 15%;

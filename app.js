@@ -150,7 +150,7 @@ app.post('/login', urlencodedParser, function (req, res) {
 
   // login fail
   function loginAttemptFail() {
-    res.send({login: false});
+    res.send({ login: false });
     res.end();
     console.log("User login fail");
   }
@@ -162,9 +162,28 @@ app.post('/login', urlencodedParser, function (req, res) {
     req.session['login'] = true;
     req.session['username'] = loginUsernameInput;
     console.log(req.session);
-    res.send({redirect: '/game'});
+    res.send({ redirect: '/game' });
     res.end();
   }
+});
+
+app.get('/game', function (req, res) {
+  if (req.session['login'] === true) {
+    res.sendFile(__dirname + '/client/html/game.html');
+  } else {
+    res.redirect('/');
+  }
+});
+
+app.post('/game', urlencodedParser, function (req, res) {
+  res.send({ Username: req.session['username'] });
+  res.end();
+});
+
+app.post('/logout', urlencodedParser, function (req, res) {
+  req.session['login'] = false;
+  req.session['username'] = null;
+  res.end();
 });
 
 app.get('*', function (req, res) {

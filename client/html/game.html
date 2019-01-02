@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/game.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        // Ändrar canvasa storlek
+        function resize() {
+            let containerSize = document.getElementById('gameCanvasContainer');
+            let c = document.querySelector("#gameCanvas");
+            canvasWidth = containerSize.offsetWidth;
+            console.log(canvasWidth);
+            canvasHeight = containerSize.offsetHeight;
+            console.log(canvasHeight);
+            // Sätter det nya värderna
+            c.width = canvasWidth;
+            c.height = canvasHeight;
+        }
+
+        function getUser() {
+            $.ajax({
+                type: "POST",
+                url: "/game",
+                timeout: 2000,
+                data: {},
+                success: function (data) {
+
+                    let username = data.Username;
+                    setUser(username);
+                },
+                error: function (jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+        }
+
+        function logout() {
+            $.ajax({
+                type: "POST",
+                url: "/logout",
+                timeout: 2000,
+                data: {},
+                success: function (data) {
+                    window.location.replace(window.location.protocol + "//" + window.location.host + '/');
+                },
+                error: function (jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+        }
+
+        function setUser(username) {
+            document.getElementById('usernameText').innerHTML = username;
+        }
+    </script>
+</head>
+
+<body onload=getUser() onresize=resize()>
+    <div id="gameCanvasContainer">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    <div id="usernameContainer">
+        <button id="logoutBtn" onclick=logout()>Logout</button>
+        <section id="usernameSection">
+            <p id="usernameText"></p>
+        </section>
+    </div>
+</body>
+
+</html>
