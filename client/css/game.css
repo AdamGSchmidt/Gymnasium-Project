@@ -18,16 +18,15 @@
 
 #logoutBtn {
     border: solid black 1px;
-    width: fit-content;
-    height: 83%;
+    width: 45%;
+    height: 84%;
     left: 2%;
     position: relative;
     background-color: tomato;
     font-weight: bold;
     font-size: 100%;
-    padding-right: 10%;
-    padding-left: 10%;
     top: 10%;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }
 
 #logoutBtn:hover {
@@ -35,6 +34,7 @@
 }
 
 #usernameSection{
+    background-color: white;
     position: absolute;
     padding-right: 5%;
     padding-left: 5%;
@@ -43,7 +43,11 @@
     top: 10%;
     margin-left: 50%;
     text-align: center;
-    line-height: 250%;
     border: solid black 1px;
-    margin-left: 80%;
+    /*margin-left: 45%; */
+    margin-left: calc(47% + 3px);
+    display:flex;
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }

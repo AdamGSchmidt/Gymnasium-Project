@@ -29,37 +29,65 @@
 
         // Draw all objects 
         function draw() {
-            // Clear canvas
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
+            drawGrid();
             // draw pllayer
             ctx.beginPath();
-                ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
-                ctx.closePath();
-                ctx.fillStyle = "#000000";
-                ctx.fill();
+            ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
+            ctx.closePath();
+            ctx.fillStyle = "#000000";
+            ctx.fill();
+        }
+
+        function drawGrid() {
+
+            c = document.getElementById("gameCanvas");
+            ctx = c.getContext("2d");
+            // Clear canvas
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // draw grid
+            for (let index = 0; index < 131; index++) {
+                ctx.strokeStyle = "#aaaaaa";
+                ctx.beginPath();
+                ctx.moveTo(0, 20 * index);
+                ctx.lineTo(2600, 20 * index);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(20 * index, 0);
+                ctx.lineTo(20 * index, 2600);
+                ctx.stroke();
+            }
+            // draw border
+            ctx.beginPath();
+            ctx.strokeStyle = "#000000";
+            ctx.rect(0, 0, 2600, 2600);
+            ctx.stroke();
+
         }
 
         // Listen for keyinputs
         document.addEventListener('keydown', function (event) {
             if (event.keyCode == 37 || event.keyCode == 65) {
                 console.log('⇦');
+                playerPosition.xCord -= 2;
                 draw();
             }
             else if (event.keyCode == 39 || event.keyCode == 68) {
                 console.log('⇨');
+                playerPosition.xCord += 2;
                 draw();
             }
             else if (event.keyCode == 38 || event.keyCode == 87) {
                 console.log('⇧');
+                playerPosition.yCord -= 2;
                 draw();
             }
             else if (event.keyCode == 40 || event.keyCode == 83) {
                 console.log('⇩');
+                playerPosition.yCord += 2;
                 draw();
             }
         });
@@ -70,7 +98,7 @@
             let c = document.querySelector("#gameCanvas");
             canvasWidth = containerSize.offsetWidth;
             console.log(canvasWidth);
-            canvasHeight = containerSize.offsetHeight -3;
+            canvasHeight = containerSize.offsetHeight - 3;
             console.log(canvasHeight);
             // Sätter det nya värderna
             c.width = canvasWidth;
@@ -128,7 +156,7 @@
     <div id="usernameContainer">
         <button id="logoutBtn" onclick=logout()>Logout</button>
         <section id="usernameSection">
-            <p id="usernameText"></p>
+            <span id="usernameText"></span>
         </section>
     </div>
 </body>

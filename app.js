@@ -1,6 +1,7 @@
 /*
   DET SOM MÅSTE GÖRAS
     SAnatize function 
+    Change input method from keybord to mouse;
 */
 
 // Initiala variabler
