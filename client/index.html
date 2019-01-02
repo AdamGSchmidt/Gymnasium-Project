@@ -2,17 +2,15 @@
 
 <head>
     <title>Login</title>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link rel="shortcut icon" href="images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="css/indexStyle.css">
     <link rel="stylesheet" type="text/css" href="css/mainStyle.css">
     <script src="js/indexScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!--Dett script eller majoriteten av den bör flyttas till indexScript.js filen-->
     <script>
 
-        // Skapar socket
-        var socket = io();
         // DEKLARATION AV X OCH Y
         var x_cord;
         var y_cord;
@@ -55,7 +53,6 @@
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // Tar fram nya x och y kordinater
-            console.log(trigValue);
             x_cord = 50 * Math.cos(trigValue);
             y_cord = 50 * Math.sin(trigValue);
 
@@ -106,22 +103,31 @@
             c.height = canvasHeight;
         }
 
-        //Tillfällig function som ändast skriver ut felmedelanden
-        // *** Updatera ****
-        // verificationError ska kallas om det äe fel lösen  och eller namn,
-        // networkError ska kallas då anda fel med inlågningen uppstår
+        // Ajax login post tar svaret och sckikar användaren till en annan sida eller skriver felmedelanden
         function login() {
             let passwordInput = document.getElementById('passwordInput').value;
             let usernameInput = document.getElementById('usernameInput').value;
-            socket.emit('loginAttempt', {
-                loginPassword: passwordInput,
-                loginUsername: usernameInput
+            console.log(usernameInput + " " + passwordInput);
+
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                timeout: 2000,
+                data: { passwordInput: passwordInput, usernameInput: usernameInput },
+                success: function (data) {
+                    if (typeof data.redirect == 'string') {
+                        window.location.replace(window.location.protocol + "//" + window.location.host + data.redirect);
+                    }
+                    else {
+                        if(!data.login){
+                            verificationError();
+                        }
+                    }
+                },
+                error: function (jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
             });
-            /*
-              document.getElementById('inputErrorSection').innerHTML = "";
-              verificationError();
-              networkError();
-              */
         }
         // Skriver ut nätverksfelmedelandet
         function networkError() {

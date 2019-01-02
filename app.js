@@ -109,17 +109,71 @@ app.post('/register', urlencodedParser, function (req, res) {
   }
 });
 
-// Lyssna efter anslutningar
-http.listen(3000, function () {
-  console.log('listening on :3000');
-});
-
-app.get('/404', function(req, res) {
+app.get('/404', function (req, res) {
   res.sendFile(__dirname + '/client/html/404.html');
 });
 
-app.get('*', function(req, res) {
+app.post('/login', urlencodedParser, function (req, res) {
+  let loginUsernameInput = req.body.usernameInput;
+  let loginPasswordInput = req.body.passwordInput;
+  console.log(loginUsernameInput + " " + loginPasswordInput)
+  validateLogin(loginUsernameInput, loginPasswordInput);
+
+  // Jämnför databasen med input
+  function validateLogin(loginUsernameInput, loginPasswordInput) {
+    let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
+    connectToDB().query(sql, function (err, results) {
+      if (err) {
+        console.log('Error: Failed to check username, login');
+      } else {
+        console.log(results);
+        console.log(results.length);
+        console.log(sql);
+        if (results.length === 1) {
+          let loginPasswordHash = results[0].Password;
+          bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
+            if (res) {
+              // SUSSECC
+              loginAttemptSuccess();
+            } else {
+              // FAIL
+              loginAttemptFail();
+            }
+          });
+        } else {
+          // FAILL
+          loginAttemptFail();
+        }
+      }
+    });
+  }
+
+  // login fail
+  function loginAttemptFail() {
+    res.send({login: false});
+    res.end();
+    console.log("User login fail");
+  }
+
+  // login success
+  // Ska även skapa en session
+  function loginAttemptSuccess() {
+    console.log("User login success");
+    req.session['login'] = true;
+    req.session['username'] = loginUsernameInput;
+    console.log(req.session);
+    res.send({redirect: '/game'});
+    res.end();
+  }
+});
+
+app.get('*', function (req, res) {
   res.redirect('/404');
+});
+
+// Lyssna efter anslutningar
+http.listen(3000, function () {
+  console.log('listening on :3000');
 });
 
 console.log("SERVER START");
@@ -272,58 +326,6 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function () {
     console.log('user disconnected');
   });
-
-  // LOGIN FUNCTIONS
-  socket.on('loginAttempt', function (data) {
-    let loginUsernameInput = data.loginUsername;
-    let loginPasswordInput = data.loginPassword;
-    console.log(loginUsernameInput + " " + loginPasswordInput)
-    validateLogin(loginUsernameInput, loginPasswordInput);
-  });
-
-  // Jämnför databasen med input
-  function validateLogin(loginUsernameInput, loginPasswordInput) {
-    let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
-    connectToDB().query(sql, function (err, results) {
-      if (err) {
-        console.log('Error: Failed to check username, login');
-      } else {
-        console.log(results);
-        console.log(results.length);
-        console.log(sql);
-        if (results.length === 1) {
-          let loginPasswordHash = results[0].Password;
-          bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
-            if (res) {
-              // SUSSECC
-              loginAttemptSuccess();
-            } else {
-              // FAIL
-              loginAttemptFail();
-            }
-          });
-        } else {
-          // FAILL
-          loginAttemptFail();
-        }
-      }
-    });
-  }
-
-  // Skikar fail medelande till servern
-  function loginAttemptFail() {
-    socket.emit('registerAttemptFail', {});
-    console.log("User login fail");
-  }
-
-  // Skicakr success medelande tillll servern
-  // Ska även skapa en session
-  function loginAttemptSuccess() {
-    socket.emit('SuccessAttemptFail', {});
-    console.log("User login success");
-    console.log(app.session);
-  }
-
 });
 
 // ****************************************************************************
