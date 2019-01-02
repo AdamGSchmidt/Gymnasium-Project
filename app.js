@@ -1,10 +1,6 @@
 /*
-
   DET SOM MÅSTE GÖRAS
-    ÄNDRA LOGIN INPUT TILLL ETT FORM SÅ ATT INFORMATIONEN KAN ANVÄNDS I SESSION
-
-    TEST TEST TEST TEST TEST
-
+    SAnatize function 
 */
 
 // Initiala variabler
@@ -18,7 +14,6 @@ const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
 const saltRounds = 10;
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -339,11 +334,13 @@ function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
 // *****************************************************************************
 // On connection skriv medelande on dissconection srkiv medelande
 // conection är då en sockets skapas, diconect är då den sidan stängs
+let currentConections = 0;
 io.on('connection', function (socket) {
-
-  console.log('a user connected');
+  currentConections++;
+  console.log('a user connected, current: ' + currentConections);
   socket.on('disconnect', function () {
-    console.log('user disconnected');
+    currentConections--;
+    console.log('user disconnected, current: ' + currentConections);
   });
 });
 

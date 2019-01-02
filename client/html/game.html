@@ -9,20 +9,77 @@
     <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="../css/game.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+        // Skapar konection
+        const socket = io();
+
+        // Variabler som håller reda på data
+        let usersPositions = [];
+        let playerPosition;
+        let canvasWidth;
+        let canvasHeight;
+
+        // Get the canvas center and set it to player posision
+        function getCenterCanvas() {
+            let containerSize = document.getElementById('gameCanvasContainer');
+            playerPosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
+            console.log(playerPosition);
+        }
+
+        // Draw all objects 
+        function draw() {
+            // Clear canvas
+            c = document.getElementById("gameCanvas");
+            ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // draw pllayer
+            ctx.beginPath();
+                ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
+                ctx.closePath();
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+        }
+
+        // Listen for keyinputs
+        document.addEventListener('keydown', function (event) {
+            if (event.keyCode == 37 || event.keyCode == 65) {
+                console.log('⇦');
+                draw();
+            }
+            else if (event.keyCode == 39 || event.keyCode == 68) {
+                console.log('⇨');
+                draw();
+            }
+            else if (event.keyCode == 38 || event.keyCode == 87) {
+                console.log('⇧');
+                draw();
+            }
+            else if (event.keyCode == 40 || event.keyCode == 83) {
+                console.log('⇩');
+                draw();
+            }
+        });
+
         // Ändrar canvasa storlek
         function resize() {
             let containerSize = document.getElementById('gameCanvasContainer');
             let c = document.querySelector("#gameCanvas");
             canvasWidth = containerSize.offsetWidth;
             console.log(canvasWidth);
-            canvasHeight = containerSize.offsetHeight;
+            canvasHeight = containerSize.offsetHeight -3;
             console.log(canvasHeight);
             // Sätter det nya värderna
             c.width = canvasWidth;
             c.height = canvasHeight;
+            getCenterCanvas();
+            draw();
         }
 
+        // Hämta username
         function getUser() {
             $.ajax({
                 type: "POST",
@@ -38,8 +95,10 @@
                     alert('text status ' + textStatus + ', err ' + err)
                 }
             });
+            resize();
         }
 
+        // Logga ut
         function logout() {
             $.ajax({
                 type: "POST",
@@ -55,6 +114,7 @@
             });
         }
 
+        // Sätt username på usernameText
         function setUser(username) {
             document.getElementById('usernameText').innerHTML = username;
         }
