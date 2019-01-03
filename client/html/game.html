@@ -11,20 +11,29 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        /*
+        FIXA DRAW FUNKTIONEN SÅ ATT DEN BLLIR RELATIV TILL SPELAREN 
+        UTVECKLA NÄTVERKSDELEN
+        */
         // Skapar konection
         const socket = io();
 
         // Variabler som håller reda på data
         let usersPositions = [];
         let playerPosition;
+        let middlePosition;
         let canvasWidth;
         let canvasHeight;
+        let mouseX;
+        let mouseY;
+        let newX;
+        let newY;
 
         // Get the canvas center and set it to player posision
         function getCenterCanvas() {
             let containerSize = document.getElementById('gameCanvasContainer');
-            playerPosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
-            console.log(playerPosition);
+            middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
+            console.log(middlePosition);
         }
 
         // Draw all objects 
@@ -34,7 +43,7 @@
             drawGrid();
             // draw pllayer
             ctx.beginPath();
-            ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
+            //ctx.arc(middlePosition.xCord, middlePosition.yCord, 20, 0, 2 * Math.PI, false);
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
@@ -46,7 +55,7 @@
             ctx = c.getContext("2d");
             // Clear canvas
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            
+
             // draw grid
             for (let index = 0; index < 131; index++) {
                 ctx.strokeStyle = "#aaaaaa";
@@ -67,30 +76,28 @@
             ctx.stroke();
 
         }
-
-        // Listen for keyinputs
-        document.addEventListener('keydown', function (event) {
-            if (event.keyCode == 37 || event.keyCode == 65) {
-                console.log('⇦');
-                playerPosition.xCord -= 2;
-                draw();
+        /*
+        function newPlayerPosition(event) {
+            console.log(event.clientX + ", " + event.clientY);
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+            newX = Math.sqrt(event.clientX + playerPosition.xCord) / Math.sqrt(event.clientX + playerPosition.xCord);
+            newY = Math.sqrt(event.clientY + playerPosition.yCord) / Math.sqrt(event.clientY + playerPosition.yCord);
+        } */
+        /*
+        function updatePlayerPosition(){
+            if (event.clientX < playerPosition.xCord) {
+                playerPosition.xCord -= newX;
             }
-            else if (event.keyCode == 39 || event.keyCode == 68) {
-                console.log('⇨');
-                playerPosition.xCord += 2;
-                draw();
+            else {
+                playerPosition.xCord += newX;
             }
-            else if (event.keyCode == 38 || event.keyCode == 87) {
-                console.log('⇧');
-                playerPosition.yCord -= 2;
-                draw();
+            if (event.clientY < playerPosition.yCord) {
+                playerPosition.yCord -= newY;
+            } else {
+                playerPosition.yCord += newY;
             }
-            else if (event.keyCode == 40 || event.keyCode == 83) {
-                console.log('⇩');
-                playerPosition.yCord += 2;
-                draw();
-            }
-        });
+        } */
 
         // Ändrar canvasa storlek
         function resize() {
@@ -146,6 +153,14 @@
         function setUser(username) {
             document.getElementById('usernameText').innerHTML = username;
         }
+
+        //document.addEventListener('mousemove', newPlayerPosition, false);
+
+        socket.on('tick', function () {
+            //console.log(playerPosition);
+            //updatePlayerPosition();
+            draw();
+        });
     </script>
 </head>
 

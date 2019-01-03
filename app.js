@@ -204,12 +204,14 @@ console.log(databaseModuleTest);
 // CONNECT TO DATABASE
 const mysql = require('mysql'); // Global databas variabel
 
+// skapa anslutnong
 let con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "hej123"
 });
 
+// testar och skapar anslutiningen
 con.connect(function (err) {
   if (err) throw err;
   console.log("CONNECTED TO DATABASE MANEGER");
@@ -253,6 +255,7 @@ function createDatabase() {
   });
 }
 
+// Skapar tabel
 function createTable() {
   con = mysql.createConnection({
     host: "localhost",
@@ -268,6 +271,7 @@ function createTable() {
   });
 }
 
+// anslut till databasen
 function connectToDB() {
   let con = mysql.createConnection({
     host: "localhost",
@@ -336,13 +340,37 @@ function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
 // On connection skriv medelande on dissconection srkiv medelande
 // conection är då en sockets skapas, diconect är då den sidan stängs
 let currentConections = 0;
+let usersPositions = [];
 io.on('connection', function (socket) {
+
   currentConections++;
+
+  let usersPosition = {
+    xCord: Math.floor((Math.random() * 2570) + 30),
+    ycord: Math.floor((Math.random() * 2570) + 30),
+    id: socket.id
+  };
+
+  usersPositions.push(usersPosition);
+  console.log(usersPositions);
+  console.log(socket.id);
+
   console.log('a user connected, current: ' + currentConections);
   socket.on('disconnect', function () {
+    for (let index = 0; index < usersPositions.length; index++) {
+      if (socket.id === usersPositions[index].id) {
+        usersPositions.splice(index,1);
+        console.log('removed from array');
+      }
+    }
     currentConections--;
     console.log('user disconnected, current: ' + currentConections);
+    console.log(usersPositions);
   });
+
+  setInterval(function(){
+    socket.emit('tick');
+  }, 16);
 });
 
 // ****************************************************************************
