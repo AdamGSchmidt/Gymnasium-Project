@@ -105,10 +105,12 @@ app.post('/register', urlencodedParser, function (req, res) {
   }
 });
 
+// då man går till /404 sänd 4040
 app.get('/404', function (req, res) {
   res.sendFile(__dirname + '/client/html/404.html');
 });
 
+// login function tar ett post från /login
 app.post('/login', urlencodedParser, function (req, res) {
   let loginUsernameInput = req.body.usernameInput;
   let loginPasswordInput = req.body.passwordInput;
@@ -162,6 +164,7 @@ app.post('/login', urlencodedParser, function (req, res) {
   }
 });
 
+// då get /game sckika game.html
 app.get('/game', function (req, res) {
   if (req.session['login'] === true) {
     res.sendFile(__dirname + '/client/html/game.html');
@@ -170,17 +173,20 @@ app.get('/game', function (req, res) {
   }
 });
 
+// kollar om man är loggedin
 app.post('/game', urlencodedParser, function (req, res) {
   res.send({ Username: req.session['username'] });
   res.end();
 });
 
+// loggar ut
 app.post('/logout', urlencodedParser, function (req, res) {
   req.session['login'] = false;
   req.session['username'] = null;
   res.end();
 });
 
+// sidan finns ej sckika till 404.htmll
 app.get('*', function (req, res) {
   res.redirect('/404');
 });
