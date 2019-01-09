@@ -37,10 +37,11 @@
         }
 
         // Draw all objects 
-        function draw() {
+        function draw(currentUserPositions) {
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
             drawGrid();
+            drawUsers(currentUserPositions);
             // draw pllayer
             ctx.beginPath();
             //ctx.arc(middlePosition.xCord, middlePosition.yCord, 20, 0, 2 * Math.PI, false);
@@ -76,6 +77,20 @@
             ctx.stroke();
 
         }
+
+        function drawUsers(currentUserPositions) {
+            c = document.getElementById("gameCanvas");
+            ctx = c.getContext("2d");
+            for (let index = 0; index < currentUserPositions.length; index++) {
+                ctx.beginPath();
+                ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].xCord, 20, 0, 2 * Math.PI, false);
+                ctx.closePath();
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+                console.log(" sdadasd");
+            }
+        }
+
         /*
         function newPlayerPosition(event) {
             console.log(event.clientX + ", " + event.clientY);
@@ -84,20 +99,7 @@
             newX = Math.sqrt(event.clientX + playerPosition.xCord) / Math.sqrt(event.clientX + playerPosition.xCord);
             newY = Math.sqrt(event.clientY + playerPosition.yCord) / Math.sqrt(event.clientY + playerPosition.yCord);
         } */
-        /*
-        function updatePlayerPosition(){
-            if (event.clientX < playerPosition.xCord) {
-                playerPosition.xCord -= newX;
-            }
-            else {
-                playerPosition.xCord += newX;
-            }
-            if (event.clientY < playerPosition.yCord) {
-                playerPosition.yCord -= newY;
-            } else {
-                playerPosition.yCord += newY;
-            }
-        } */
+
 
         // Ändrar canvasa storlek
         function resize() {
@@ -156,10 +158,11 @@
 
         //document.addEventListener('mousemove', newPlayerPosition, false);
 
-        socket.on('tick', function () {
+        socket.on('tick', function (data) {
+            let currentUserPositions = JSON.parse(data);
             //console.log(playerPosition);
             //updatePlayerPosition();
-            draw();
+           draw(currentUserPositions);
         });
     </script>
 </head>

@@ -105,7 +105,7 @@ app.post('/register', urlencodedParser, function (req, res) {
   }
 });
 
-// då man går till /404 sänd 4040
+// då man går till /404 sänd 404
 app.get('/404', function (req, res) {
   res.sendFile(__dirname + '/client/html/404.html');
 });
@@ -351,8 +351,8 @@ io.on('connection', function (socket) {
   currentConections++;
 
   let usersPosition = {
-    xCord: Math.floor((Math.random() * 2570) + 30),
-    ycord: Math.floor((Math.random() * 2570) + 30),
+    xCord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
+    ycord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
     id: socket.id
   };
 
@@ -361,10 +361,13 @@ io.on('connection', function (socket) {
   console.log(socket.id);
 
   console.log('a user connected, current: ' + currentConections);
+
+  socket.emit('tick', JSON.stringify(usersPositions));
+
   socket.on('disconnect', function () {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id === usersPositions[index].id) {
-        usersPositions.splice(index,1);
+        usersPositions.splice(index, 1);
         console.log('removed from array');
       }
     }
@@ -373,9 +376,7 @@ io.on('connection', function (socket) {
     console.log(usersPositions);
   });
 
-  setInterval(function(){
-    socket.emit('tick');
-  }, 16);
+    socket.emit('tick', JSON.stringify(usersPositions));
 });
 
 // ****************************************************************************
