@@ -129,7 +129,6 @@ app.post('/login', urlencodedParser, function (req, res) {
           let loginPasswordHash = results[0].Password;
           bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
             if (res) {
-              // SUSSECC
               loginAttemptSuccess();
             } else {
               // FAIL
@@ -335,7 +334,7 @@ function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
 
 // *****************************************************************************
 
-// CONECTIONS
+// CONECTIONS WEBSOCKET
 // *****************************************************************************
 // On connection skriv medelande on dissconection srkiv medelande
 // conection är då en sockets skapas, diconect är då den sidan stängs
