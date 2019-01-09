@@ -186,7 +186,7 @@ app.post('/logout', urlencodedParser, function (req, res) {
   res.end();
 });
 
-// sidan finns ej sckika till 404.htmll
+
 app.get('*', function (req, res) {
   res.redirect('/404');
 });
