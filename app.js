@@ -37,7 +37,11 @@ app.use(express.static(clientPath));
 
 // Start är index, när man kommer till sidan så börjar man på index
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/client/index.html');
+  if (req.session['login'] === true) {
+    res.sendFile(__dirname + '/client/html/game.html');
+  } else {
+    res.redirect('/');
+  }
 });
 
 // Register får rätt fil
@@ -347,13 +351,14 @@ function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
 // conection är då en sockets skapas, diconect är då den sidan stängs
 let currentConections = 0;
 let usersPositions = [];
-io.on('connection', function (socket) {
+
+io.on('connection', (socket) => {
 
   currentConections++;
 
   let usersPosition = {
     xCord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
-    ycord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
+    yCord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
     id: socket.id
   };
 
@@ -365,7 +370,19 @@ io.on('connection', function (socket) {
 
   socket.emit('tick', JSON.stringify(usersPositions));
 
-  socket.on('disconnect', function () {
+  socket.on('update', (data) => {
+    for (let index = 0; index < usersPositions.length; index++) {
+      if (socket.id == usersPositions[index].id) {
+        console.log(data.clientX+ "  -  " + data.clientY);
+        usersPositions[index].xCord += 1; // flytta mde vinkeln
+        usersPositions[index].yCord += 1; // flytta med vinkeln
+        console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
+      }
+
+    }
+  })
+
+  socket.on('disconnect', () => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id === usersPositions[index].id) {
         usersPositions.splice(index, 1);
@@ -376,8 +393,10 @@ io.on('connection', function (socket) {
     console.log('user disconnected, current: ' + currentConections);
     console.log(usersPositions);
   });
-
-    socket.emit('tick', JSON.stringify(usersPositions));
 });
+
+setInterval(() => {
+  io.emit('tick', JSON.stringify(usersPositions));
+}, 16);
 
 // ****************************************************************************

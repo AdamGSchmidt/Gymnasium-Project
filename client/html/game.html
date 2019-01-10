@@ -19,15 +19,13 @@
         const socket = io();
 
         // Variabler som håller reda på data
-        let usersPositions = [];
+        let currentUserPositions = [];
         let playerPosition;
         let middlePosition;
         let canvasWidth;
         let canvasHeight;
-        let mouseX;
-        let mouseY;
-        let newX;
-        let newY;
+        let mouseX = 0;
+        let mouseY = 0;
 
         // Get the canvas center and set it to player posision
         function getCenterCanvas() {
@@ -91,14 +89,12 @@
             }
         }
 
-        /*
+        
         function newPlayerPosition(event) {
-            console.log(event.clientX + ", " + event.clientY);
             mouseX = event.clientX;
             mouseY = event.clientY;
-            newX = Math.sqrt(event.clientX + playerPosition.xCord) / Math.sqrt(event.clientX + playerPosition.xCord);
-            newY = Math.sqrt(event.clientY + playerPosition.yCord) / Math.sqrt(event.clientY + playerPosition.yCord);
-        } */
+            console.log(mouseX + " , " + mouseY);
+        } 
 
 
         // Ändrar canvasa storlek
@@ -156,13 +152,17 @@
             document.getElementById('usernameText').innerHTML = username;
         }
 
-        //document.addEventListener('mousemove', newPlayerPosition, false);
+        document.addEventListener('mousemove', newPlayerPosition, false);
 
         socket.on('tick', function (data) {
             let currentUserPositions = JSON.parse(data);
             //console.log(playerPosition);
             //updatePlayerPosition();
-           draw(currentUserPositions);
+            draw(currentUserPositions);
+            socket.emit('update', {
+                clientX: mouseX,
+                clientY: mouseY,
+            });
         });
     </script>
 </head>
