@@ -2,6 +2,7 @@
   DET SOM MÅSTE GÖRAS
     SAnatize function 
     Change input method from keybord to mouse;
+    git test comment
 */
 
 // Initiala variabler
