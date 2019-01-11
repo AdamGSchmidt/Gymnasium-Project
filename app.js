@@ -374,8 +374,12 @@ io.on('connection', (socket) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
         console.log(data.clientX+ "  -  " + data.clientY);
+        /*
         usersPositions[index].xCord += 1; // flytta mde vinkeln
         usersPositions[index].yCord += 1; // flytta med vinkeln
+        */
+       usersPositions[index].xCord = data.clientX; // flytta mde vinkeln
+       usersPositions[index].yCord = data.clientY; // flytta med vinkeln
         console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
       }
 

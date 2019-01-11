@@ -81,7 +81,7 @@
             ctx = c.getContext("2d");
             for (let index = 0; index < currentUserPositions.length; index++) {
                 ctx.beginPath();
-                ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].xCord, 20, 0, 2 * Math.PI, false);
+                ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, 20, 0, 2 * Math.PI, false);
                 ctx.closePath();
                 ctx.fillStyle = "#000000";
                 ctx.fill();
