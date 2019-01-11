@@ -373,14 +373,7 @@ io.on('connection', (socket) => {
   socket.on('update', (data) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
-        console.log(data.clientX+ "  -  " + data.clientY);
-        /*
-        usersPositions[index].xCord += 1; // flytta mde vinkeln
-        usersPositions[index].yCord += 1; // flytta med vinkeln
-        */
-       usersPositions[index].xCord = data.clientX; // flytta mde vinkeln
-       usersPositions[index].yCord = data.clientY; // flytta med vinkeln
-        console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
+        determimNewPosition(data.clientX, data.clientY, index)
       }
 
     }
@@ -401,6 +394,27 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
   io.emit('tick', JSON.stringify(usersPositions));
-}, 50);
+}, 16);
+
+function determimNewPosition(clientX, clientY, index) {
+  // Behöver multiplicera med '4' vinkeln
+  console.log(clientX + "  -  " + clientY);
+
+  if (!(usersPositions[index].xCord > 2581) && clientX != usersPositions[index].xCord) {    // Gränser
+    if (clientX > usersPositions[index].xCord) {
+      usersPositions[index].xCord += 1;
+    } else if (usersPositions[index].xCord > 21) {
+      usersPositions[index].xCord -= 1;
+    }
+  }
+  if (!(usersPositions[index].yCord > 2579)  && !(usersPositions[index].yCord < 21) && clientY != usersPositions[index].yCord) {
+    if (clientY > usersPositions[index].yCord) {
+      usersPositions[index].yCord += 1;
+    } else if (usersPositions[index].yCord > 21){
+      usersPositions[index].yCord -= 1;
+    }
+  }
+  console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
+}
 
 // ****************************************************************************
