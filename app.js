@@ -397,6 +397,6 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
   io.emit('tick', JSON.stringify(usersPositions));
-}, 16);
+}, 50);
 
 // ****************************************************************************
