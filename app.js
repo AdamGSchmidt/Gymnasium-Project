@@ -1,8 +1,7 @@
 /*
   DET SOM MÅSTE GÖRAS
     SAnatize function 
-    Change input method from keybord to mouse;
-    git test comment
+    Får draw att vara relativ till spelaren (påbörjad) (alltid - mitt)
 */
 
 // Initiala variabler
@@ -398,7 +397,7 @@ setInterval(() => {
 
 function determimNewPosition(clientX, clientY, index) {
   // Behöver multiplicera med '4' vinkeln
-  console.log(clientX + "  -  " + clientY);
+  //console.log(clientX + "  -  " + clientY);
 
   if (!(usersPositions[index].xCord > 2581) && clientX != usersPositions[index].xCord) {    // Gränser
     if (clientX > usersPositions[index].xCord) {
@@ -414,7 +413,7 @@ function determimNewPosition(clientX, clientY, index) {
       usersPositions[index].yCord -= 1;
     }
   }
-  console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
+  //console.log(usersPositions[index].xCord + " , " + usersPositions[index].yCord + " update");
 }
 
 // ****************************************************************************

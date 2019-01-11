@@ -17,13 +17,18 @@
         */
         // Skapar konection
         const socket = io();
+        let socketId;
+        socket.on('connect', function () {
+            socketId = socket.id;
+            console.log(socket.id);
+        });
 
         // Variabler som håller reda på data
         let currentUserPositions = [];
-        let playerPosition;
         let middlePosition;
         let canvasWidth;
         let canvasHeight;
+        let playerPosition;
         let mouseX = 0;
         let mouseY = 0;
 
@@ -31,7 +36,6 @@
         function getCenterCanvas() {
             let containerSize = document.getElementById('gameCanvasContainer');
             middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
-            console.log(middlePosition);
         }
 
         // Draw all objects 
@@ -49,7 +53,7 @@
         }
 
         function drawGrid() {
-
+            getCenterCanvas();
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
             // Clear canvas
@@ -59,13 +63,13 @@
             for (let index = 0; index < 131; index++) {
                 ctx.strokeStyle = "#aaaaaa";
                 ctx.beginPath();
-                ctx.moveTo(0, 20 * index);
-                ctx.lineTo(2600, 20 * index);
+                ctx.moveTo(0  , (20 * index) );
+                ctx.lineTo(2600  , 20 * index  );
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(20 * index, 0);
-                ctx.lineTo(20 * index, 2600);
+                ctx.moveTo(20 * index , 0  );
+                ctx.lineTo(20 * index , 2600 );
                 ctx.stroke();
             }
             // draw border
@@ -77,24 +81,33 @@
         }
 
         function drawUsers(currentUserPositions) {
+            getCenterCanvas();
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
             for (let index = 0; index < currentUserPositions.length; index++) {
-                ctx.beginPath();
-                ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, 20, 0, 2 * Math.PI, false);
-                ctx.closePath();
-                ctx.fillStyle = "#000000";
-                ctx.fill();
-                console.log(" sdadasd");
+                if (currentUserPositions[index].id != socketId) {
+                    ctx.beginPath();
+                    ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, 20, 0, 2 * Math.PI, false);
+                    ctx.closePath();
+                    ctx.fillStyle = "#000000";
+                    ctx.fill();
+                    // console.log(" sdadasd");
+                }
             }
+            // draw Player
+            ctx.beginPath();
+            ctx.arc(middlePosition.xCord, middlePosition.yCord, 20, 0, 2 * Math.PI, false);
+            ctx.closePath();
+            ctx.fillStyle = "#000000";
+            ctx.fill();
         }
 
-        
+
         function newPlayerPosition(event) {
             mouseX = event.clientX;
             mouseY = event.clientY;
             console.log(mouseX + " , " + mouseY);
-        } 
+        }
 
 
         // Ändrar canvasa storlek
@@ -157,8 +170,15 @@
 
         socket.on('tick', function (data) {
             let currentUserPositions = JSON.parse(data);
-            //console.log(playerPosition);
-            //updatePlayerPosition();
+            for (let index = 0; index < currentUserPositions.length; index++) {
+                if (currentUserPositions[index].id == socketId) {
+                    playerPosition = {
+                        xCord: currentUserPositions[index].xCord,
+                        yCord: currentUserPositions[index].yCord,
+                    }
+                    currentUserPositions.splice(index, 1);
+                }
+            }
             draw(currentUserPositions);
             socket.emit('update', {
                 clientX: mouseX,
