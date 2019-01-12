@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../images/favicon.ico" />
     <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="../css/game.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -85,7 +86,7 @@
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
             for (let index = 0; index < currentUserPositions.length; index++) {
-                if (currentUserPositions[index].id != socketId) {
+                if (currentUserPositions[index].id) {
                     ctx.beginPath();
                     ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, 20, 0, 2 * Math.PI, false);
                     ctx.closePath();
@@ -96,7 +97,7 @@
             }
             // draw Player
             ctx.beginPath();
-            ctx.arc(middlePosition.xCord, middlePosition.yCord, 20, 0, 2 * Math.PI, false);
+            ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
