@@ -15,7 +15,7 @@
         /*
         FIXA DRAW FUNKTIONEN SÅ ATT DEN BLLIR RELATIV TILL SPELAREN 
         Musens vinkel gäntemott mitten är det värdet som bör sckikas inte musens position
-        client emit angel !!!!!!!
+        BUGG : Fastnar återigen i väggarna ???
         */
         // Skapar konection
         const socket = io();
@@ -104,15 +104,23 @@
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
+
+            // DRAW MIDDLLE POINT CHANGE LATER
+            ctx.beginPath();
+            ctx.arc(middlePosition.xCord, middlePosition.yCord, 4, 0, 2 * Math.PI, false);
+            ctx.closePath();
+            ctx.fillStyle = "#444444";
+            ctx.fill();
         }
 
 
         function newPlayerPosition(event) {
+            getCenterCanvas();
             mouseX = event.clientX;
             mouseY = event.clientY;
             // calculate angel from middle
             let angleX = mouseX - middlePosition.xCord;
-            let angleY = (mouseY - middlePosition.yCord) * -1;
+            let angleY = (mouseY - middlePosition.yCord);
             if (angleX == 0 && angleY == 0) {
                 angel = 0;
                 useAngel = false;
@@ -120,7 +128,7 @@
                 useAngel = true;
                 angel = Math.atan2(angleY, angleX);
             }
-            console.log(angel + " , " + useAngel);
+            console.log(angel*(180/Math.PI) + " , " + useAngel);
         }
 
 
@@ -195,8 +203,10 @@
             }
             draw(currentUserPositions);
             socket.emit('update', {
-                clientX: mouseX,
-                clientY: mouseY,
+                //clientX: mouseX,
+                //clientY: mouseY,
+                clientAngel: angel,
+                clientUseAngel: useAngel
             });
         });
     </script>
