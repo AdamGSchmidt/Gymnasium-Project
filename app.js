@@ -1,7 +1,7 @@
 /*
   DET SOM MÅSTE GÖRAS
     SAnatize function 
-    Får draw att vara relativ till spelaren (påbörjad) (alltid - mitt)
+    Fixa kod skapa moduler
 */
 
 // Initiala variabler
@@ -28,7 +28,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-console.log(app.session);
 
 // Ser till att static filer i client som registerAccount.html går att nå
 const clientPath = path.resolve(__dirname, 'client/');
@@ -373,7 +372,6 @@ io.on('connection', (socket) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
         data =data;
-        console.log(data)
         determimNewPosition(data.clientAngel, data.clientUseAngel, index)
       }
 
@@ -398,7 +396,6 @@ setInterval(() => {
 }, 16);
 
 function determimNewPosition(angle, useAngle, index) {
-  console.log(angle + " , " + useAngle)
   if (useAngle && angle) {
     if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 21)) {
       usersPositions[index].xCord += 4 * Math.cos(angle);

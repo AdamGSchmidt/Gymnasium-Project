@@ -13,9 +13,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         /*
-        FIXA DRAW FUNKTIONEN SÅ ATT DEN BLLIR RELATIV TILL SPELAREN 
-        Musens vinkel gäntemott mitten är det värdet som bör sckikas inte musens position
-        BUGG : Fastnar återigen i väggarna ???
+        Fixa rezize så att den inte förstör absolut allt
+        Fixa scale
+        gör det enklare att stanna (kanske)
+        Fixa collision controll
         */
         // Skapar konection
         const socket = io();
@@ -31,10 +32,15 @@
         let canvasWidth;
         let canvasHeight;
         let playerPosition;
+        let lastPlayerPosition = {
+            xCord: 0,
+            yCord: 0
+        }
         let mouseX = 0;
         let mouseY = 0;
         let angel;
         let useAngel = true;
+        let notFirst = false;
 
         // Get the canvas center and set it to player posision
         function getCenterCanvas() {
@@ -44,25 +50,24 @@
 
         // Draw all objects 
         function draw(currentUserPositions) {
+            getCenterCanvas();
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
-            //ctx.translate(middlePosition.xCord, middlePosition.yCord);
+            // Clear canvas
+            if (notFirst) {
+                ctx.translate(-1*(middlePosition.xCord - lastPlayerPosition.xCord), -1*(middlePosition.yCord - lastPlayerPosition.yCord));
+            ctx.clearRect(-10, -10, 2600, 2600);
+            }
+            notFirst = true;
+            ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
             drawGrid();
             drawUsers(currentUserPositions);
-            // draw pllayer
-            ctx.beginPath();
-            //ctx.arc(middlePosition.xCord, middlePosition.yCord, 20, 0, 2 * Math.PI, false);
-            ctx.closePath();
-            ctx.fillStyle = "#000000";
-            ctx.fill();
         }
 
         function drawGrid() {
             getCenterCanvas();
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
-            // Clear canvas
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
             // draw grid
             for (let index = 0; index < 131; index++) {
@@ -85,7 +90,6 @@
         }
 
         function drawUsers(currentUserPositions) {
-            getCenterCanvas();
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
             for (let index = 0; index < currentUserPositions.length; index++) {
@@ -104,13 +108,6 @@
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
-
-            // DRAW MIDDLLE POINT CHANGE LATER
-            ctx.beginPath();
-            ctx.arc(middlePosition.xCord, middlePosition.yCord, 4, 0, 2 * Math.PI, false);
-            ctx.closePath();
-            ctx.fillStyle = "#444444";
-            ctx.fill();
         }
 
 
@@ -128,7 +125,7 @@
                 useAngel = true;
                 angel = Math.atan2(angleY, angleX);
             }
-            console.log(angel*(180/Math.PI) + " , " + useAngel);
+            console.log(angel * (180 / Math.PI) + " , " + useAngel);
         }
 
 
@@ -145,7 +142,6 @@
             c.width = canvasWidth;
             c.height = canvasHeight;
             getCenterCanvas();
-            draw();
         }
 
         // Hämta username
@@ -203,11 +199,11 @@
             }
             draw(currentUserPositions);
             socket.emit('update', {
-                //clientX: mouseX,
-                //clientY: mouseY,
                 clientAngel: angel,
                 clientUseAngel: useAngel
             });
+            lastPlayerPosition.xCord = playerPosition.xCord;
+            lastPlayerPosition.yCord = playerPosition.yCord;
         });
     </script>
 </head>
