@@ -355,8 +355,8 @@ io.on('connection', (socket) => {
   currentConections++;
 
   let usersPosition = {
-    xCord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
-    yCord: Math.floor((Math.random() * 500) + 30), // 500 = 2570 igentligen
+    xCord: Math.floor((Math.random() * 2570) + 30),
+    yCord: Math.floor((Math.random() * 2570) + 30), 
     id: socket.id
   };
 
