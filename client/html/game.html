@@ -46,6 +46,7 @@
         function draw(currentUserPositions) {
             c = document.getElementById("gameCanvas");
             ctx = c.getContext("2d");
+            //ctx.translate(middlePosition.xCord, middlePosition.yCord);
             drawGrid();
             drawUsers(currentUserPositions);
             // draw pllayer
@@ -81,7 +82,6 @@
             ctx.strokeStyle = "#000000";
             ctx.rect(0, 0, 2600, 2600);
             ctx.stroke();
-
         }
 
         function drawUsers(currentUserPositions) {
