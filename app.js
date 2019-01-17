@@ -374,7 +374,7 @@ io.on('connection', (socket) => {
       if (socket.id == usersPositions[index].id) {
         data =data;
         console.log(data)
-        determimNewPosition(/*data.clientX, data.clientY,*/data.clientAngel, data.clientUseAngel, index)
+        determimNewPosition(data.clientAngel, data.clientUseAngel, index)
       }
 
     }
@@ -397,14 +397,26 @@ setInterval(() => {
   io.emit('tick', JSON.stringify(usersPositions));
 }, 16);
 
-function determimNewPosition(/*clientX, clientY,*/ angle, useAngle, index) {
+function determimNewPosition(angle, useAngle, index) {
   console.log(angle + " , " + useAngle)
   if (useAngle && angle) {
-    if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 30)) {
+    if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 21)) {
       usersPositions[index].xCord += 4 * Math.cos(angle);
+      if (usersPositions[index].xCord >= 2579) {
+        usersPositions[index].xCord =2579;
+      }
+      if (usersPositions[index].xCord <= 21) {
+        usersPositions[index].xCord =21;
+      }
     }
-    if ((usersPositions[index].yCord < 2579) && (usersPositions[index].yCord > 30)) {
+    if ((usersPositions[index].yCord <= 2579) && (usersPositions[index].yCord >= 21)) {
       usersPositions[index].yCord += 4 * Math.sin(angle);
+      if (usersPositions[index].yCord >= 2579) {
+        usersPositions[index].yCord =2579;
+      }
+      if (usersPositions[index].yCord <= 21) {
+        usersPositions[index].yCord =21;
+      }
     }
   }
 }
