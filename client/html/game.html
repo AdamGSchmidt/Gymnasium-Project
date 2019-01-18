@@ -118,7 +118,7 @@
             // calculate angel from middle
             let angleX = mouseX - middlePosition.xCord;
             let angleY = (mouseY - middlePosition.yCord);
-            if (angleX == 0 && angleY == 0) {
+            if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < 15 &&  middlePosition.xCord - mouseX > -15)) && (middlePosition.yCord - mouseY < 15 &&  middlePosition.yCord - mouseY > -15)) {
                 angel = 0;
                 useAngel = false;
             } else {
