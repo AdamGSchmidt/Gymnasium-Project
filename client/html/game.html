@@ -15,7 +15,7 @@
         /*
         Fixa rezize så att den inte förstör absolut allt
         Fixa scale
-        gör det enklare att stanna (kanske)
+        Fixa stäng tab bug
         Fixa collision controll
         */
         // Skapar konection
@@ -28,7 +28,7 @@
 
         // Variabler som håller reda på data
         let currentUserPositions = [];
-        let middlePosition;
+        let middlePosition, lastMiddlePosition;
         let canvasWidth;
         let canvasHeight;
         let playerPosition;
@@ -45,6 +45,12 @@
         // Get the canvas center and set it to player posision
         function getCenterCanvas() {
             let containerSize = document.getElementById('gameCanvasContainer');
+            // SKA KOLLA OM DE ÄR FÖRSTA OCH SPARA VÄRDERNA
+            if (!notFirst) {
+                lastMiddlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
+            } else {
+                middlePosition = { xCord: middlePosition.xCord, yCord: middlePosition.yCord};
+            }
             middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
         }
 
@@ -55,8 +61,8 @@
             ctx = c.getContext("2d");
             // Clear canvas
             if (notFirst) {
-                ctx.translate(-1*(middlePosition.xCord - lastPlayerPosition.xCord), -1*(middlePosition.yCord - lastPlayerPosition.yCord));
-            ctx.clearRect(-10, -10, 2600, 2600);
+                ctx.translate(-1 * (middlePosition.xCord - lastPlayerPosition.xCord), -1 * (middlePosition.yCord - lastPlayerPosition.yCord));
+                ctx.clearRect(-10, -10, 2600, 2600);
             }
             notFirst = true;
             ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
@@ -118,7 +124,7 @@
             // calculate angel from middle
             let angleX = mouseX - middlePosition.xCord;
             let angleY = (mouseY - middlePosition.yCord);
-            if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < 15 &&  middlePosition.xCord - mouseX > -15)) && (middlePosition.yCord - mouseY < 15 &&  middlePosition.yCord - mouseY > -15)) {
+            if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < 15 && middlePosition.xCord - mouseX > -15)) && (middlePosition.yCord - mouseY < 15 && middlePosition.yCord - mouseY > -15)) {
                 angel = 0;
                 useAngel = false;
             } else {
