@@ -355,8 +355,8 @@ io.on('connection', (socket) => {
   currentConections++;
 
   let usersPosition = {
-    xCord: Math.floor((Math.random() * 2570) + 30),
-    yCord: Math.floor((Math.random() * 2570) + 30), 
+    xCord: Math.floor((Math.random() * 2570)),
+    yCord: Math.floor((Math.random() * 2570)),
     id: socket.id
   };
 
@@ -371,8 +371,8 @@ io.on('connection', (socket) => {
   socket.on('update', (data) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
-        data =data;
-        determimNewPosition(data.clientAngel, data.clientUseAngel, index)
+        data = data;
+        determinNewPosition(data.clientAngel, data.clientUseAngel, index)
       }
 
     }
@@ -395,25 +395,67 @@ setInterval(() => {
   io.emit('tick', JSON.stringify(usersPositions));
 }, 16);
 
-function determimNewPosition(angle, useAngle, index) {
+function determinNewPosition(angle, useAngle, index) {
   if (useAngle && angle) {
-    if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 21)) {
-      usersPositions[index].xCord += 4 * Math.cos(angle);
-      if (usersPositions[index].xCord >= 2579) {
-        usersPositions[index].xCord =2579;
-      }
-      if (usersPositions[index].xCord <= 21) {
-        usersPositions[index].xCord =21;
+
+    // Kolla om det finns en kollition
+    let collision = false;
+    let moveX = true;
+    let moveY = true;
+
+    if (usersPositions.length != 1) {
+      for (let index2 = 0; index2 < usersPositions.length; index2++) {
+        if (usersPositions[index2].id !== usersPositions[index].id) {
+          // Collision checking algorithim
+          let distanceX = usersPositions[index].xCord - usersPositions[index2].xCord;
+          let distanceY = usersPositions[index].yCord - usersPositions[index2].yCord;
+          let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY); 
+          if (distance < 20 + 20) { // 20 is the radius change later
+            console.log('COLLISION')
+            collision = true;
+            if (distanceX < 0) {
+              moveX = false
+              usersPositions[index].xCord = usersPositions[index].xCord - 0.07;
+            } else if (distanceX > 0) {
+              moveX = false
+              usersPositions[index].xCord = usersPositions[index].xCord + 0.07;
+            }
+            if (distanceY < 0) {
+              moveY = false
+              usersPositions[index].yCord = usersPositions[index].yCord - 0.07;
+            } else if (distanceY > 0) {
+              moveY = false
+              usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
+            }
+          } else {
+            console.log('NOT')
+            collision = false;
+          }
+        }
       }
     }
-    if ((usersPositions[index].yCord <= 2579) && (usersPositions[index].yCord >= 21)) {
-      usersPositions[index].yCord += 4 * Math.sin(angle);
-      if (usersPositions[index].yCord >= 2579) {
-        usersPositions[index].yCord =2579;
+
+    // Om ingen kollition byt position
+    if (!collision) {
+      if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 21) && moveX) {
+        usersPositions[index].xCord += 4 * Math.cos(angle);
       }
-      if (usersPositions[index].yCord <= 21) {
-        usersPositions[index].yCord =21;
+      if ((usersPositions[index].yCord <= 2579) && (usersPositions[index].yCord >= 21) && moveY) {
+        usersPositions[index].yCord += 4 * Math.sin(angle);
       }
+    }
+    // Om vid vägg stanna
+    if (usersPositions[index].xCord >= 2579) {
+      usersPositions[index].xCord = 2579;
+    }
+    if (usersPositions[index].xCord <= 21) {
+      usersPositions[index].xCord = 21;
+    }
+    if (usersPositions[index].yCord >= 2579) {
+      usersPositions[index].yCord = 2579;
+    }
+    if (usersPositions[index].yCord <= 21) {
+      usersPositions[index].yCord = 21;
     }
   }
 }

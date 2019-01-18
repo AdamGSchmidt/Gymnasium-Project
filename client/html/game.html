@@ -13,10 +13,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         /*
-        Fixa rezize så att den inte förstör absolut allt
+        Fixa rezize så att den inte förstör absolut allt (VET EJ VARFÖR??????)
         Fixa scale
-        Fixa stäng tab bug
-        Fixa collision controll
+        Fixa stäng tab bug (time stamp, sulution?)
+        Collision controll funkar men bör ändras
         */
         // Skapar konection
         const socket = io();
@@ -49,7 +49,7 @@
             if (!notFirst) {
                 lastMiddlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
             } else {
-                middlePosition = { xCord: middlePosition.xCord, yCord: middlePosition.yCord};
+                lastMiddlePosition = { xCord: middlePosition.xCord, yCord: middlePosition.yCord};
             }
             middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
         }
@@ -62,7 +62,7 @@
             // Clear canvas
             if (notFirst) {
                 ctx.translate(-1 * (middlePosition.xCord - lastPlayerPosition.xCord), -1 * (middlePosition.yCord - lastPlayerPosition.yCord));
-                ctx.clearRect(-10, -10, 2600, 2600);
+                ctx.clearRect(-10000, -10000, 26000, 26000);
             }
             notFirst = true;
             ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
