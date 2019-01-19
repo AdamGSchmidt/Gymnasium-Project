@@ -349,17 +349,19 @@ function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
 // conection är då en sockets skapas, diconect är då den sidan stängs
 let currentConections = 0;
 let usersPositions = [];
+let time;
 
 io.on('connection', (socket) => {
 
   currentConections++;
-
+  time = new Date();
   let usersPosition = {
     xCord: Math.floor((Math.random() * 2570)),
     yCord: Math.floor((Math.random() * 2570)),
-    id: socket.id
+    id: socket.id,
+    lastMessage: time.getMilliseconds() + 1000
   };
-
+console.log(usersPosition);
   usersPositions.push(usersPosition);
   console.log(usersPositions);
   console.log(socket.id);
@@ -372,9 +374,13 @@ io.on('connection', (socket) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
         data = data;
-        determinNewPosition(data.clientAngel, data.clientUseAngel, index)
+        time = new Date();
+        // if satsen ser till så att man endast kan röra sig om man är i spelet
+        if (((usersPositions[index].lastMessage  + 14) % 1000) < time.getMilliseconds()) {
+          determinNewPosition(data.clientAngel, data.clientUseAngel, index);
+        } 
+        usersPositions[index].lastMessage = time.getMilliseconds();
       }
-
     }
   })
 
@@ -428,7 +434,7 @@ function determinNewPosition(angle, useAngle, index) {
               usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
             }
           } else {
-            console.log('NOT')
+           // console.log('NOT')
             collision = false;
           }
         }
