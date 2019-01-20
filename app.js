@@ -17,6 +17,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const saltRounds = 10;
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const databaseModule = require('./server/js/databaseModule.js');
 
 // Ser tilll så att cookie / session data går att avläsas
 app.use(cookieParser());
@@ -64,7 +65,7 @@ app.post('/register', urlencodedParser, function (req, res) {
   // Checks if username finns then runs formatinf functions
   function checkIfUsernameTaken(registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
     let sql = `SELECT * FROM User WHERE Username = '${registrationUsernameInput}'`;
-    connectToDB().query(sql, function (err, results) {
+    databaseModule.connectToDB().query(sql, function (err, results) {
       if (err) {
         console.log('Error: Failed to check username, register');
       } else {
@@ -98,7 +99,7 @@ app.post('/register', urlencodedParser, function (req, res) {
 
     if (checkPassMatchRegistrationVariable && checkUsernameRegistrationVariable && checkPasswordRegistrationVariable && checkUsernameFormatRegistration) {
 
-      registerNewUser(registrationPasswordInput, registrationUsernameInput);
+      databaseModule.registerNewUser(registrationPasswordInput, registrationUsernameInput);
       res.send(JSON.stringify(resultObj));
       res.end();
     } else {
@@ -118,36 +119,15 @@ app.post('/login', urlencodedParser, function (req, res) {
   let loginUsernameInput = req.body.usernameInput;
   let loginPasswordInput = req.body.passwordInput;
   console.log(loginUsernameInput + " " + loginPasswordInput)
-  validateLogin(loginUsernameInput, loginPasswordInput);
 
   // Jämnför databasen med input
-  function validateLogin(loginUsernameInput, loginPasswordInput) {
-    let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
-    connectToDB().query(sql, function (err, results) {
-      if (err) {
-        console.log('Error: Failed to check username, login');
-      } else {
-        console.log(results);
-        console.log(results.length);
-        console.log(sql);
-        if (results.length === 1) {
-          let loginPasswordHash = results[0].Password;
-          bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
-            if (res) {
-              loginAttemptSuccess();
-            } else {
-              // FAIL
-              loginAttemptFail();
-            }
-          });
-        } else {
-          // FAILL
-          loginAttemptFail();
-        }
-      }
-    });
+  if (databaseModule.validateLogin(loginUsernameInput, loginPasswordInput)) {
+    loginAttemptSuccess();
+  } else {
+    // FAIL
+    loginAttemptFail();
   }
-
+  
   // login fail
   function loginAttemptFail() {
     res.send({ login: false });
@@ -201,94 +181,11 @@ http.listen(3000, function () {
 
 console.log("SERVER START");
 
-// Kör test functionen från databas modulen
-const databaseModule = require('./server/js/databaseModule.js');
-let databaseModuleTest = databaseModule.test();
-console.log(databaseModuleTest);
-
 // *** ALLA FUNKTIONER EFTER DETTA BÖR FLYTTAS TILL DATABASEMODULE ***
 // *****************************************************************************
 
 // CONNECT TO DATABASE
 const mysql = require('mysql'); // Global databas variabel
-
-// skapa anslutnong
-let con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "hej123"
-});
-
-// testar och skapar anslutiningen
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("CONNECTED TO DATABASE MANEGER");
-});
-
-// HITTA OCH ANSLUT TILL DATABASEN
-con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "hej123",
-  database: "mydb"
-});
-
-// OM DATABASEN INTE FINNS SÅ SKAPA DEN
-// Se till så att variabeln con har rätt värde
-con.connect(function (err) {
-  if (err) {
-    console.log("CREATING DATABASE");
-    createDatabase();
-    con = mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      password: "hej123",
-      database: "mydb"
-    });
-  }
-  console.log("CONNECTED TO DATABASE");
-});
-
-// SKAPAR DATABASEN
-function createDatabase() {
-  con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "hej123"
-  });
-  con.query("CREATE DATABASE mydb", function (err, result) {
-    if (err) throw err;
-    console.log("DATABASE CREATED");
-    createTable();
-  });
-}
-
-// Skapar tabel
-function createTable() {
-  con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "hej123",
-    database: "mydb"
-  });
-  console.log("CREATING TABLE");
-  let sql = "CREATE TABLE User (Username VARCHAR(255) NOT NULL, UserID int NOT NULL AUTO_INCREMENT, Password VARCHAR(255) NOT NULL, Progress VARCHAR(255), UNIQUE(UserID), PRIMARY KEY(UserID) );";
-  con.query(sql, function (err, result) {
-    if (err) throw err;
-    console.log("TABLE CREATED");
-  });
-}
-
-// anslut till databasen
-function connectToDB() {
-  let con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "hej123",
-    database: "mydb"
-  });
-  return con;
-}
 // *****************************************************************************
 
 // REGESTRATION VALIDATION
@@ -325,25 +222,9 @@ function checkPasswordRegistration(registrationPasswordInput) {
   } else return false;
 }
 
-// Create new user
-function registerNewUser(registrationPasswordInput, registrationUsernameInput) {
-  bcrypt.hash(registrationPasswordInput, saltRounds).then(function (hash) {
-    connectToDB().connect(function (err) {
-      let sql = `INSERT INTO User (Username, Password) VALUES ('${registrationUsernameInput}', '${hash}')`;
-      connectToDB().query(sql, function (err, result, fields) {
-        if (err) {
-          throw err;
-        } else {
-          console.log("ACCOUNT " + registrationUsernameInput + " REGISTERED");
-        }
-      });
-    });
-  });
-}
-
 // *****************************************************************************
 
-// CONECTIONS WEBSOCKET
+// CONECTIONS WEBSOCKET, AND GAME MECHANICS
 // *****************************************************************************
 // On connection skriv medelande on dissconection srkiv medelande
 // conection är då en sockets skapas, diconect är då den sidan stängs
@@ -361,7 +242,7 @@ io.on('connection', (socket) => {
     id: socket.id,
     lastMessage: time.getMilliseconds() + 1000
   };
-console.log(usersPosition);
+  console.log(usersPosition);
   usersPositions.push(usersPosition);
   console.log(usersPositions);
   console.log(socket.id);
@@ -376,9 +257,9 @@ console.log(usersPosition);
         data = data;
         time = new Date();
         // if satsen ser till så att man endast kan röra sig om man är i spelet
-        if (((usersPositions[index].lastMessage  + 14) % 1000) < time.getMilliseconds()) {
+        if (((usersPositions[index].lastMessage + 14) % 1000) < time.getMilliseconds()) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
-        } 
+        }
         usersPositions[index].lastMessage = time.getMilliseconds();
       }
     }
@@ -415,7 +296,7 @@ function determinNewPosition(angle, useAngle, index) {
           // Collision checking algorithim
           let distanceX = usersPositions[index].xCord - usersPositions[index2].xCord;
           let distanceY = usersPositions[index].yCord - usersPositions[index2].yCord;
-          let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY); 
+          let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
           if (distance < 20 + 20) { // 20 is the radius change later
             console.log('COLLISION')
             collision = true;
@@ -434,7 +315,7 @@ function determinNewPosition(angle, useAngle, index) {
               usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
             }
           } else {
-           // console.log('NOT')
+            // console.log('NOT')
             collision = false;
           }
         }
