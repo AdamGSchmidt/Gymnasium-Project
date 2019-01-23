@@ -1,3 +1,70 @@
-*{
+* {
+    margin: 0%;
+    padding: 0%;
+}
 
+#statsSection{
+    background-color: azure;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+    border: solid black 1px;
+    position: absolute;
+    bottom: 5vh;
+    left: 10%;
+    height: 26vh;
+    width: 80%;
+}
+
+#gameCanvasContainer {
+    position: absolute;
+    top: 5vh;
+    left: 10%;
+    height: 60vh;
+    width: 80%;
+    background-color: azure;  /* TA BORT DENNA SEN */
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+    border: solid black 1px;
+}
+
+#usernameContainer {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 20%;
+    height: 4%;
+}
+
+#logoutBtn {
+    border: solid black 1px;
+    width: 45%;
+    height: 84%;
+    left: 2%;
+    position: relative;
+    background-color: tomato;
+    font-weight: bold;
+    font-size: 100%;
+    top: 10%;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#logoutBtn:hover {
+    box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#usernameSection{
+    background-color: white;
+    position: absolute;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: fit-content;
+    height: 80%;
+    top: 10%;
+    margin-left: 50%;
+    text-align: center;
+    border: solid black 1px;
+    /*margin-left: 45%; */
+    margin-left: calc(47% + 3px);
+    display:flex;
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }

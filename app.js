@@ -39,7 +39,16 @@ app.use(express.static(clientPath));
 // Start är index, när man kommer till sidan så börjar man på index
 app.get('/', function (req, res) {
   if (req.session['login'] === true) {
-    res.sendFile(__dirname + '/client/html/game.html');
+    res.sendFile(__dirname + '/client/html/menu.html');
+  } else {
+    res.redirect('/');
+  }
+});
+
+// menu route
+app.get('/menu', function (req, res) {
+  if (req.session['login'] === true) {
+    res.sendFile(__dirname + '/client/html/menu.html');
   } else {
     res.redirect('/');
   }
@@ -48,10 +57,6 @@ app.get('/', function (req, res) {
 // Register får rätt fil
 app.get('/register', function (req, res) {
   res.sendFile(__dirname + '/client/html/registerAccount.html');
-});
-
-app.get('/menu', function (req, res) {
-  res.sendFile(__dirname + '/client/html/menu.html');
 });
 
 // Register post 
@@ -148,7 +153,7 @@ app.post('/login', urlencodedParser, function (req, res) {
     req.session['login'] = true;
     req.session['username'] = loginUsernameInput;
     console.log(req.session);
-    res.send({ redirect: '/game' });
+    res.send({ redirect: '/menu' });
     res.end();
   }
 });
@@ -163,6 +168,7 @@ app.get('/game', function (req, res) {
 });
 
 // kollar om man är loggedin
+// bör ändras till GET
 app.post('/game', urlencodedParser, function (req, res) {
   res.send({ Username: req.session['username'] });
   res.end();
