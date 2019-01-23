@@ -290,11 +290,6 @@ function determinNewPosition(angle, useAngle, index) {
     let collision = false;
     let moveX = true;
     let moveY = true;
-    /*
-    FÖR ATT FÖRBÄTTRA KOLLISIONS KONTROLLEN SÅ BÖR DEN NYA POSITIONEN VARA DET ANDRA
-    OBJECTETS POSITION PLUS DIFIRANSEN MELLAN DEN OCH DEN EGNA + NÅGÅT MINIMALT VÄRDE
-    SOM 0,000001 OSV.
-    */
 
     if (usersPositions.length != 1) {
       for (let index2 = 0; index2 < usersPositions.length; index2++) {
