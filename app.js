@@ -258,8 +258,10 @@ io.on('connection', (socket) => {
         data = data;
         time = new Date();
         // if satsen ser till så att man endast kan röra sig om man är i spelet
-        if (((usersPositions[index].lastMessage + 14) % 1000) < time.getMilliseconds()) {
+        if (((usersPositions[index].lastMessage + 15) % 1000) < time.getMilliseconds()) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
+        } else {
+          console.log("TO EARLY");
         }
         usersPositions[index].lastMessage = time.getMilliseconds();
       }
