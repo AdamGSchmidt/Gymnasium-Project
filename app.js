@@ -50,6 +50,10 @@ app.get('/register', function (req, res) {
   res.sendFile(__dirname + '/client/html/registerAccount.html');
 });
 
+app.get('/menu', function (req, res) {
+  res.sendFile(__dirname + '/client/html/menu.html');
+});
+
 // Register post 
 app.post('/register', urlencodedParser, function (req, res) {
   let registrationPasswordInput = req.body.registerPassword;
