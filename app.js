@@ -3,6 +3,7 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
+    Change sql to prepared statments and use mysql escape function
 */
 
 // Initiala variabler
