@@ -122,13 +122,33 @@ app.post('/login', urlencodedParser, function (req, res) {
   console.log(loginUsernameInput + " " + loginPasswordInput)
 
   // Jämnför databasen med input
-  if (databaseModule.validateLogin(loginUsernameInput, loginPasswordInput)) {
-    loginAttemptSuccess();
-  } else {
-    // FAIL
-    loginAttemptFail();
+  validateLogin(loginUsernameInput, loginPasswordInput);
+
+  function validateLogin(loginUsernameInput, loginPasswordInput) {
+    let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
+    databaseModule.connectToDB().query(sql, function (err, results) {
+      if (err) {
+        console.log('Error: Failed to check username, login');
+      } else {
+        console.log(results);
+        console.log(results.length);
+        console.log(sql);
+        if (results.length === 1) {
+          let loginPasswordHash = results[0].Password;
+          bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
+            if (res) {
+              loginAttemptSuccess();
+            } else {
+              loginAttemptFail();
+            }
+          });
+        } else {
+          loginAttemptFail();
+        }
+      }
+    });
   }
-  
+
   // login fail
   function loginAttemptFail() {
     res.send({ login: false });
