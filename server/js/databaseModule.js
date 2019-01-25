@@ -99,8 +99,8 @@ module.exports = {
          database: "mydb"
       });
       return con;
-   },
-
+   }
+/*
    validateLogin: async function (loginUsernameInput, loginPasswordInput) {
       let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
       await conDatabseModule.query(sql, function (err, results) {
@@ -124,7 +124,7 @@ module.exports = {
             }
          }
       });
-   } /*,
+   } */ /*,
    // DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
    checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
       let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
