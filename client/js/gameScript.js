@@ -122,13 +122,14 @@ function newPlayerPosition(event) {
 
 
 // Ändrar canvasa storlek
+// SKAPER EN BUGG FIXA SNARAST, antons dator inte må bra
 function resize() {
     let containerSize = document.getElementById('gameCanvasContainer');
     let c = document.querySelector("#gameCanvas");
     c.style.display = 'block';
-    canvasWidth = containerSize.offsetWidth;
+    canvasWidth = window.innerWidth;
     console.log(canvasWidth);
-    canvasHeight = containerSize.offsetHeight;
+    canvasHeight = window.innerHeight;
     console.log(canvasHeight);
     // Sätter det nya värderna
     c.width = canvasWidth;
