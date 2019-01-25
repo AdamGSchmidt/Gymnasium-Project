@@ -189,7 +189,7 @@ app.get('/game', function (req, res) {
 
 // kollar om man är loggedin
 // bör ändras till GET
-app.post('/game', urlencodedParser, function (req, res) {
+app.get('/getusername', urlencodedParser, function (req, res) {
   res.send({ Username: req.session['username'] });
   res.end();
 });
@@ -198,6 +198,11 @@ app.post('/game', urlencodedParser, function (req, res) {
 app.post('/logout', urlencodedParser, function (req, res) {
   req.session['login'] = false;
   req.session['username'] = null;
+  res.end();
+});
+
+app.get('/getnumberofcurrentusers', urlencodedParser, function (req, res) {
+  res.send({ users: currentConections });
   res.end();
 });
 

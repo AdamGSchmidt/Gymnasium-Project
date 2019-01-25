@@ -9,12 +9,14 @@
     <link rel="shortcut icon" href="../images/favicon.ico" />
     <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="../css/menuStyle.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../js/menuScript.js"></script>
 </head>
 
-<body>
-    <div id="gameCanvasContainer">
-        <canvas id="gameCanvas"></canvas>
+<body onresize=resize()>
+    <div id="menuCanvasContainer">
+        <canvas id="menuCanvas"></canvas>
+        <input type="button" id="playBtn" value="Play" onclick=play()>
     </div>
     <div id="usernameContainer">
         <button id="logoutBtn" onclick=logout()>Logout</button>
@@ -23,7 +25,12 @@
         </section>
     </div>
     <section id="statsSection">
-
+        <div id="numberOfUsersContainer">
+            <section id="numberOfUsers">
+                <p id="numberOfUsersText">Current player count</p>
+            </section>
+            <section id="numberOfUsersCount">0</section>
+        </div>
     </section>
 </body>
 

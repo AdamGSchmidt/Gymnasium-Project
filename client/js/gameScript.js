@@ -3,6 +3,7 @@
         Fixa scale
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
+        ändra logout till quit
         */
 // Skapar konection
 const socket = io();
@@ -139,8 +140,7 @@ function resize() {
 // Hämta username
 function getUser() {
     $.ajax({
-        type: "POST",
-        url: "/game",
+        url: "/getusername",
         timeout: 2000,
         data: {},
         success: function (data) {
