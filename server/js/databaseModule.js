@@ -114,13 +114,13 @@ module.exports = {
                let loginPasswordHash = results[0].Password;
                bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
                   if (res) {
-                     return true;
+                     loginAttemptSuccess();
                   } else {
-                     return false;
+                     loginAttemptFail();
                   }
                });
             } else {
-               return false;
+               loginAttemptFail();
             }
          }
       });
