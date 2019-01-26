@@ -3,7 +3,7 @@
     padding: 0%;
 }
 
-#statsSection{
+#statsSection {
     background-color: azure;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
     border: solid black 1px;
@@ -20,20 +20,13 @@
     left: 40%;
     height: 86vh;
     width: 55%;
-    background-color: azure;  /* TA BORT DENNA SEN */
+    background-color: azure;
+    /* TA BORT DENNA SEN */
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
     border: solid black 1px;
 }
 
-#usernameContainer {
-    position: absolute;
-    top: 2.5%;
-    left: 5%;
-    width: 20%;
-    height: 4%;
-}
-
-#playBtn{
+#playBtn {
     border: solid black 1px;
     padding-left: 8%;
     padding-right: 8%;
@@ -56,21 +49,42 @@
     width: fit-content;
     padding-left: 8%;
     padding-right: 8%;
-    height: 84%;
-    left: 0%;
     position: relative;
     background-color: tomato;
     font-weight: bold;
     font-size: 100%;
-    top: 10%;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+    float: left;
 }
 
 #logoutBtn:hover {
     box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
 }
 
-#numberOfUsers{
+#usernameContainer {
+    position: absolute;
+    top: 2.5%;
+    left: 5%;
+    width: 20%;
+    height: 4%;
+}
+
+#usernameSection {
+    background-color: white;
+    position: relative;
+    float: left;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: fit-content;
+    text-align: center;
+    border: solid black 1px;
+    margin-left: 4px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#numberOfUsers {
     background-color: tomato;
     padding: 2%;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
@@ -82,8 +96,7 @@
     margin-top: 4%;
 }
 
-
-#numberOfUsersCount{
+#numberOfUsersCount {
     padding: 2%;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
     border: solid black 1px;
@@ -94,24 +107,6 @@
     margin-top: 4%;
 }
 
-#numberOfUsersText{
+#numberOfUsersText {
     font-weight: bold;
-}
-
-#usernameSection{
-    background-color: white;
-    position: absolute;
-    padding-right: 5%;
-    padding-left: 5%;
-    width: fit-content;
-    height: 78%;
-    top: 10%;
-    text-align: center;
-    border: solid black 1px;
-    /*margin-left: 45%; */
-    margin-left: calc(40% + 3px);
-    display:flex;
-    align-items: center; 
-    justify-content: center; 
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }

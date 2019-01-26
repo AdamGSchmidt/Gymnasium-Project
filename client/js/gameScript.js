@@ -156,19 +156,8 @@ function getUser() {
 }
 
 // Logga ut
-function logout() {
-    $.ajax({
-        type: "POST",
-        url: "/logout",
-        timeout: 2000,
-        data: {},
-        success: function (data) {
-            window.location.replace(window.location.protocol + "//" + window.location.host + '/');
-        },
-        error: function (jqXHR, textStatus, err) {
-            alert('Error');
-        }
-    });
+function quit() {
+    window.location.replace(window.location.protocol + "//" + window.location.host + '/menu');
 }
 
 // Sätt username på usernameText
