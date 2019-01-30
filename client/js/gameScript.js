@@ -32,6 +32,7 @@ class Projectile {
     constructor(){
         this.angel = angel;
         this.useAngel = useAngel;
+        this.id = socketId;
     }
 }
 

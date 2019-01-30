@@ -251,6 +251,7 @@ function checkPasswordRegistration(registrationPasswordInput) {
 // conection är då en sockets skapas, diconect är då den sidan stängs
 let currentConections = 0;
 let usersPositions = [];
+let projectilePositions = [];
 let time;
 
 io.on('connection', (socket) => {
@@ -289,7 +290,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newProjectile', (projectile) => {
-    console.log(projectile.angel);
+    for (let index = 0; index < usersPositions.length; index++) {
+      if (projectile.useAngle && projectile.id == usersPositions[index].id == projectile.id ) {
+        let newProjectile = {
+          xCord: usersPositions[index].xCord + ((20 * Math.cos(projectile.angel)) + 15),
+          yCord:  usersPositions[index].yCord + ((20 * Math.sin(projectile.angel)) + 15),
+          angel: projectile.angel,
+          radius: 15, // change 15
+          speed: 6 // change 6 and 20
+        }
+        projectilePositions.push(newProjectile);
+      }
+    }
   });
 
   socket.on('disconnect', () => {
