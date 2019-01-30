@@ -13,7 +13,7 @@ socket.on('connect', function () {
 });
 
 // Variabler som håller reda på data
-let currentUserPositions = [];
+const currentUserPositions = new Array();
 let middlePosition, lastMiddlePosition;
 let canvasWidth;
 let canvasHeight;
@@ -28,8 +28,15 @@ let angel;
 let useAngel = true;
 let notFirst = false;
 
+class Projectile {
+    constructor(){
+        this.angel = angel;
+        this.useAngel = useAngel;
+    }
+}
+
 // Get the canvas center and set it to player posision
-function getCenterCanvas() {
+const getCenterCanvas = () => {
     let containerSize = document.getElementById('gameCanvasContainer');
     // SKA KOLLA OM DE ÄR FÖRSTA OCH SPARA VÄRDERNA
     if (!notFirst) {
@@ -41,7 +48,7 @@ function getCenterCanvas() {
 }
 
 // Draw all objects 
-function draw(currentUserPositions) {
+const draw = (currentUserPositions) => {
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
@@ -56,7 +63,7 @@ function draw(currentUserPositions) {
     drawUsers(currentUserPositions);
 }
 
-function drawGrid() {
+const drawGrid = () => {
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
@@ -81,7 +88,7 @@ function drawGrid() {
     ctx.stroke();
 }
 
-function drawUsers(currentUserPositions) {
+const drawUsers = (currentUserPositions) => {
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
     for (let index = 0; index < currentUserPositions.length; index++) {
@@ -103,7 +110,7 @@ function drawUsers(currentUserPositions) {
 }
 
 
-function newPlayerPosition(event) {
+const newPlayerPosition = (event) => {
     getCenterCanvas();
     mouseX = event.clientX;
     mouseY = event.clientY;
@@ -120,10 +127,16 @@ function newPlayerPosition(event) {
     console.log(angel * (180 / Math.PI) + " , " + useAngel);
 }
 
+const newProjectile = (event) => {
+    let projectile = new Projectile();
+    console.log(projectile);
+    socket.emit('newProjectile', projectile);
+}
+
 
 // Ändrar canvasa storlek
 // SKAPER EN BUGG FIXA SNARAST, antons dator inte må bra
-function resize() {
+const resize = () => {
     let containerSize = document.getElementById('gameCanvasContainer');
     let c = document.querySelector("#gameCanvas");
     c.style.display = 'block';
@@ -138,7 +151,7 @@ function resize() {
 }
 
 // Hämta username
-function getUser() {
+const getUser = () => {
     $.ajax({
         type: "POST",
         url: "/game",
@@ -157,7 +170,7 @@ function getUser() {
 }
 
 // Logga ut
-function logout() {
+const logout = () => {
     $.ajax({
         type: "POST",
         url: "/logout",
@@ -173,11 +186,13 @@ function logout() {
 }
 
 // Sätt username på usernameText
-function setUser(username) {
+const setUser = (username) => {
     document.getElementById('usernameText').innerHTML = username;
 }
 
 document.addEventListener('mousemove', newPlayerPosition, false);
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener("click", newProjectile);
 
 socket.on('tick', function (data) {
     let currentUserPositions = JSON.parse(data);

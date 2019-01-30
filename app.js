@@ -281,12 +281,16 @@ io.on('connection', (socket) => {
         if (((usersPositions[index].lastMessage + 15) % 1000) < time.getMilliseconds()) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
         } else {
-          console.log("TO EARLY");
+          console.log("TOO EARLY");
         }
         usersPositions[index].lastMessage = time.getMilliseconds();
       }
     }
-  })
+  });
+
+  socket.on('newProjectile', (projectile) => {
+    console.log(projectile.angel);
+  });
 
   socket.on('disconnect', () => {
     for (let index = 0; index < usersPositions.length; index++) {
