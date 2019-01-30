@@ -3,7 +3,16 @@
         Fixa scale
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
-        */
+        vid studs av kula halvera farten oom farten är under x ta brt den
+        kula fastnar i vägg
+*/
+
+/* AOUTO CLICKER FOR TESTING 
+    setInterval(function () { 
+        document.getElementById('gameCanvas').click();
+    },25);
+*/
+
 // Skapar konection
 const socket = io();
 let socketId;
@@ -13,7 +22,6 @@ socket.on('connect', function () {
 });
 
 // Variabler som håller reda på data
-const currentUserPositions = new Array();
 let middlePosition, lastMiddlePosition;
 let canvasWidth;
 let canvasHeight;
@@ -29,7 +37,7 @@ let useAngel = true;
 let notFirst = false;
 
 class Projectile {
-    constructor(){
+    constructor() {
         this.angel = angel;
         this.useAngel = useAngel;
         this.id = socketId;
@@ -49,7 +57,7 @@ const getCenterCanvas = () => {
 }
 
 // Draw all objects 
-const draw = (currentUserPositions) => {
+const draw = (currentUserPositions, currentProjectilePositions) => {
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
@@ -61,6 +69,7 @@ const draw = (currentUserPositions) => {
     notFirst = true;
     ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
+    drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
 }
 
@@ -110,6 +119,18 @@ const drawUsers = (currentUserPositions) => {
     ctx.fill();
 }
 
+const drawProjectiles = (currentProjectilePositions) => {
+    c = document.getElementById("gameCanvas");
+    ctx = c.getContext("2d");
+    for (let index = 0; index < currentProjectilePositions.length; index++) {
+        ctx.beginPath();
+        ctx.arc(currentProjectilePositions[index].xCord, currentProjectilePositions[index].yCord, currentProjectilePositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fillStyle = "#000000";
+        ctx.fill();
+    }
+}
+
 
 const newPlayerPosition = (event) => {
     getCenterCanvas();
@@ -130,6 +151,7 @@ const newPlayerPosition = (event) => {
 
 const newProjectile = (event) => {
     let projectile = new Projectile();
+    console.log("asdasd")
     console.log(projectile);
     socket.emit('newProjectile', projectile);
 }
@@ -194,23 +216,32 @@ const setUser = (username) => {
 document.addEventListener('mousemove', newPlayerPosition, false);
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener("click", newProjectile);
+document.addEventListener('mousedown', (e) => { e.preventDefault(); }, false);
 
-socket.on('tick', function (data) {
-    let currentUserPositions = JSON.parse(data);
-    for (let index = 0; index < currentUserPositions.length; index++) {
-        if (currentUserPositions[index].id == socketId) {
-            playerPosition = {
-                xCord: currentUserPositions[index].xCord,
-                yCord: currentUserPositions[index].yCord,
+socket.on('tick', (data) => {
+    let parsedData = JSON.parse(data);
+    console.log("hah1")
+    console.log(parsedData);
+    console.log("hah2")
+    let currentUserPositions = [];
+    currentUserPositions = parsedData.players;
+    let currentProjectilePositions = parsedData.projectiles;
+    if (currentUserPositions) {
+        for (let index = 0; index < currentUserPositions.length; index++) {
+            if (currentUserPositions[index].id == socketId) {
+                playerPosition = {
+                    xCord: currentUserPositions[index].xCord,
+                    yCord: currentUserPositions[index].yCord,
+                }
+                currentUserPositions.splice(index, 1);
             }
-            currentUserPositions.splice(index, 1);
         }
+        draw(currentUserPositions, currentProjectilePositions);
+        socket.emit('update', {
+            clientAngel: angel,
+            clientUseAngel: useAngel
+        });
+        lastPlayerPosition.xCord = playerPosition.xCord;
+        lastPlayerPosition.yCord = playerPosition.yCord;
     }
-    draw(currentUserPositions);
-    socket.emit('update', {
-        clientAngel: angel,
-        clientUseAngel: useAngel
-    });
-    lastPlayerPosition.xCord = playerPosition.xCord;
-    lastPlayerPosition.yCord = playerPosition.yCord;
 });

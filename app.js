@@ -250,8 +250,8 @@ function checkPasswordRegistration(registrationPasswordInput) {
 // On connection skriv medelande on dissconection srkiv medelande
 // conection är då en sockets skapas, diconect är då den sidan stängs
 let currentConections = 0;
-let usersPositions = [];
-let projectilePositions = [];
+const usersPositions = new Array();
+const projectilePositions = new Array();
 let time;
 
 io.on('connection', (socket) => {
@@ -279,7 +279,7 @@ io.on('connection', (socket) => {
         data = data;
         time = new Date();
         // if satsen ser till så att man endast kan röra sig om man är i spelet
-        if (((usersPositions[index].lastMessage + 15) % 1000) < time.getMilliseconds()) {
+        if (((usersPositions[index].lastMessage + 10) % 1000) < time.getMilliseconds()) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
         } else {
           console.log("TOO EARLY");
@@ -291,15 +291,20 @@ io.on('connection', (socket) => {
 
   socket.on('newProjectile', (projectile) => {
     for (let index = 0; index < usersPositions.length; index++) {
-      if (projectile.useAngle && projectile.id == usersPositions[index].id == projectile.id ) {
-        let newProjectile = {
-          xCord: usersPositions[index].xCord + ((20 * Math.cos(projectile.angel)) + 15),
-          yCord:  usersPositions[index].yCord + ((20 * Math.sin(projectile.angel)) + 15),
-          angel: projectile.angel,
-          radius: 15, // change 15
-          speed: 6 // change 6 and 20
+      console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
+      if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
+        if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
+          let newProjectile = {
+            xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
+            yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
+            angel: projectile.angel,
+            radius: 15, // change 15
+            speed: 6, // change 6 and 20
+            id: projectile.id
+          }
+          projectilePositions.push(newProjectile);
+          console.log(projectilePositions);
         }
-        projectilePositions.push(newProjectile);
       }
     }
   });
@@ -318,8 +323,69 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
-  io.emit('tick', JSON.stringify(usersPositions));
+  determinNewProjectile();
+  let clientDataObj = {
+    players: usersPositions || [],
+    projectiles: projectilePositions || []
+  };
+  io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
+
+const determinNewProjectile = () => {
+
+
+  // Kolla om det finns en kollition mellan projectilerna
+  if (projectilePositions.length >= 2) {
+    for (let index = 0; index < projectilePositions.length; index++) {
+      for (let index2 = 0; index2 < projectilePositions.length; index2++) {
+        if (projectilePositions[index2] !== projectilePositions[index]) {
+          // Collision checking algorithim
+          let distanceX = projectilePositions[index].xCord - projectilePositions[index2].xCord;
+          let distanceY = projectilePositions[index].yCord - projectilePositions[index2].yCord;
+          let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+          if (distance < projectilePositions[index].radius + projectilePositions[index2].radius) { // 20 is the radius change later
+            projectilePositions.splice(index, 1);
+            projectilePositions.splice(index2, 1);
+            console.log("PROJECTILE COLLISION")
+          }
+        }
+      }
+    }
+  }
+
+  for (let index = 0; index < projectilePositions.length; index++) {
+    if (projectilePositions[index].speed <= 1) {
+      projectilePositions.splice(index, 1);
+      break;
+    }
+    // Byt till else if kanske ??
+    if (projectilePositions[index].xCord >= (2600 - projectilePositions[index].radius + 1)) {
+      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].speed *= 0.90;
+      continue;
+    }
+    if (projectilePositions[index].xCord <= (0 + projectilePositions[index].radius + 1)) {
+      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].speed *= 0.90;
+      continue;
+    }
+    if (projectilePositions[index].yCord >= (2600 - projectilePositions[index].radius + 1)) {
+      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].speed *= 0.90;
+      continue;
+    }
+    if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
+      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].speed *= 0.90;
+      continue;
+    }
+  }
+
+  for (let index = 0; index < projectilePositions.length; index++) {
+    projectilePositions[index].xCord += (Math.cos(projectilePositions[index].angel) * projectilePositions[index].speed);
+    projectilePositions[index].yCord += (Math.sin(projectilePositions[index].angel) * projectilePositions[index].speed);
+  }
+}
 
 function determinNewPosition(angle, useAngle, index) {
   if (useAngle && angle) {

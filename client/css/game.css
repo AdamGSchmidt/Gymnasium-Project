@@ -33,7 +33,7 @@
     box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
 }
 
-#usernameSection{
+#usernameSection {
     background-color: white;
     position: absolute;
     padding-right: 5%;
@@ -46,8 +46,8 @@
     border: solid black 1px;
     /*margin-left: 45%; */
     margin-left: calc(47% + 3px);
-    display:flex;
-    align-items: center; 
-    justify-content: center; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }
