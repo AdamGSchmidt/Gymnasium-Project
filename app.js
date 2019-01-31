@@ -362,11 +362,9 @@ const playerProjectileCollisionCheck = () => {
       }
     }
   }
-
 }
 
 const determinNewProjectile = () => {
-
   // Kolla om det finns en kollition mellan projectilerna
   if (projectilePositions.length >= 2) {
     for (let index = 0; index < projectilePositions.length; index++) {
@@ -395,21 +393,25 @@ const determinNewProjectile = () => {
     if (projectilePositions[index].xCord >= (2600 - projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel += Math.PI / 2;
       projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].xCord = 2600 - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].xCord <= (0 + projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel += Math.PI / 2;
       projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].xCord = 0 + projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord >= (2600 - projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel += Math.PI / 2;
       projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].yCord = 2600 - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel += Math.PI / 2;
       projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].yCord = 0 + projectilePositions[index].radius;
       continue;
     }
   }

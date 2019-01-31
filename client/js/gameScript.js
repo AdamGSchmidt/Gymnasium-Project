@@ -3,9 +3,6 @@
         Fixa scale
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
-        vid studs av kula halvera farten oom farten är under x ta brt den
-        kula fastnar i vägg
-        dör bugg
 */
 
 /* AOUTO CLICKER FOR TESTING 
@@ -250,8 +247,8 @@ socket.on('tick', (data) => {
 
 socket.on('obliterated', (data) => {
     if (socketId == data) {
-        document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
-        console.log("ASD!!!!!!!!!!!!!!!!!!!!!!!")
-        console.log(data)
+        setTimeout( () => {
+            document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
+        },32);
     }
 });
