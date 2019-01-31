@@ -5,6 +5,7 @@
         Collision controll funkar men bör ändras
         vid studs av kula halvera farten oom farten är under x ta brt den
         kula fastnar i vägg
+        dör bugg
 */
 
 /* AOUTO CLICKER FOR TESTING 
@@ -220,9 +221,6 @@ document.addEventListener('mousedown', (e) => { e.preventDefault(); }, false);
 
 socket.on('tick', (data) => {
     let parsedData = JSON.parse(data);
-    console.log("hah1")
-    console.log(parsedData);
-    console.log("hah2")
     let currentUserPositions = [];
     currentUserPositions = parsedData.players;
     let currentProjectilePositions = parsedData.projectiles;
@@ -243,5 +241,12 @@ socket.on('tick', (data) => {
         });
         lastPlayerPosition.xCord = playerPosition.xCord;
         lastPlayerPosition.yCord = playerPosition.yCord;
+    }
+});
+
+socket.on('obliterated', (data) => {
+    if (socketId = data) {
+        alert('YOU HAVE BEEN obliterated')
+        console.log("HAHAHAHAHAHHAHAHHAHAHA" + data)
     }
 });

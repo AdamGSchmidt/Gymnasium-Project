@@ -252,6 +252,7 @@ function checkPasswordRegistration(registrationPasswordInput) {
 let currentConections = 0;
 const usersPositions = new Array();
 const projectilePositions = new Array();
+const sockets = new Array();
 let time;
 
 io.on('connection', (socket) => {
@@ -262,10 +263,16 @@ io.on('connection', (socket) => {
     xCord: Math.floor((Math.random() * 2570)),
     yCord: Math.floor((Math.random() * 2570)),
     id: socket.id,
-    lastMessage: time.getMilliseconds() + 1000
+    lastMessage: time.getMilliseconds() + 1000,
+    obliterated: false
   };
+  let socketInfo = {
+    id: socket.id,
+    socket
+  }
   console.log(usersPosition);
   usersPositions.push(usersPosition);
+  sockets.push(socketInfo);
   console.log(usersPositions);
   console.log(socket.id);
 
@@ -290,20 +297,28 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newProjectile', (projectile) => {
-    for (let index = 0; index < usersPositions.length; index++) {
-      console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
-      if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
-        if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
-          let newProjectile = {
-            xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
-            yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
-            angel: projectile.angel,
-            radius: 15, // change 15
-            speed: 6, // change 6 and 20
-            id: projectile.id
+    let playerNotObliterated = true;
+    for (let index2 = 0; index2 < usersPositions.length; index2++) {
+      if (socket.id == usersPositions[index2].id) {
+        playerNotObliterated = false;
+      }
+    }
+    if (!playerNotObliterated) {
+      for (let index = 0; index < usersPositions.length; index++) {
+        console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
+        if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
+          if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
+            let newProjectile = {
+              xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
+              yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
+              angel: projectile.angel,
+              radius: 15, // change 15
+              speed: 6, // change 6 and 20
+              id: projectile.id
+            }
+            projectilePositions.push(newProjectile);
+            console.log(projectilePositions);
           }
-          projectilePositions.push(newProjectile);
-          console.log(projectilePositions);
         }
       }
     }
@@ -324,6 +339,7 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
   determinNewProjectile();
+  playerProjectileCollisionCheck();
   let clientDataObj = {
     players: usersPositions || [],
     projectiles: projectilePositions || []
@@ -331,8 +347,25 @@ setInterval(() => {
   io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
 
-const determinNewProjectile = () => {
+const playerProjectileCollisionCheck = () => {
+  for (let index = 0; index < projectilePositions.length; index++) {
+    for (let index2 = 0; index2 < usersPositions.length; index2++) {
+      // Collision checking algorithim
+      let distanceX = projectilePositions[index].xCord - usersPositions[index2].xCord;
+      let distanceY = projectilePositions[index].yCord - usersPositions[index2].yCord;
+      let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      if (distance < projectilePositions[index].radius + 20) { // 20 is the radius change later
+        usersPositions[index2].obliterated = true;
+        io.emit('obliterated', usersPositions[index2].id);
+        usersPositions.splice(index2, 1);
+        console.log("PROJECTILE PLAYER COLLISION");
+      }
+    }
+  }
 
+}
+
+const determinNewProjectile = () => {
 
   // Kolla om det finns en kollition mellan projectilerna
   if (projectilePositions.length >= 2) {
