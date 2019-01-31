@@ -3,6 +3,7 @@
         Fixa scale
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
+        canvas save and restore för att fixa buggar??
 */
 
 /* AOUTO CLICKER FOR TESTING 
