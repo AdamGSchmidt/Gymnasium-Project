@@ -209,6 +209,10 @@ const logout = () => {
     });
 }
 
+const restart = () => {
+    window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
+}
+
 // Sätt username på usernameText
 const setUser = (username) => {
     document.getElementById('usernameText').innerHTML = username;
@@ -217,7 +221,7 @@ const setUser = (username) => {
 document.addEventListener('mousemove', newPlayerPosition, false);
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener("click", newProjectile);
-document.addEventListener('mousedown', (e) => { e.preventDefault(); }, false);
+document.addEventListener('mousedown', (event) => { event.preventDefault(); }, false);
 
 socket.on('tick', (data) => {
     let parsedData = JSON.parse(data);
@@ -245,8 +249,9 @@ socket.on('tick', (data) => {
 });
 
 socket.on('obliterated', (data) => {
-    if (socketId = data) {
-        alert('YOU HAVE BEEN obliterated')
-        console.log("HAHAHAHAHAHHAHAHHAHAHA" + data)
+    if (socketId == data) {
+        document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
+        console.log("ASD!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log(data)
     }
 });

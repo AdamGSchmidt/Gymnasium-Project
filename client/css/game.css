@@ -51,3 +51,49 @@
     justify-content: center;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
 }
+
+#obliteratedMessageContainer {
+    visibility: hidden;
+    position: absolute;
+    top: 27.5%;
+    left: 32.5%;
+    height: 45vh;
+    width: 35%;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+    border: solid black 1px;
+    background-color: white;
+}
+
+#obliteratedMessage1 {
+    padding: 4%;
+    font-weight: bold;
+    display: table;
+    margin: 0 auto;
+}
+
+#obliteratedMessage2 {
+    display: table;
+    margin: 0 auto;
+    align-self: center;
+    color: tomato;
+    font-weight: bold;
+    font-size: 300%;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+#restartBtn {
+    border: solid black 1px;
+    width: 60%;
+    height: 40%;
+    left: 20%;
+    position: absolute;
+    background-color: tomato;
+    font-weight: bold;
+    font-size: 200%;
+    top: 50%;
+    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#restartBtn:hover {
+    box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
