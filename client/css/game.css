@@ -81,6 +81,14 @@
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
+#obliteratedMessage3{
+    padding: 4%;
+    padding-top: 0%;
+    font-weight: bold;
+    display: table;
+    margin: 0 auto;
+}
+
 #restartBtn {
     border: solid black 1px;
     width: 60%;
@@ -96,4 +104,18 @@
 
 #restartBtn:hover {
     box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
+}
+
+#obliteratedFeedContainer{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+}
+.obliteratedFeed{
+    width: fit-content;
+    height: fit-content;
+    display: table;
+    margin: 0 auto;
 }

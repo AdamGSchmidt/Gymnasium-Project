@@ -4,6 +4,9 @@
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
     Fixa timestamps skapar lagg
+    Fixa session data
+    game crash from picking up loot (sometimes)
+    fix getting session data for usernname
 */
 
 // Initiala variabler
@@ -29,11 +32,15 @@ app.use(cookieParser());
 
 // Ser tilll så att session går att avändas
 // ******** ÄNDRA PLACEHOLDER ************
+let storage = new session.MemoryStore;
+console.log(storage)
 app.use(session({
   secret: 'PLACEHOLDER',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: storage
 }));
+let sessionId;
 
 // Ser till att static filer i client som registerAccount.html går att nå
 const clientPath = path.resolve(__dirname, 'client/');
@@ -176,6 +183,7 @@ app.post('/login', urlencodedParser, function (req, res) {
 app.get('/game', function (req, res) {
   if (req.session['login'] === true) {
     res.sendFile(__dirname + '/client/html/game.html');
+    sessionId = req.session.id;
   } else {
     res.redirect('/');
   }
@@ -260,13 +268,21 @@ const lootPositions = new Array();
 let time;
 
 io.on('connection', (socket) => {
-
+  let username = 'username';
+  storage.get(sessionId, (error, session) => {
+    if (error || session == null) {
+      console.log('ERROR WHILE GETING USERNAME IN /game')
+    } else {
+      username = session['username'];
+    }
+  });
   currentConections++;
   time = new Date();
   let usersPosition = {
     xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
     yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
     id: socket.id,
+    username: username,
     lastMessage: time,
     lastProjectile: time,
     obliterated: false,
@@ -274,14 +290,8 @@ io.on('connection', (socket) => {
     projectileRadius: config.game.projectile.startRadius,
     radius: config.game.player.startRadius
   };
-  let socketInfo = {
-    id: socket.id,
-    socket
-  }
-  console.log(usersPosition);
+
   usersPositions.push(usersPosition);
-  console.log(usersPositions);
-  console.log(socket.id);
 
   console.log('a user connected, current: ' + currentConections);
 
@@ -332,7 +342,8 @@ io.on('connection', (socket) => {
               angel: projectile.angel,
               radius: usersPositions[index].projectileRadius,
               speed: usersPositions[index].projectileSpeed,
-              id: projectile.id
+              id: projectile.id,
+              username: usersPositions[index].username,
             }
             socket.emit('startreload');
             projectilePositions.push(newProjectile);
@@ -406,7 +417,11 @@ const playerProjectileCollisionCheck = () => {
       let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
       if (distance < projectilePositions[index].radius + usersPositions[index2].radius) {
         usersPositions[index2].obliterated = true;
-        io.emit('obliterated', usersPositions[index2].id);
+        io.emit('obliterated', {
+          obliterated: usersPositions[index2],
+          obliterator: projectilePositions[index].username,
+          id: usersPositions[index2].id
+        });
         createLoot(usersPositions[index2]);
         usersPositions.splice(index2, 1);
         console.log("PROJECTILE PLAYER COLLISION");

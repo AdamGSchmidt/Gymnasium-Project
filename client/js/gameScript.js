@@ -39,6 +39,8 @@ let notFirst = false;
 let reload = false;
 let reloadBarValue = 0;
 
+const feedList = new Array();
+
 class Projectile {
     constructor() {
         this.angel = angel;
@@ -109,6 +111,10 @@ const drawUsers = (currentUserPositions) => {
     ctx = c.getContext("2d");
     for (let index = 0; index < currentUserPositions.length; index++) {
         if (currentUserPositions[index].id) {
+            ctx.font = "15px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(currentUserPositions[index].username, currentUserPositions[index].xCord, currentUserPositions[index].yCord - currentUserPositions[index].radius - 10);
+
             ctx.beginPath();
             ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, currentUserPositions[index].radius, 0, 2 * Math.PI, false);
             ctx.closePath();
@@ -123,10 +129,11 @@ const drawUsers = (currentUserPositions) => {
     ctx.fillStyle = "#000000";
     ctx.fill();
 
+    console.log(playerPosition.username)
     // reload progress bar
     ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.arc(playerPosition.xCord, playerPosition.yCord, 20 + 14, 3* Math.PI/2, reloadBarValue + 3*  Math.PI/2, true);
+    ctx.arc(playerPosition.xCord, playerPosition.yCord, playerPosition.radius + 14, 3 * Math.PI / 2, reloadBarValue + 3 * Math.PI / 2, true);
     ctx.strokeStyle = "#ff6347";
     ctx.stroke();
     ctx.lineWidth = 1;
@@ -160,7 +167,7 @@ const drawLoot = (currentLootPositions) => {
         ctx.arc(currentLootPositions[index].xCord, currentLootPositions[index].yCord, currentLootPositions[index].radius, 0, 2 * Math.PI, false);
         ctx.strokeStyle = "#000000";
         ctx.stroke();
-    } 
+    }
 };
 
 
@@ -234,7 +241,7 @@ const logout = () => {
         success: function (data) {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/');
         },
-        error:  () => {
+        error: () => {
             alert('Error');
         }
     });
@@ -266,7 +273,8 @@ socket.on('tick', (data) => {
                 playerPosition = {
                     xCord: currentUserPositions[index].xCord,
                     yCord: currentUserPositions[index].yCord,
-                    radius: currentUserPositions[index].radius
+                    radius: currentUserPositions[index].radius,
+                    username: currentUserPositions[index].username
                 }
                 currentUserPositions.splice(index, 1);
             }
@@ -282,8 +290,24 @@ socket.on('tick', (data) => {
 });
 
 socket.on('obliterated', (data) => {
-    if (socketId == data) {
+    let feedItem = {
+        obliterated: data.obliterated.username,
+        obliterator: data.obliterator.username
+    };
+    feedList.push(feedItem);
+    if (feedList.length > 9) {
+        feedList.splice(0,1);
+    }
+    let feedText = '';
+    for (let index = 0; index < feedList.length; index++) {
+        feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
+        
+    }
+    document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
+
+    if (socketId == data.id) {
         setTimeout(() => {
+            document.getElementById('obliteratedMessage3').innerHTML = `by ${playerPosition.username}`;
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
         }, 32);
     }
