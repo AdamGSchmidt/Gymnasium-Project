@@ -238,7 +238,6 @@ function checkUsernameFormatRegistration(registrationUsernameInput) {
 // Om det är det returnar den true annar returnar den false
 function checkPasswordRegistration(registrationPasswordInput) {
   let regExCheckFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-  console.log(registrationPasswordInput + "asdasdasdasdsa");
   if (regExCheckFormat.test(registrationPasswordInput)) {
     return true;
   } else return false;
@@ -267,7 +266,10 @@ io.on('connection', (socket) => {
     id: socket.id,
     lastMessage: time,
     lastProjectile: time,
-    obliterated: false
+    obliterated: false,
+    projectileSpeed: 6,
+    projectileRadius: 15,
+    radius: 20
   };
   let socketInfo = {
     id: socket.id,
@@ -280,20 +282,17 @@ io.on('connection', (socket) => {
 
   console.log('a user connected, current: ' + currentConections);
 
-  socket.emit('tick', JSON.stringify(usersPositions));
-
   socket.on('update', (data) => {
     for (let index = 0; index < usersPositions.length; index++) {
       if (socket.id == usersPositions[index].id) {
         data = data;
         time = new Date();
-        time2 = usersPositions[index].lastMessage + 10;
+        let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 14));
         time2 = new Date(time2);
         // if satsen ser till så att man endast kan röra sig om man är i spelet
         if (time > time2) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
         } else {
-          console.log(time2)
           console.log("TOO EARLY");
         }
         usersPositions[index].lastMessage = time;
@@ -312,7 +311,6 @@ io.on('connection', (socket) => {
         if (usersPositions[index].lastProjectile == null || usersPositions[index].lastProjectile < time2) {
           projectileTime = true;
           usersPositions[index].lastProjectile = time;
-
         }
       }
     }
@@ -324,20 +322,18 @@ io.on('connection', (socket) => {
       }
       if (!playerNotObliterated) {
         for (let index = 0; index < usersPositions.length; index++) {
-          console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
           if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
             if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
               let newProjectile = {
-                xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
-                yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
+                xCord: usersPositions[index].xCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4)  * Math.cos(projectile.angel)), // 4 to avoid collision
+                yCord: usersPositions[index].yCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4)  * Math.sin(projectile.angel)),
                 angel: projectile.angel,
-                radius: 15, // change 15
-                speed: 6, // change 6 and 20
+                radius: usersPositions[index].projectileRadius, 
+                speed: usersPositions[index].projectileSpeed, 
                 id: projectile.id
               }
               socket.emit('startreload');
               projectilePositions.push(newProjectile);
-              console.log(projectilePositions);
             }
           }
         }
@@ -361,6 +357,7 @@ io.on('connection', (socket) => {
 setInterval(() => {
   determinNewProjectile();
   playerProjectileCollisionCheck();
+  playerLootCollisionCheck();
   let clientDataObj = {
     players: usersPositions || [],
     projectiles: projectilePositions || [],
@@ -369,6 +366,36 @@ setInterval(() => {
   io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
 
+const playerLootCollisionCheck = () => {
+  for (let index = 0; index < lootPositions.length; index++) {
+    for (let index2 = 0; index2 < usersPositions.length; index2++) {
+      // Collision checking algorithim
+      let distanceX = lootPositions[index].xCord - usersPositions[index2].xCord;
+      let distanceY = lootPositions[index].yCord - usersPositions[index2].yCord;
+      let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      if (distance < lootPositions[index].radius + usersPositions[index2].radius) { // 20 is the radius change later
+        if (usersPositions[index2].projectileSpeed <= 10) { // max speed
+          usersPositions[index2].projectileSpeed *= 1.2; // INCRESE BY 10%
+        } else {
+          usersPositions[index2].projectileSpeed = 10;
+        }
+        if (usersPositions[index2].projectileRadius <= 40) { // max radius
+          usersPositions[index2].projectileRadius *= 1.2; // INCRESE BY 10%
+        } else {
+          usersPositions[index2].projectileRadius = 40;
+        }
+        if (usersPositions[index2].radius >= 10) {
+          usersPositions[index2].radius *= 0.9;
+        } else {
+          usersPositions[index2].radius = 10
+        }
+        lootPositions.splice(index, 1);
+        console.log("LOOT PLAYER COLLISION");
+      }
+    }
+  }
+};
+
 const playerProjectileCollisionCheck = () => {
   for (let index = 0; index < projectilePositions.length; index++) {
     for (let index2 = 0; index2 < usersPositions.length; index2++) {
@@ -376,7 +403,7 @@ const playerProjectileCollisionCheck = () => {
       let distanceX = projectilePositions[index].xCord - usersPositions[index2].xCord;
       let distanceY = projectilePositions[index].yCord - usersPositions[index2].yCord;
       let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      if (distance < projectilePositions[index].radius + 20) { // 20 is the radius change later
+      if (distance < projectilePositions[index].radius + usersPositions[index2].radius) { // 20 is the radius change later
         usersPositions[index2].obliterated = true;
         io.emit('obliterated', usersPositions[index2].id);
         createLoot(usersPositions[index2]);
@@ -393,6 +420,7 @@ const createLoot = (data) => {
     xCord: data.xCord,
     yCord: data.yCord
   }
+  console.log("LOOT CREATED")
   lootPositions.push(loot);
 };
 
@@ -486,7 +514,6 @@ function determinNewPosition(angle, useAngle, index) {
               usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
             }
           } else {
-            // console.log('NOT')
             collision = false;
           }
         }

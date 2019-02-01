@@ -107,7 +107,7 @@ const drawUsers = (currentUserPositions) => {
     for (let index = 0; index < currentUserPositions.length; index++) {
         if (currentUserPositions[index].id) {
             ctx.beginPath();
-            ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, 20, 0, 2 * Math.PI, false);
+            ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, currentUserPositions[index].radius, 0, 2 * Math.PI, false);
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
@@ -116,16 +116,18 @@ const drawUsers = (currentUserPositions) => {
     }
     // draw Player
     ctx.beginPath();
-    ctx.arc(playerPosition.xCord, playerPosition.yCord, 20, 0, 2 * Math.PI, false);
+    ctx.arc(playerPosition.xCord, playerPosition.yCord, playerPosition.radius, 0, 2 * Math.PI, false);
     ctx.closePath();
     ctx.fillStyle = "#000000";
     ctx.fill();
 
     // reload progress bar
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.arc(playerPosition.xCord, playerPosition.yCord, 20 + 10, 3* Math.PI/2, reloadBarValue + 3*  Math.PI/2, true);
+    ctx.arc(playerPosition.xCord, playerPosition.yCord, 20 + 14, 3* Math.PI/2, reloadBarValue + 3*  Math.PI/2, true);
     ctx.strokeStyle = "#ff6347";
     ctx.stroke();
+    ctx.lineWidth = 1;
     ctx.strokeStyle = "#000000";
 }
 
@@ -152,6 +154,10 @@ const drawLoot = (currentLootPositions) => {
         ctx.fillStyle = "#FFFF00";
         ctx.fill();
         ctx.fillStyle = "#000000";
+        ctx.beginPath();
+        ctx.arc(currentLootPositions[index].xCord, currentLootPositions[index].yCord, currentLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.strokeStyle = "#000000";
+        ctx.stroke();
     } 
 };
 
@@ -258,6 +264,7 @@ socket.on('tick', (data) => {
                 playerPosition = {
                     xCord: currentUserPositions[index].xCord,
                     yCord: currentUserPositions[index].yCord,
+                    radius: currentUserPositions[index].radius
                 }
                 currentUserPositions.splice(index, 1);
             }
