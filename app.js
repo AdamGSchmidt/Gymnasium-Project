@@ -21,6 +21,9 @@ const saltRounds = 10;
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const databaseModule = require('./server/js/databaseModule.js');
 
+// config
+const config = require('./config.json');
+
 // Ser tilll så att cookie / session data går att avläsas
 app.use(cookieParser());
 
@@ -261,15 +264,15 @@ io.on('connection', (socket) => {
   currentConections++;
   time = new Date();
   let usersPosition = {
-    xCord: Math.floor((Math.random() * 2570)),
-    yCord: Math.floor((Math.random() * 2570)),
+    xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
+    yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
     id: socket.id,
     lastMessage: time,
     lastProjectile: time,
     obliterated: false,
-    projectileSpeed: 6,
-    projectileRadius: 15,
-    radius: 20
+    projectileSpeed: config.game.projectile.startSpeed,
+    projectileRadius: config.game.projectile.startRadius,
+    radius: config.game.player.startRadius
   };
   let socketInfo = {
     id: socket.id,
@@ -287,7 +290,7 @@ io.on('connection', (socket) => {
       if (socket.id == usersPositions[index].id) {
         data = data;
         time = new Date();
-        let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 14));
+        let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 12));
         time2 = new Date(time2);
         // if satsen ser till så att man endast kan röra sig om man är i spelet
         if (time > time2) {
@@ -323,18 +326,16 @@ io.on('connection', (socket) => {
       if (!playerNotObliterated) {
         for (let index = 0; index < usersPositions.length; index++) {
           if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
-            if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
-              let newProjectile = {
-                xCord: usersPositions[index].xCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4)  * Math.cos(projectile.angel)), // 4 to avoid collision
-                yCord: usersPositions[index].yCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4)  * Math.sin(projectile.angel)),
-                angel: projectile.angel,
-                radius: usersPositions[index].projectileRadius, 
-                speed: usersPositions[index].projectileSpeed, 
-                id: projectile.id
-              }
-              socket.emit('startreload');
-              projectilePositions.push(newProjectile);
+            let newProjectile = {
+              xCord: usersPositions[index].xCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.cos(projectile.angel)), // 4 to avoid collision
+              yCord: usersPositions[index].yCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.sin(projectile.angel)),
+              angel: projectile.angel,
+              radius: usersPositions[index].projectileRadius,
+              speed: usersPositions[index].projectileSpeed,
+              id: projectile.id
             }
+            socket.emit('startreload');
+            projectilePositions.push(newProjectile);
           }
         }
       }
@@ -373,21 +374,21 @@ const playerLootCollisionCheck = () => {
       let distanceX = lootPositions[index].xCord - usersPositions[index2].xCord;
       let distanceY = lootPositions[index].yCord - usersPositions[index2].yCord;
       let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      if (distance < lootPositions[index].radius + usersPositions[index2].radius) { // 20 is the radius change later
-        if (usersPositions[index2].projectileSpeed <= 10) { // max speed
-          usersPositions[index2].projectileSpeed *= 1.2; // INCRESE BY 10%
+      if (distance < lootPositions[index].radius + usersPositions[index2].radius) {
+        if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
+          usersPositions[index2].projectileSpeed *= config.game.upgrade.projectileSpeedMultiplier; // INCRESE BY 10%
         } else {
-          usersPositions[index2].projectileSpeed = 10;
+          usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
         }
-        if (usersPositions[index2].projectileRadius <= 40) { // max radius
-          usersPositions[index2].projectileRadius *= 1.2; // INCRESE BY 10%
+        if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
+          usersPositions[index2].projectileRadius *= config.game.upgrade.projectileRadiusMultiplier; // INCRESE BY 10%
         } else {
-          usersPositions[index2].projectileRadius = 40;
+          usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
         }
-        if (usersPositions[index2].radius >= 10) {
-          usersPositions[index2].radius *= 0.9;
+        if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
+          usersPositions[index2].radius *= config.game.upgrade.playerRadiusMultipler;
         } else {
-          usersPositions[index2].radius = 10
+          usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
         }
         lootPositions.splice(index, 1);
         console.log("LOOT PLAYER COLLISION");
@@ -403,7 +404,7 @@ const playerProjectileCollisionCheck = () => {
       let distanceX = projectilePositions[index].xCord - usersPositions[index2].xCord;
       let distanceY = projectilePositions[index].yCord - usersPositions[index2].yCord;
       let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      if (distance < projectilePositions[index].radius + usersPositions[index2].radius) { // 20 is the radius change later
+      if (distance < projectilePositions[index].radius + usersPositions[index2].radius) {
         usersPositions[index2].obliterated = true;
         io.emit('obliterated', usersPositions[index2].id);
         createLoot(usersPositions[index2]);
@@ -416,7 +417,7 @@ const playerProjectileCollisionCheck = () => {
 
 const createLoot = (data) => {
   let loot = {
-    radius: 10,
+    radius: config.game.loot.startRadius,
     xCord: data.xCord,
     yCord: data.yCord
   }
@@ -434,7 +435,7 @@ const determinNewProjectile = () => {
           let distanceX = projectilePositions[index].xCord - projectilePositions[index2].xCord;
           let distanceY = projectilePositions[index].yCord - projectilePositions[index2].yCord;
           let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          if (distance < projectilePositions[index].radius + projectilePositions[index2].radius) { // 20 is the radius change later
+          if (distance < projectilePositions[index].radius + projectilePositions[index2].radius) {
             projectilePositions.splice(index, 1);
             console.log("PROJECTILE COLLISION")
           }
@@ -444,32 +445,32 @@ const determinNewProjectile = () => {
   }
 
   for (let index = 0; index < projectilePositions.length; index++) {
-    if (projectilePositions[index].speed <= 1) {
+    if (projectilePositions[index].speed <= config.game.projectile.minSpeed) {
       projectilePositions.splice(index, 1);
       break;
     }
     // Byt till else if kanske ??
-    if (projectilePositions[index].xCord >= (2600 - projectilePositions[index].radius + 1)) {
+    if (projectilePositions[index].xCord >= (config.game.map.xBoundary - projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
-      projectilePositions[index].speed *= 0.90;
-      projectilePositions[index].xCord = 2600 - projectilePositions[index].radius;
+      projectilePositions[index].speed *= config.game.projectile.speedChange;
+      projectilePositions[index].xCord = config.game.map.xBoundary - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].xCord <= (0 + projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
-      projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].speed *= config.game.projectile.speedChange;
       projectilePositions[index].xCord = 0 + projectilePositions[index].radius;
       continue;
     }
-    if (projectilePositions[index].yCord >= (2600 - projectilePositions[index].radius + 1)) {
+    if (projectilePositions[index].yCord >= (config.game.map.yBoundary - projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel = Math.PI - (-1 * (Math.PI - projectilePositions[index].angel));
-      projectilePositions[index].speed *= 0.90;
-      projectilePositions[index].yCord = 2600 - projectilePositions[index].radius;
+      projectilePositions[index].speed *= config.game.projectile.speedChange;
+      projectilePositions[index].yCord = config.game.map.yBoundary - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
       projectilePositions[index].angel = Math.abs((Math.PI - projectilePositions[index].angel));
-      projectilePositions[index].speed *= 0.90;
+      projectilePositions[index].speed *= config.game.projectile.speedChange;
       projectilePositions[index].yCord = 0 + projectilePositions[index].radius;
       continue;
     }
@@ -496,7 +497,7 @@ function determinNewPosition(angle, useAngle, index) {
           let distanceX = usersPositions[index].xCord - usersPositions[index2].xCord;
           let distanceY = usersPositions[index].yCord - usersPositions[index2].yCord;
           let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          if (distance < 20 + 20) { // 20 is the radius change later
+          if (distance < usersPositions[index].radius + usersPositions[index2].radius) {
             console.log('COLLISION')
             collision = true;
             if (distanceX < 0) {
@@ -522,25 +523,25 @@ function determinNewPosition(angle, useAngle, index) {
 
     // Om ingen kollition byt position
     if (!collision) {
-      if ((usersPositions[index].xCord <= 2579) && (usersPositions[index].xCord >= 21) && moveX) {
+      if ((usersPositions[index].xCord <= config.game.map.xBoundary - usersPositions[index].radius) && (usersPositions[index].xCord >= usersPositions[index].radius) && moveX) {
         usersPositions[index].xCord += 4 * Math.cos(angle);
       }
-      if ((usersPositions[index].yCord <= 2579) && (usersPositions[index].yCord >= 21) && moveY) {
+      if ((usersPositions[index].yCord <= config.game.map.yBoundary - usersPositions[index].radius) && (usersPositions[index].yCord >= usersPositions[index].radius) && moveY) {
         usersPositions[index].yCord += 4 * Math.sin(angle);
       }
     }
     // Om vid vägg stanna
-    if (usersPositions[index].xCord >= 2579) {
-      usersPositions[index].xCord = 2579;
+    if (usersPositions[index].xCord > config.game.map.xBoundary - usersPositions[index].radius) {
+      usersPositions[index].xCord = config.game.map.xBoundary - usersPositions[index].radius - 1;
     }
-    if (usersPositions[index].xCord <= 21) {
-      usersPositions[index].xCord = 21;
+    if (usersPositions[index].xCord < usersPositions[index].radius) {
+      usersPositions[index].xCord = usersPositions[index].radius + 1;
     }
-    if (usersPositions[index].yCord >= 2579) {
-      usersPositions[index].yCord = 2579;
+    if (usersPositions[index].yCord > config.game.map.yBoundary - usersPositions[index].radius) {
+      usersPositions[index].yCord = config.game.map.yBoundary - usersPositions[index].radius - 1;
     }
-    if (usersPositions[index].yCord <= 21) {
-      usersPositions[index].yCord = 21;
+    if (usersPositions[index].yCord < usersPositions[index].radius) {
+      usersPositions[index].yCord = usersPositions[index].radius + 1;
     }
   }
 }

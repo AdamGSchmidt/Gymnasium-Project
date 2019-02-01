@@ -4,6 +4,7 @@
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
         canvas save and restore för att fixa buggar??
+        BUGG kulur vid vänster och övre väggen fastnar då de skjuts med en vinkel parallel till väggen
 */
 
 /* AOUTO CLICKER FOR TESTING 
@@ -96,9 +97,11 @@ const drawGrid = () => {
     }
     // draw border
     ctx.beginPath();
+    ctx.lineWidth = 2;
     ctx.strokeStyle = "#000000";
     ctx.rect(0, 0, 2600, 2600);
     ctx.stroke();
+    ctx.lineWidth = 1;
 }
 
 const drawUsers = (currentUserPositions) => {
@@ -111,7 +114,6 @@ const drawUsers = (currentUserPositions) => {
             ctx.closePath();
             ctx.fillStyle = "#000000";
             ctx.fill();
-            // console.log(" sdadasd");
         }
     }
     // draw Player
