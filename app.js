@@ -3,6 +3,7 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
+    Fixa timestamps skapar lagg
 */
 
 // Initiala variabler
@@ -263,7 +264,8 @@ io.on('connection', (socket) => {
     xCord: Math.floor((Math.random() * 2570)),
     yCord: Math.floor((Math.random() * 2570)),
     id: socket.id,
-    lastMessage: time.getMilliseconds() + 1000,
+    lastMessage: time,
+    lastProjectile: time,
     obliterated: false
   };
   let socketInfo = {
@@ -285,39 +287,57 @@ io.on('connection', (socket) => {
       if (socket.id == usersPositions[index].id) {
         data = data;
         time = new Date();
+        time2 = usersPositions[index].lastMessage + 10;
+        time2 = new Date(time2);
         // if satsen ser till så att man endast kan röra sig om man är i spelet
-        if (((usersPositions[index].lastMessage + 10) % 1000) < time.getMilliseconds()) {
+        if (time > time2) {
           determinNewPosition(data.clientAngel, data.clientUseAngel, index);
         } else {
+          console.log(time2)
           console.log("TOO EARLY");
         }
-        usersPositions[index].lastMessage = time.getMilliseconds();
+        usersPositions[index].lastMessage = time;
       }
     }
   });
 
   socket.on('newProjectile', (projectile) => {
     let playerNotObliterated = true;
-    for (let index2 = 0; index2 < usersPositions.length; index2++) {
-      if (socket.id == usersPositions[index2].id) {
-        playerNotObliterated = false;
+    let projectileTime = false;
+    for (let index = 0; index < usersPositions.length; index++) {
+      if (usersPositions[index].id == socket.id) {
+        time = new Date();
+        time2 = time + 1000;
+        time2 = new Date(time2);
+        if (usersPositions[index].lastProjectile == null || usersPositions[index].lastProjectile < time2) {
+          projectileTime = true;
+          usersPositions[index].lastProjectile = time;
+
+        }
       }
     }
-    if (!playerNotObliterated) {
-      for (let index = 0; index < usersPositions.length; index++) {
-        console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
-        if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
-          if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
-            let newProjectile = {
-              xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
-              yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
-              angel: projectile.angel,
-              radius: 15, // change 15
-              speed: 6, // change 6 and 20
-              id: projectile.id
+    if (projectileTime) {
+      for (let index2 = 0; index2 < usersPositions.length; index2++) {
+        if (socket.id == usersPositions[index2].id) {
+          playerNotObliterated = false;
+        }
+      }
+      if (!playerNotObliterated) {
+        for (let index = 0; index < usersPositions.length; index++) {
+          console.log(projectile.useAngel + projectile.id + usersPositions[index].id);
+          if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
+            if (usersPositions[index].xCord > 37 && usersPositions[index].xCord < 2563 && usersPositions[index].yCord > 37 && usersPositions[index].yCord < 2563) {
+              let newProjectile = {
+                xCord: usersPositions[index].xCord + ((20 + 15) * Math.cos(projectile.angel)),
+                yCord: usersPositions[index].yCord + ((20 + 15) * Math.sin(projectile.angel)),
+                angel: projectile.angel,
+                radius: 15, // change 15
+                speed: 6, // change 6 and 20
+                id: projectile.id
+              }
+              projectilePositions.push(newProjectile);
+              console.log(projectilePositions);
             }
-            projectilePositions.push(newProjectile);
-            console.log(projectilePositions);
           }
         }
       }
@@ -376,7 +396,6 @@ const determinNewProjectile = () => {
           let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
           if (distance < projectilePositions[index].radius + projectilePositions[index2].radius) { // 20 is the radius change later
             projectilePositions.splice(index, 1);
-            projectilePositions.splice(index2, 1);
             console.log("PROJECTILE COLLISION")
           }
         }
@@ -391,25 +410,25 @@ const determinNewProjectile = () => {
     }
     // Byt till else if kanske ??
     if (projectilePositions[index].xCord >= (2600 - projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].xCord = 2600 - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].xCord <= (0 + projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].xCord = 0 + projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord >= (2600 - projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].yCord = 2600 - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel += Math.PI / 2;
+      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].yCord = 0 + projectilePositions[index].radius;
       continue;
