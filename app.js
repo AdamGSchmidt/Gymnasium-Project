@@ -253,7 +253,8 @@ function checkPasswordRegistration(registrationPasswordInput) {
 let currentConections = 0;
 const usersPositions = new Array();
 const projectilePositions = new Array();
-const sockets = new Array();
+const lootPositions = new Array();
+
 let time;
 
 io.on('connection', (socket) => {
@@ -274,7 +275,6 @@ io.on('connection', (socket) => {
   }
   console.log(usersPosition);
   usersPositions.push(usersPosition);
-  sockets.push(socketInfo);
   console.log(usersPositions);
   console.log(socket.id);
 
@@ -335,6 +335,7 @@ io.on('connection', (socket) => {
                 speed: 6, // change 6 and 20
                 id: projectile.id
               }
+              socket.emit('startreload');
               projectilePositions.push(newProjectile);
               console.log(projectilePositions);
             }
@@ -422,13 +423,13 @@ const determinNewProjectile = () => {
       continue;
     }
     if (projectilePositions[index].yCord >= (2600 - projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
+      projectilePositions[index].angel = Math.PI - (-1 * (Math.PI - projectilePositions[index].angel));
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].yCord = 2600 - projectilePositions[index].radius;
       continue;
     }
     if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel = (Math.PI - projectilePositions[index].angel);
+      projectilePositions[index].angel = Math.abs((Math.PI - projectilePositions[index].angel));
       projectilePositions[index].speed *= 0.90;
       projectilePositions[index].yCord = 0 + projectilePositions[index].radius;
       continue;

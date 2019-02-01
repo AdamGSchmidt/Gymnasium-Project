@@ -35,6 +35,9 @@ let angel;
 let useAngel = true;
 let notFirst = false;
 
+let reload = false;
+let reloadBarValue = 0;
+
 class Projectile {
     constructor() {
         this.angel = angel;
@@ -116,6 +119,13 @@ const drawUsers = (currentUserPositions) => {
     ctx.closePath();
     ctx.fillStyle = "#000000";
     ctx.fill();
+
+    // reload progress bar
+    ctx.beginPath();
+    ctx.arc(playerPosition.xCord, playerPosition.yCord, 20 + 10, 3* Math.PI/2, reloadBarValue + 3*  Math.PI/2, true);
+    ctx.strokeStyle = "#ff6347";
+    ctx.stroke();
+    ctx.strokeStyle = "#000000";
 }
 
 const drawProjectiles = (currentProjectilePositions) => {
@@ -125,8 +135,9 @@ const drawProjectiles = (currentProjectilePositions) => {
         ctx.beginPath();
         ctx.arc(currentProjectilePositions[index].xCord, currentProjectilePositions[index].yCord, currentProjectilePositions[index].radius, 0, 2 * Math.PI, false);
         ctx.closePath();
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#ff6347";
         ctx.fill();
+        ctx.fillStyle = "#000000";
     }
 }
 
@@ -184,7 +195,7 @@ const getUser = () => {
             let username = data.Username;
             setUser(username);
         },
-        error: function (jqXHR, textStatus, err) {
+        error: () => {
             alert('Error');
         }
     });
@@ -201,7 +212,7 @@ const logout = () => {
         success: function (data) {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/');
         },
-        error: function (jqXHR, textStatus, err) {
+        error:  () => {
             alert('Error');
         }
     });
@@ -248,8 +259,23 @@ socket.on('tick', (data) => {
 
 socket.on('obliterated', (data) => {
     if (socketId == data) {
-        setTimeout( () => {
+        setTimeout(() => {
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
-        },32);
+        }, 32);
     }
 });
+
+socket.on('startreload', () => {
+    reload = true;
+});
+
+
+setInterval(() => {
+    if (reload) {
+        reloadBarValue += ((Math.PI * 2) / 62.5); // 62.5 is half the tick rate;
+        if (reloadBarValue >= Math.PI * 2) {
+            reload = false;
+            reloadBarValue = 0;
+        }
+    }
+}, 14.5);
