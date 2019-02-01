@@ -59,7 +59,7 @@ const getCenterCanvas = () => {
 }
 
 // Draw all objects 
-const draw = (currentUserPositions, currentProjectilePositions) => {
+const draw = (currentUserPositions, currentProjectilePositions, currentLootPositions) => {
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
@@ -71,6 +71,7 @@ const draw = (currentUserPositions, currentProjectilePositions) => {
     notFirst = true;
     ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
+    drawLoot(currentLootPositions);
     drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
 }
@@ -140,6 +141,19 @@ const drawProjectiles = (currentProjectilePositions) => {
         ctx.fillStyle = "#000000";
     }
 }
+
+const drawLoot = (currentLootPositions) => {
+    c = document.getElementById("gameCanvas");
+    ctx = c.getContext("2d");
+    for (let index = 0; index < currentLootPositions.length; index++) {
+        ctx.beginPath();
+        ctx.arc(currentLootPositions[index].xCord, currentLootPositions[index].yCord, currentLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fillStyle = "#FFFF00";
+        ctx.fill();
+        ctx.fillStyle = "#000000";
+    } 
+};
 
 
 const newPlayerPosition = (event) => {
@@ -237,6 +251,7 @@ socket.on('tick', (data) => {
     let currentUserPositions = [];
     currentUserPositions = parsedData.players;
     let currentProjectilePositions = parsedData.projectiles;
+    let currentLootPositions = parsedData.loot;
     if (currentUserPositions) {
         for (let index = 0; index < currentUserPositions.length; index++) {
             if (currentUserPositions[index].id == socketId) {
@@ -247,7 +262,7 @@ socket.on('tick', (data) => {
                 currentUserPositions.splice(index, 1);
             }
         }
-        draw(currentUserPositions, currentProjectilePositions);
+        draw(currentUserPositions, currentProjectilePositions, currentLootPositions);
         socket.emit('update', {
             clientAngel: angel,
             clientUseAngel: useAngel

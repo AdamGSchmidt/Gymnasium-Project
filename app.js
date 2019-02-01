@@ -363,7 +363,8 @@ setInterval(() => {
   playerProjectileCollisionCheck();
   let clientDataObj = {
     players: usersPositions || [],
-    projectiles: projectilePositions || []
+    projectiles: projectilePositions || [],
+    loot: lootPositions || []
   };
   io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
@@ -378,12 +379,22 @@ const playerProjectileCollisionCheck = () => {
       if (distance < projectilePositions[index].radius + 20) { // 20 is the radius change later
         usersPositions[index2].obliterated = true;
         io.emit('obliterated', usersPositions[index2].id);
+        createLoot(usersPositions[index2]);
         usersPositions.splice(index2, 1);
         console.log("PROJECTILE PLAYER COLLISION");
       }
     }
   }
 }
+
+const createLoot = (data) => {
+  let loot = {
+    radius: 10,
+    xCord: data.xCord,
+    yCord: data.yCord
+  }
+  lootPositions.push(loot);
+};
 
 const determinNewProjectile = () => {
   // Kolla om det finns en kollition mellan projectilerna
