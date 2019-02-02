@@ -389,17 +389,20 @@ const playerLootCollisionCheck = () => {
       if (distance < lootPositions[index].radius + usersPositions[index2].radius) {
         if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
           usersPositions[index2].projectileSpeed *= config.game.upgrade.projectileSpeedMultiplier; // INCRESE BY 10%
-        } else {
+        }
+        if (usersPositions[index2].projectileSpeed >= config.game.upgrade.maxSpeedProjectile) {
           usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
         }
         if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
           usersPositions[index2].projectileRadius *= config.game.upgrade.projectileRadiusMultiplier; // INCRESE BY 10%
-        } else {
+        }
+        if (usersPositions[index2].projectileRadius >= config.game.upgrade.maxRadiusProjectile) {
           usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
         }
         if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
           usersPositions[index2].radius *= config.game.upgrade.playerRadiusMultipler;
-        } else {
+        }
+        if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
           usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
         }
         lootPositions.splice(index, 1);
