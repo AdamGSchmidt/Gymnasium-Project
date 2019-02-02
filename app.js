@@ -7,6 +7,7 @@
     Fixa session data
     game crash from picking up loot (sometimes)
     fix getting session data for usernname
+    error chcking with socket on update
 */
 
 // Initiala variabler
