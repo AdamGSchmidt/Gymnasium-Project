@@ -4,9 +4,6 @@
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
     Fixa timestamps skapar lagg
-    Fixa session data
-    game crash from picking up loot (sometimes)
-    fix getting session data for usernname
     error chcking with socket on update
 */
 

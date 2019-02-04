@@ -310,7 +310,7 @@ socket.on('obliterated', (data) => {
             if (feedItem.obliterator == feedItem.obliterated) {
                 document.getElementById('obliteratedMessage3').innerHTML = `by yourself`;
             } else {
-                document.getElementById('obliteratedMessage3').innerHTML = `by ${playerPosition.username}`;
+                document.getElementById('obliteratedMessage3').innerHTML = `by ${feedItem.obliterator}`;
             }
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
         }, 32);
