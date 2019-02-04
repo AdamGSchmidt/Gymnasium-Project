@@ -368,9 +368,9 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
+  playerLootCollisionCheck();
   determinNewProjectile();
   playerProjectileCollisionCheck();
-  playerLootCollisionCheck();
   let clientDataObj = {
     players: usersPositions || [],
     projectiles: projectilePositions || [],
