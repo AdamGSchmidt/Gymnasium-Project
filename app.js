@@ -297,57 +297,61 @@ io.on('connection', (socket) => {
   console.log('a user connected, current: ' + currentConections);
 
   socket.on('update', (data) => {
-    for (let index = 0; index < usersPositions.length; index++) {
-      if (socket.id == usersPositions[index].id) {
-        data = data;
-        time = new Date();
-        let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 12));
-        time2 = new Date(time2);
-        // if satsen ser till så att man endast kan röra sig om man är i spelet
-        if (time > time2) {
-          determinNewPosition(data.clientAngel, data.clientUseAngel, index);
-        } else {
-          console.log("TOO EARLY");
+    if (data && data.clientAngel && data.clientUseAngel) {
+      for (let index = 0; index < usersPositions.length; index++) {
+        if (socket.id == usersPositions[index].id) {
+          data = data;
+          time = new Date();
+          let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 12));
+          time2 = new Date(time2);
+          // if satsen ser till så att man endast kan röra sig om man är i spelet
+          if (time > time2) {
+            determinNewPosition(data.clientAngel, data.clientUseAngel, index);
+          } else {
+            console.log("TOO EARLY");
+          }
+          usersPositions[index].lastMessage = time;
         }
-        usersPositions[index].lastMessage = time;
       }
     }
   });
 
   socket.on('newProjectile', (projectile) => {
-    let playerNotObliterated = true;
-    let projectileTime = false;
-    for (let index = 0; index < usersPositions.length; index++) {
-      if (usersPositions[index].id == socket.id) {
-        time = new Date();
-        time2 = time + 1000;
-        time2 = new Date(time2);
-        if (usersPositions[index].lastProjectile == null || usersPositions[index].lastProjectile < time2) {
-          projectileTime = true;
-          usersPositions[index].lastProjectile = time;
+    if (projectile && projectile.angel && projectile.id) {
+      let playerNotObliterated = true;
+      let projectileTime = false;
+      for (let index = 0; index < usersPositions.length; index++) {
+        if (usersPositions[index].id == socket.id) {
+          time = new Date();
+          time2 = time + 1000;
+          time2 = new Date(time2);
+          if (usersPositions[index].lastProjectile == null || usersPositions[index].lastProjectile < time2) {
+            projectileTime = true;
+            usersPositions[index].lastProjectile = time;
+          }
         }
       }
-    }
-    if (projectileTime) {
-      for (let index2 = 0; index2 < usersPositions.length; index2++) {
-        if (socket.id == usersPositions[index2].id) {
-          playerNotObliterated = false;
+      if (projectileTime) {
+        for (let index2 = 0; index2 < usersPositions.length; index2++) {
+          if (socket.id == usersPositions[index2].id) {
+            playerNotObliterated = false;
+          }
         }
-      }
-      if (!playerNotObliterated) {
-        for (let index = 0; index < usersPositions.length; index++) {
-          if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
-            let newProjectile = {
-              xCord: usersPositions[index].xCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.cos(projectile.angel)), // 4 to avoid collision
-              yCord: usersPositions[index].yCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.sin(projectile.angel)),
-              angel: projectile.angel,
-              radius: usersPositions[index].projectileRadius,
-              speed: usersPositions[index].projectileSpeed,
-              id: projectile.id,
-              username: usersPositions[index].username,
+        if (!playerNotObliterated) {
+          for (let index = 0; index < usersPositions.length; index++) {
+            if (projectile.useAngel && (projectile.id === usersPositions[index].id)) {
+              let newProjectile = {
+                xCord: usersPositions[index].xCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.cos(projectile.angel)), // 4 to avoid collision
+                yCord: usersPositions[index].yCord + ((usersPositions[index].radius + usersPositions[index].projectileRadius + 4) * Math.sin(projectile.angel)),
+                angel: projectile.angel,
+                radius: usersPositions[index].projectileRadius,
+                speed: usersPositions[index].projectileSpeed,
+                id: projectile.id,
+                username: usersPositions[index].username,
+              }
+              socket.emit('startreload');
+              projectilePositions.push(newProjectile);
             }
-            socket.emit('startreload');
-            projectilePositions.push(newProjectile);
           }
         }
       }
@@ -382,31 +386,33 @@ setInterval(() => {
 const playerLootCollisionCheck = () => {
   for (let index = 0; index < lootPositions.length; index++) {
     for (let index2 = 0; index2 < usersPositions.length; index2++) {
-      // Collision checking algorithim
-      let distanceX = lootPositions[index].xCord - usersPositions[index2].xCord;
-      let distanceY = lootPositions[index].yCord - usersPositions[index2].yCord;
-      let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      if (distance < lootPositions[index].radius + usersPositions[index2].radius) {
-        if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
-          usersPositions[index2].projectileSpeed *= config.game.upgrade.projectileSpeedMultiplier; // INCRESE BY 10%
+      if (lootPositions[index] && usersPositions[index2]) {
+        // Collision checking algorithim
+        let distanceX = lootPositions[index].xCord - usersPositions[index2].xCord;
+        let distanceY = lootPositions[index].yCord - usersPositions[index2].yCord;
+        let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        if (distance < lootPositions[index].radius + usersPositions[index2].radius) {
+          if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
+            usersPositions[index2].projectileSpeed *= config.game.upgrade.projectileSpeedMultiplier; // INCREASE BY 10%
+          }
+          if (usersPositions[index2].projectileSpeed >= config.game.upgrade.maxSpeedProjectile) {
+            usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
+          }
+          if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
+            usersPositions[index2].projectileRadius *= config.game.upgrade.projectileRadiusMultiplier; // INCREASE BY 10%
+          }
+          if (usersPositions[index2].projectileRadius >= config.game.upgrade.maxRadiusProjectile) {
+            usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
+          }
+          if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
+            usersPositions[index2].radius *= config.game.upgrade.playerRadiusMultipler;
+          }
+          if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
+            usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
+          }
+          lootPositions.splice(index, 1);
+          console.log("LOOT PLAYER COLLISION");
         }
-        if (usersPositions[index2].projectileSpeed >= config.game.upgrade.maxSpeedProjectile) {
-          usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
-        }
-        if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
-          usersPositions[index2].projectileRadius *= config.game.upgrade.projectileRadiusMultiplier; // INCRESE BY 10%
-        }
-        if (usersPositions[index2].projectileRadius >= config.game.upgrade.maxRadiusProjectile) {
-          usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
-        }
-        if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
-          usersPositions[index2].radius *= config.game.upgrade.playerRadiusMultipler;
-        }
-        if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
-          usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
-        }
-        lootPositions.splice(index, 1);
-        console.log("LOOT PLAYER COLLISION");
       }
     }
   }
