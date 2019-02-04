@@ -291,8 +291,8 @@ socket.on('tick', (data) => {
 
 socket.on('obliterated', (data) => {
     let feedItem = {
-        obliterated: data.obliterated.username,
-        obliterator: data.obliterator.username
+        obliterated: data.obliterated,
+        obliterator: data.obliterator
     };
     feedList.push(feedItem);
     if (feedList.length > 9) {
@@ -307,7 +307,11 @@ socket.on('obliterated', (data) => {
 
     if (socketId == data.id) {
         setTimeout(() => {
-            document.getElementById('obliteratedMessage3').innerHTML = `by ${playerPosition.username}`;
+            if (feedItem.obliterator == feedItem.obliterated) {
+                document.getElementById('obliteratedMessage3').innerHTML = `by yourself`;
+            } else {
+                document.getElementById('obliteratedMessage3').innerHTML = `by ${playerPosition.username}`;
+            }
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
         }, 32);
     }

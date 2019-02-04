@@ -269,30 +269,30 @@ const lootPositions = new Array();
 let time;
 
 io.on('connection', (socket) => {
-  let username = 'username';
+  let usernameSessin;
   storage.get(sessionId, (error, session) => {
     if (error || session == null) {
       console.log('ERROR WHILE GETING USERNAME IN /game')
     } else {
-      username = session['username'];
+      usernameSessin = session['username'];
     }
+    console.log("USERNAME ::::  " + usernameSessin)
+    time = new Date();
+    let usersPosition = {
+      xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
+      yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
+      id: socket.id,
+      username: usernameSessin,
+      lastMessage: time,
+      lastProjectile: time,
+      obliterated: false,
+      projectileSpeed: config.game.projectile.startSpeed,
+      projectileRadius: config.game.projectile.startRadius,
+      radius: config.game.player.startRadius
+    };
+    usersPositions.push(usersPosition);
   });
   currentConections++;
-  time = new Date();
-  let usersPosition = {
-    xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
-    yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
-    id: socket.id,
-    username: username,
-    lastMessage: time,
-    lastProjectile: time,
-    obliterated: false,
-    projectileSpeed: config.game.projectile.startSpeed,
-    projectileRadius: config.game.projectile.startRadius,
-    radius: config.game.player.startRadius
-  };
-
-  usersPositions.push(usersPosition);
 
   console.log('a user connected, current: ' + currentConections);
 
@@ -428,7 +428,7 @@ const playerProjectileCollisionCheck = () => {
       if (distance < projectilePositions[index].radius + usersPositions[index2].radius) {
         usersPositions[index2].obliterated = true;
         io.emit('obliterated', {
-          obliterated: usersPositions[index2],
+          obliterated: usersPositions[index2].username,
           obliterator: projectilePositions[index].username,
           id: usersPositions[index2].id
         });
