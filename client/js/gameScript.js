@@ -111,8 +111,6 @@ const drawUsers = (currentUserPositions) => {
     ctx.closePath();
     ctx.fillStyle = "#000000";
     ctx.fill();
-
-    console.log(playerPosition.username)
     // reload progress bar
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -161,7 +159,7 @@ const newPlayerPosition = (event) => {
     // calculate angel from middle
     let angleX = mouseX - middlePosition.xCord;
     let angleY = (mouseY - middlePosition.yCord);
-    if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < 15 && middlePosition.xCord - mouseX > -15)) && (middlePosition.yCord - mouseY < 15 && middlePosition.yCord - mouseY > -15)) {
+    if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < playerPosition.radius - 5 && middlePosition.xCord - mouseX > -1*(playerPosition.radius - 5)) && (middlePosition.yCord - mouseY < playerPosition.radius - 5 && middlePosition.yCord - mouseY > -1 * (playerPosition.radius - 5)))) {
         angel = 0;
         useAngel = false;
     } else {
@@ -173,7 +171,6 @@ const newPlayerPosition = (event) => {
 
 const newProjectile = (event) => {
     let projectile = new Projectile();
-    console.log("asdasd")
     console.log(projectile);
     socket.emit('newProjectile', projectile);
 }
@@ -281,7 +278,7 @@ socket.on('obliterated', (data) => {
     }
     let feedText = '';
     for (let index = 0; index < feedList.length; index++) {
-        if (feedItem.obliterator == playerPosition.username) {
+        if (feedList[index].obliterator == playerPosition.username) {
             feedText += `<span class="obliteratedFeed2"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
         } else {
             feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
