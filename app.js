@@ -460,6 +460,8 @@ const determinNewProjectile = () => {
           if (distance < projectilePositions[index].radius + projectilePositions[index2].radius) {
             projectilePositions.splice(index, 1);
             console.log("PROJECTILE COLLISION")
+          } else if ((projectilePositions[index].xCord == 0 && projectilePositions[index].yCord == config.game.map.yBoundary) || (projectilePositions[index].yCord == 0 && projectilePositions[index].xCord == config.game.map.xBoundary) || (projectilePositions[index].xCord == 0 && projectilePositions[index].yCord == 0) || (projectilePositions[index].xCord == config.game.map.xBoundary && projectilePositions[index].yCord == config.game.map.yBoundary)) {
+            projectilePositions.splice(index, 1);
           }
         }
       }
