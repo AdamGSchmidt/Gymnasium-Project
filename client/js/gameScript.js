@@ -30,6 +30,7 @@ let useAngel = true;
 let reload = false;
 let reloadBarValue = 0;
 
+const defaultScale = 680;
 const feedList = new Array();
 
 class Projectile {
@@ -42,7 +43,6 @@ class Projectile {
 
 // Get the canvas center and set it to player posision
 const getCenterCanvas = () => {
-    let containerSize = document.getElementById('gameCanvasContainer');
     middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
 }
 
@@ -53,11 +53,12 @@ const draw = (currentUserPositions, currentProjectilePositions, currentLootPosit
     ctx = c.getContext("2d");
     ctx.clearRect(-10000, -10000, 26000, 26000);
     ctx.save();
-    ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
+    ctx.translate((middlePosition.xCord - playerPosition.xCord ), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
     drawLoot(currentLootPositions);
     drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
+   // ctx.scale((canvasWidth / defaultScale), (canvasWidth / defaultScale));
     ctx.restore();
 }
 
@@ -276,7 +277,7 @@ socket.on('obliterated', (data) => {
     };
     feedList.push(feedItem);
     if (feedList.length > 9) {
-        feedList.splice(0,1);
+        feedList.splice(0, 1);
     }
     let feedText = '';
     for (let index = 0; index < feedList.length; index++) {
