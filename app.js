@@ -294,7 +294,7 @@ io.on('connection', (socket) => {
   console.log('a user connected, current: ' + currentConections);
 
   socket.on('update', (data) => {
-    if (data && data.clientAngel && data.clientUseAngel) {
+    if (data && data.clientAngel && data.clientUseAngel && (typeof data.clientUseAngel === "boolean") && (typeof data.clientAngel === "number")) {
       for (let index = 0; index < usersPositions.length; index++) {
         if (socket.id == usersPositions[index].id) {
           data = data;
@@ -314,7 +314,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newProjectile', (projectile) => {
-    if (projectile && projectile.angel && projectile.id) {
+    if (projectile && projectile.angel && projectile.id && (typeof projectile.angel === "number") && (typeof projectile.id === "string")) {
       let playerNotObliterated = true;
       let projectileTime = false;
       for (let index = 0; index < usersPositions.length; index++) {

@@ -1,9 +1,7 @@
 /*
-        Fixa rezize så att den inte förstör absolut allt (VET EJ VARFÖR??????)
         Fixa scale
         tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
-        canvas save and restore för att fixa buggar??
         BUGG kulur vid vänster och övre väggen fastnar då de skjuts med en vinkel parallel till väggen
 */
 
@@ -22,20 +20,13 @@ socket.on('connect', function () {
 });
 
 // Variabler som håller reda på data
-let middlePosition, lastMiddlePosition;
 let canvasWidth;
 let canvasHeight;
 let playerPosition;
-let lastPlayerPosition = {
-    xCord: 0,
-    yCord: 0
-}
 let mouseX = 0;
 let mouseY = 0;
 let angel;
 let useAngel = true;
-let notFirst = false;
-
 let reload = false;
 let reloadBarValue = 0;
 
@@ -52,12 +43,6 @@ class Projectile {
 // Get the canvas center and set it to player posision
 const getCenterCanvas = () => {
     let containerSize = document.getElementById('gameCanvasContainer');
-    // SKA KOLLA OM DE ÄR FÖRSTA OCH SPARA VÄRDERNA
-    if (!notFirst) {
-        lastMiddlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
-    } else {
-        lastMiddlePosition = { xCord: middlePosition.xCord, yCord: middlePosition.yCord };
-    }
     middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
 }
 
@@ -66,17 +51,14 @@ const draw = (currentUserPositions, currentProjectilePositions, currentLootPosit
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
-    // Clear canvas
-    if (notFirst) {
-        ctx.translate(-1 * (middlePosition.xCord - lastPlayerPosition.xCord), -1 * (middlePosition.yCord - lastPlayerPosition.yCord));
-        ctx.clearRect(-10000, -10000, 26000, 26000);
-    }
-    notFirst = true;
+    ctx.clearRect(-10000, -10000, 26000, 26000);
+    ctx.save();
     ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
     drawLoot(currentLootPositions);
     drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
+    ctx.restore();
 }
 
 const drawGrid = () => {
@@ -284,8 +266,6 @@ socket.on('tick', (data) => {
             clientAngel: angel,
             clientUseAngel: useAngel
         });
-        lastPlayerPosition.xCord = playerPosition.xCord;
-        lastPlayerPosition.yCord = playerPosition.yCord;
     }
 });
 
@@ -300,8 +280,11 @@ socket.on('obliterated', (data) => {
     }
     let feedText = '';
     for (let index = 0; index < feedList.length; index++) {
-        feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
-        
+        if (feedItem.obliterator == playerPosition.username) {
+            feedText += `<span class="obliteratedFeed2"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
+        } else {
+            feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
+        }
     }
     document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
 

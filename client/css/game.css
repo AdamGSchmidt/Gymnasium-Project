@@ -120,3 +120,12 @@
     margin: 0;
     text-align:right
 }
+
+.obliteratedFeed2{
+    width: fit-content;
+    height: fit-content;
+    display: table;
+    margin: 0;
+    text-align:right;
+    color: tomato;
+}
