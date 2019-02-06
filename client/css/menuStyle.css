@@ -3,110 +3,11 @@
     padding: 0%;
 }
 
-#statsSection {
-    background-color: azure;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-    border: solid black 1px;
-    position: absolute;
-    top: 9%;
-    left: 5%;
-    height: 86vh;
-    width: 30%;
-}
 
 #menuCanvasContainer {
     position: absolute;
-    top: 9%;
-    left: 40%;
-    height: 86vh;
-    width: 55%;
-    background-color: azure;
-    /* TA BORT DENNA SEN */
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-    border: solid black 1px;
-}
-
-#playBtn {
-    border: solid black 1px;
-    padding-left: 8%;
-    padding-right: 8%;
-    height: 10%;
-    position: absolute;
-    top: 45%;
-    left: 40%;
-    background-color: tomato;
-    font-weight: bold;
-    font-size: 100%;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-}
-
-#playBtn:hover {
-    box-shadow: 0 0 5vh 0 rgba(0, 0, 0, 0.24), 0 0 5vh 0 rgba(0, 0, 0, 0.19);
-}
-
-#logoutBtn {
-    border: solid black 1px;
-    width: fit-content;
-    padding-left: 8%;
-    padding-right: 8%;
-    position: relative;
-    background-color: tomato;
-    font-weight: bold;
-    font-size: 100%;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-    float: left;
-}
-
-#logoutBtn:hover {
-    box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
-}
-
-#usernameContainer {
-    position: absolute;
-    top: 2.5%;
-    left: 5%;
-    width: 20%;
-    height: 4%;
-}
-
-#usernameSection {
-    background-color: white;
-    position: relative;
-    float: left;
-    padding-right: 5%;
-    padding-left: 5%;
-    width: fit-content;
-    text-align: center;
-    border: solid black 1px;
-    margin-left: 4px;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-}
-
-#numberOfUsers {
-    background-color: tomato;
-    padding: 2%;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-    border: solid black 1px;
-    width: fit-content;
-    height: fit-content;
-    float: left;
-    margin-left: 3%;
-    margin-top: 4%;
-}
-
-#numberOfUsersCount {
-    padding: 2%;
-    box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
-    border: solid black 1px;
-    width: fit-content;
-    height: fit-content;
-    float: left;
-    margin-left: 3%;
-    margin-top: 4%;
-}
-
-#numberOfUsersText {
-    font-weight: bold;
+    top: 0%;
+    left: 0%;
+    height: 100vh;
+    width: 100%;
 }
