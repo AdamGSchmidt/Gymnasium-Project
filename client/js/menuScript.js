@@ -25,7 +25,6 @@ const drawMenue = () => {
     ctx.clearRect(-10000, -10000, 26000, 26000);
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
     // draw button boxes
 
     // top box
@@ -46,19 +45,31 @@ const drawMenue = () => {
     if (selectedMenue === 'profile') {
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 8.4, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
         ctx.fillRect(0, (canvasHeight / 80) * 8.4, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#FFFFFF";
     }
+    // text
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('Profile', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 14.8 / 0.9);
 
     // loadout box
     if (selectedMenue === 'loadout') {
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 24.2, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
         ctx.fillRect(0, (canvasHeight / 80) * 24.2, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#FFFFFF";
     }
+    // text
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('Loadout', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 24.2 / 0.75);
 
     // play box
     if (selectedMenue === 'play') {
@@ -73,30 +84,47 @@ const drawMenue = () => {
         ctx.fillStyle = "#000000";
         ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
         ctx.textAlign = "center";
-        ctx.fillText('Play!', ((canvasWidth / 24) * 12) + ((canvasWidth / 24 * 2) /2), ((canvasHeight / 80) * 43.7) + ((canvasHeight / 80) * 7.4 / 1.5));
+        ctx.fillText('Play!', ((canvasWidth / 24) * 12) + ((canvasWidth / 24 * 2) / 2), ((canvasHeight / 80) * 43.7) + ((canvasHeight / 80) * 7.4 / 1.5));
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
         ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#FFFFFF";
     }
+    // text
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('Play', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 43.7 / 0.9);
 
     // store box
     if (selectedMenue === 'store') {
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 55.8, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
         ctx.fillRect(0, (canvasHeight / 80) * 55.8, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillStyle = "#FFFFFF";
     }
+    // text
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('Store', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 55.8 / 0.867);
 
     // ??? box
     if (selectedMenue === '???') {
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 7, (canvasHeight / 80) * 8.5); // borde vara 8.4
+        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 7, (canvasHeight / 80) * 8.5); 
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 8, (canvasHeight / 80) * 8.5); // borde vara 8.4
-
+        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 8, (canvasHeight / 80) * 8.5); 
+        ctx.fillStyle = "#FFFFFF";
     }
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('???', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 71.6 / 0.925);
+
 
     // username
     ctx.fillStyle = "#FFFFFF";
