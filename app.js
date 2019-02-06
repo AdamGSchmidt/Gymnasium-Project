@@ -55,11 +55,11 @@ app.get('/', function (req, res) {
 
 // menu route
 app.get('/menu', function (req, res) {
-  if (req.session['login'] === true) {
+ //if (req.session['login'] === true) {
     res.sendFile(__dirname + '/client/html/menu.html');
-  } else {
-    res.redirect('/');
-  }
+  //} else {
+   // res.redirect('/');
+  //}
 });
 
 // Register får rätt fil
