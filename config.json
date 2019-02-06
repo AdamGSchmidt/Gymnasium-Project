@@ -1,0 +1,32 @@
+{
+    "database": {},
+    "game": {
+        "player": {
+            "startRadius": 20
+        },
+        "projectile": {
+            "startSpeed": 6,
+            "startRadius": 15,
+            "speedChange": 0.90,
+            "minSpeed": 1
+        },
+        "loot": {
+            "startRadius": 10
+        },
+        "upgrade" :{
+            "maxRadiusProjectile": 40,
+            "maxSpeedProjectile": 10,
+            "minRadiusPlayer": 10,
+            "projectileRadiusMultiplier": 1.2,
+            "projectileSpeedMultiplier": 1.2,
+            "playerRadiusMultipler": 0.9
+        },
+        "map": {
+            "xBoundary": 2600,
+            "yBoundary": 2600
+        },
+        "general": {
+
+        }
+    }
+}
