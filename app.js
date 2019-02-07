@@ -198,8 +198,11 @@ app.get('/game', function (req, res) {
 
 // kollar om man är loggedin
 // bör ändras till GET
-app.get('/getusername', urlencodedParser, function (req, res) {
-  res.send({ Username: req.session['username'] });
+app.get('/getlogin', urlencodedParser, function (req, res) {
+  res.send(JSON.stringify({ 
+    username: req.session['username'],
+    login: req.session['login']
+}));
   res.end();
 });
 

@@ -3,6 +3,7 @@ let canvasWidth;
 let canvasHeight;
 let c;
 let username;
+let login;
 let selectedMenue = 'play';
 
 const defaoultScale = 680;
@@ -10,7 +11,7 @@ const defaoultScale = 680;
 
 const startup = () => {
     // Hämntar användarnamn och anropar andera functioner
-    getUsername();
+    getLogin();
 
     // hämtar antalet nuvarande spelare varje sekund
     /* getNumberOfUsers();
@@ -25,6 +26,7 @@ const drawMenue = () => {
     ctx.clearRect(-10000, -10000, 26000, 26000);
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.globalCompositeOperation = 'ligther';
     // draw button boxes
 
     // top box
@@ -114,11 +116,11 @@ const drawMenue = () => {
     // ??? box
     if (selectedMenue === '???') {
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 7, (canvasHeight / 80) * 8.5); 
+        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 7, (canvasHeight / 80) * 8.5);
         ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 8, (canvasHeight / 80) * 8.5); 
+        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 8, (canvasHeight / 80) * 8.5);
         ctx.fillStyle = "#FFFFFF";
     }
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -131,6 +133,45 @@ const drawMenue = () => {
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
     ctx.fillText(username, canvasWidth / 8, canvasHeight / 18);
+
+    // login buttons
+    if (login == true) {
+        // sign up
+        ctx.fillStyle = "#ff6347";
+        ctx.fillRect((canvasWidth / 80) * 71.5, (canvasHeight / 80) * 1, canvasWidth / 80 * 8, (canvasHeight / 80) * 6);
+        //text
+        ctx.fillStyle = "#000000";
+        ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText('Friends', (canvasWidth / 80) * 75.5, canvasHeight / 16);
+
+        // login
+        ctx.fillStyle = "#ff6347";
+        ctx.fillRect((canvasWidth / 80) * 64, (canvasHeight / 80) * 1, canvasWidth / 80 * 7, (canvasHeight / 80) * 6);
+        // text  
+        ctx.fillStyle = "#000000";
+        ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText('Logout', (canvasWidth / 80) * 67.5, canvasHeight / 16);
+    } else {
+        // sign up
+        ctx.fillStyle = "#ff6347";
+        ctx.fillRect((canvasWidth / 80) * 71.5, (canvasHeight / 80) * 1, canvasWidth / 80 * 8, (canvasHeight / 80) * 6);
+        //text
+        ctx.fillStyle = "#000000";
+        ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText('Sign Up', (canvasWidth / 80) * 75.5, canvasHeight / 16);
+
+        // login
+        ctx.fillStyle = "#ff6347";
+        ctx.fillRect((canvasWidth / 80) * 65, (canvasHeight / 80) * 1, canvasWidth / 80 * 6, (canvasHeight / 80) * 6);
+        // text  
+        ctx.fillStyle = "#000000";
+        ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText('Login', (canvasWidth / 80) * 68, canvasHeight / 16);
+    }
 }
 
 const changeMenue = (event) => {
@@ -148,6 +189,20 @@ const changeMenue = (event) => {
         selectedMenue = 'store';
     } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 71.6) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 71.6) + ((canvasHeight / 80) * 14.8)) {
         selectedMenue = '???';
+    }
+
+    if (login == false) {
+        if (mouseX > (canvasWidth / 80) * 71.5 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 8 + (canvasWidth / 80) * 71.5 && mouseY < (((canvasHeight / 80) * 6) + ((canvasHeight / 80) * 1))) {
+            registerFunc();
+        } else if (mouseX > (canvasWidth / 80) * 65 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 6 + (canvasWidth / 80) * 65 && mouseY < (((canvasHeight / 80) * 8)) + (((canvasHeight / 80) * 1))) {
+            loginFunc();
+        }
+    } else {
+        if (mouseX > (canvasWidth / 80) * 71.5 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 8 + (canvasWidth / 80) * 71.5 && mouseY < (((canvasHeight / 80) * 6) + ((canvasHeight / 80) * 1))) {
+            friendsFunc();
+        } else if (mouseX > (canvasWidth / 80) * 65 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 6 + (canvasWidth / 80) * 65 && mouseY < (((canvasHeight / 80) * 8)) + (((canvasHeight / 80) * 1))) {
+            logoutFunc();
+        }
     }
     drawMenue();
 
@@ -174,7 +229,15 @@ const changeMenue = (event) => {
     }
 }
 
-const logout = () => {
+const registerFunc = () => {
+    window.location.replace(window.location.protocol + "//" + window.location.host + '/register');
+};
+
+const loginFunc = () => {
+    window.location.replace(window.location.protocol + "//" + window.location.host + '/');
+};
+
+const logoutFunc = () => {
     $.ajax({
         type: "POST",
         url: "/logout",
@@ -189,14 +252,15 @@ const logout = () => {
     });
 }
 
-const getUsername = () => {
+const getLogin = () => {
     $.ajax({
-        url: "/getusername",
+        url: "/getlogin",
         timeout: 2000,
         data: {},
         success: function (data) {
-
-            username = data.Username;
+            data = JSON.parse(data);
+            username = data.username || 'Guest';
+            login = data.login || false;
             console.log(username)
             resize();
             drawMenue();
