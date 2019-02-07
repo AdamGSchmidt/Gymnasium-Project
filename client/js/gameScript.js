@@ -53,12 +53,12 @@ const draw = (currentUserPositions, currentProjectilePositions, currentLootPosit
     ctx = c.getContext("2d");
     ctx.clearRect(-10000, -10000, 26000, 26000);
     ctx.save();
-    ctx.translate((middlePosition.xCord - playerPosition.xCord ), (middlePosition.yCord - playerPosition.yCord));
+    ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
     drawLoot(currentLootPositions);
     drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
-   // ctx.scale((canvasWidth / defaultScale), (canvasWidth / defaultScale));
+    // ctx.scale((canvasWidth / defaultScale), (canvasWidth / defaultScale));
     ctx.restore();
 }
 
@@ -159,7 +159,7 @@ const newPlayerPosition = (event) => {
     // calculate angel from middle
     let angleX = mouseX - middlePosition.xCord;
     let angleY = (mouseY - middlePosition.yCord);
-    if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < playerPosition.radius - 5 && middlePosition.xCord - mouseX > -1*(playerPosition.radius - 5)) && (middlePosition.yCord - mouseY < playerPosition.radius - 5 && middlePosition.yCord - mouseY > -1 * (playerPosition.radius - 5)))) {
+    if ((angleX == 0 && angleY == 0) || ((middlePosition.xCord - mouseX < playerPosition.radius - 5 && middlePosition.xCord - mouseX > -1 * (playerPosition.radius - 5)) && (middlePosition.yCord - mouseY < playerPosition.radius - 5 && middlePosition.yCord - mouseY > -1 * (playerPosition.radius - 5)))) {
         angel = 0;
         useAngel = false;
     } else {
@@ -195,13 +195,13 @@ const resize = () => {
 // Hämta username
 const getUser = () => {
     $.ajax({
-        url: "/getusername",
+        url: "/getlogin",
         timeout: 2000,
         data: {},
         success: function (data) {
-
-            let username = data.Username;
-            setUser(username);
+            data = JSON.parse(data);
+            let playerUsername = data.username;
+            setUser(playerUsername);
         },
         error: () => {
             alert('Error');
@@ -221,6 +221,8 @@ const restart = () => {
 
 // Sätt username på usernameText
 const setUser = (username) => {
+    console.log("asdasasdadsasdadssadsadadsasdsadadsdsadsaadsdsaadsadsadsadsadsgfdsdbv")
+    console.log(username)
     document.getElementById('usernameText').innerHTML = username;
 }
 

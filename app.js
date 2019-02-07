@@ -55,10 +55,10 @@ app.get('/', function (req, res) {
 
 // menu route
 app.get('/menu', function (req, res) {
- //if (req.session['login'] === true) {
-    res.sendFile(__dirname + '/client/html/menu.html');
+  //if (req.session['login'] === true) {
+  res.sendFile(__dirname + '/client/html/menu.html');
   //} else {
-   // res.redirect('/');
+  // res.redirect('/');
   //}
 });
 
@@ -197,14 +197,31 @@ app.get('/game', function (req, res) {
 });
 
 // kollar om man är loggedin
-// bör ändras till GET
 app.get('/getlogin', urlencodedParser, function (req, res) {
-  res.send(JSON.stringify({ 
+  res.send(JSON.stringify({
     username: req.session['username'],
     login: req.session['login']
-}));
+  }));
   res.end();
 });
+
+
+
+app.get('/getprofielecontent', urlencodedParser, function (req, res) {
+
+  let profileUsername = req.session['username'];
+  let sql = `SELECT Username, UserID, Progress, Projectiles, Obliterations, Currency, Games FROM User WHERE Username = '${profileUsername}'`;
+  databaseModule.connectToDB().query(sql, function (err, results) {
+    if (err) {
+      console.log('Error: Failed to get profile content,');
+      console.log(err);
+    } else {
+      console.log(results);
+      res.send(results);
+    }
+  });
+});
+
 
 // loggar ut
 app.post('/logout', urlencodedParser, function (req, res) {

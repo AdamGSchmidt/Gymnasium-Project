@@ -65,7 +65,16 @@ function createTable() {
       database: "mydb"
    });
    console.log("CREATING TABLE");
-   let sql = "CREATE TABLE User (Username VARCHAR(255) NOT NULL, UserID int NOT NULL AUTO_INCREMENT, Password VARCHAR(255) NOT NULL, Progress VARCHAR(255), UNIQUE(UserID), PRIMARY KEY(UserID) );";
+   let sql = `CREATE TABLE User (Username VARCHAR(255) NOT NULL, 
+   UserID int NOT NULL AUTO_INCREMENT, 
+   Password VARCHAR(255) NOT NULL, 
+   Progress int, 
+   Projectiles int,
+   Obliterations int,
+   Currency int,
+   Games int,
+   UNIQUE(UserID), 
+   PRIMARY KEY(UserID) );`;
    con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("TABLE CREATED");
@@ -75,14 +84,14 @@ con.end();
 
 module.exports = {
 
-   // Create new user
+   // Create new users
    registerNewUser: function (registrationPasswordInput, registrationUsernameInput) {
       bcrypt.hash(registrationPasswordInput, saltRounds).then(function (hash) {
          conDatabseModule.connect(function (err) {
-            let sql = `INSERT INTO User (Username, Password) VALUES ('${registrationUsernameInput}', '${hash}')`;
+            let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Games) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0})`;
             conDatabseModule.query(sql, function (err, result, fields) {
                if (err) {
-                  throw err;
+                  console.log(err);
                } else {
                   console.log("ACCOUNT " + registrationUsernameInput + " REGISTERED");
                }
