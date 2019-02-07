@@ -5,6 +5,7 @@ let c;
 let username;
 let login;
 let selectedMenue = 'play';
+let profieleContent;
 
 const defaoultScale = 680;
 
@@ -12,6 +13,9 @@ const defaoultScale = 680;
 const startup = () => {
     // Hämntar användarnamn och anropar andera functioner
     getLogin();
+    if (login == true) {
+        getProfieleContent();
+    }
 
     // hämtar antalet nuvarande spelare varje sekund
     /* getNumberOfUsers();
@@ -175,7 +179,7 @@ const drawMenue = () => {
 
     if (selectedMenue === 'profile') {
         // profile content 
-
+        
         // box
         ctx.fillStyle = "#AAAAAA";
         ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
@@ -183,7 +187,14 @@ const drawMenue = () => {
 
         // content
         if (login == true) {
-            let contentList = getProfieleContent();
+            // login
+            ctx.fillStyle = "#777777";
+            ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            // text  
+            ctx.fillStyle = "#000000";
+            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+            ctx.textAlign = "center";
+            ctx.fillText(profieleContent.Username, canvasWidth / 1.73, (canvasHeight / 80) * 45);
         } else {
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -210,12 +221,39 @@ const drawMenue = () => {
 
         // content
         if (login == true) {
-            let contentList = getProfieleContent();
+
         } else {
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
             ctx.textAlign = "center";
             ctx.fillText('Login to change loadout', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
+            // login
+            ctx.fillStyle = "#ff6347";
+            ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            // text  
+            ctx.fillStyle = "#000000";
+            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+            ctx.textAlign = "center";
+            ctx.fillText('Login', canvasWidth / 1.73, (canvasHeight / 80) * 45);
+        }
+    }
+
+    if (selectedMenue === 'store') {
+        // loadout content 
+
+        // box
+        ctx.fillStyle = "#AAAAAA";
+        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
+        ctx.fillStyle = "#000000";
+
+        // content
+        if (login == true) {
+
+        } else {
+            ctx.fillStyle = "#000000";
+            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+            ctx.textAlign = "center";
+            ctx.fillText('Login to see store', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
             // login
             ctx.fillStyle = "#ff6347";
             ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
@@ -281,7 +319,11 @@ const changeMenue = (event) => {
             }
             break;
         case 'store':
-
+            if (login == false) {
+                if (mouseX > (canvasWidth / 1.9) && mouseY > (canvasHeight / 80 * 40) && mouseX < (canvasWidth / 80 * 8 + (canvasWidth / 1.9)) && mouseY < ((canvasHeight / 80 * 8) + (canvasHeight / 80 * 40))) {
+                    loginFunc();
+                }
+            }
             break;
         case '???':
 
@@ -297,7 +339,7 @@ const getProfieleContent = () => {
         timeout: 2000,
         data: {},
         success: function (data) {
-
+            profieleContent = data[0];
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
