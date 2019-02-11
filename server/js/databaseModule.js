@@ -73,6 +73,8 @@ function createTable() {
    Obliterations int,
    Currency int,
    Games int,
+   HighScore int,
+   ScoreSum int,
    UNIQUE(UserID), 
    PRIMARY KEY(UserID) );`;
    con.query(sql, function (err, result) {
@@ -88,7 +90,7 @@ module.exports = {
    registerNewUser: function (registrationPasswordInput, registrationUsernameInput) {
       bcrypt.hash(registrationPasswordInput, saltRounds).then(function (hash) {
          conDatabseModule.connect(function (err) {
-            let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Games) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0})`;
+            let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Games, HighScore, ScoreSum) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0}, ${0} , ${0})`;
             conDatabseModule.query(sql, function (err, result, fields) {
                if (err) {
                   console.log(err);

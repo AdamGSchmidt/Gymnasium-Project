@@ -187,14 +187,8 @@ const drawMenue = () => {
 
         // content
         if (login == true) {
-            // login
-            ctx.fillStyle = "#777777";
-            ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
-            // text  
-            ctx.fillStyle = "#000000";
-            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-            ctx.textAlign = "center";
-            ctx.fillText(profieleContent.Username, canvasWidth / 1.73, (canvasHeight / 80) * 45);
+            // content
+            getProfieleContent();
         } else {
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -332,7 +326,16 @@ const changeMenue = (event) => {
             break;
     }
 }
-
+const drawProfileContent = () => {
+    let ctx = c.getContext("2d");
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  
+    ctx.fillStyle = "#000000";
+    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText(profieleContent.Username, canvasWidth / 1.73, (canvasHeight / 80) * 45);
+}
 const getProfieleContent = () => {
     $.ajax({
         url: "/getprofielecontent",
@@ -340,6 +343,7 @@ const getProfieleContent = () => {
         data: {},
         success: function (data) {
             profieleContent = data[0];
+            drawProfileContent();
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');

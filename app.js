@@ -320,7 +320,8 @@ io.on('connection', (socket) => {
       obliterated: false,
       projectileSpeed: config.game.projectile.startSpeed,
       projectileRadius: config.game.projectile.startRadius,
-      radius: config.game.player.startRadius
+      radius: config.game.player.startRadius,
+      score: 0
     };
     usersPositions.push(usersPosition);
   });
@@ -442,6 +443,7 @@ const playerLootCollisionCheck = () => {
           if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
+          usersPositions[index2].score += config.game.score.loot;
           lootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION");
         }
@@ -464,6 +466,12 @@ const playerProjectileCollisionCheck = () => {
           obliterator: projectilePositions[index].username,
           id: usersPositions[index2].id
         });
+        for (let index3 = 0; index3 < usersPositions.length; index3++) {
+          if (usersPositions[index3].username == projectilePositions[index].username) {
+            usersPositions[index3].score += config.game.score.obliteration;
+            break;
+          }
+        }
         createLoot(usersPositions[index2]);
         usersPositions.splice(index2, 1);
         console.log("PROJECTILE PLAYER COLLISION");

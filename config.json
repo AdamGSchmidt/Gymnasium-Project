@@ -25,6 +25,10 @@
             "xBoundary": 2600,
             "yBoundary": 2600
         },
+        "score": {
+            "loot": 200,
+            "obliteration" : 100
+        },
         "general": {
 
         }
