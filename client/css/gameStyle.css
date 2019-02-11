@@ -129,3 +129,31 @@
     text-align:right;
     color: tomato;
 }
+
+#obliteratedFeedContainer{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+}
+
+.obliteratedFeed{
+    width: fit-content;
+    height: fit-content;
+    display: table;
+}
+
+.obliteratedFeedNumber{
+    width: fit-content;
+    height: fit-content;
+    text-align:left;
+    color: tomato;
+}
+
+.obliteratedFeedUsername{
+    width: fit-content;
+    height: fit-content;
+    text-align:right;
+    color: tomato;
+}

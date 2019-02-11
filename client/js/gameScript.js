@@ -32,6 +32,7 @@ let reloadBarValue = 0;
 
 const defaultScale = 680;
 const feedList = new Array();
+const topList = new Array();
 
 class Projectile {
     constructor() {
@@ -226,6 +227,26 @@ const setUser = (username) => {
     document.getElementById('usernameText').innerHTML = username;
 }
 
+const drawTopScoreFeed = (currentUserPositions) => {
+    let feedItem = {
+        username: currentUserPositions.username,
+        score: currentUserPositions.score
+    };
+    topList.push(feedItem);
+    if (topList.length > 9) {
+        topList.splice(0, 1);
+    }
+    let feedText = '';
+    for (let index = 0; index < topList.length; index++) {
+        if (topList[index].obliterator == playerPosition.username) {
+            feedText += `<span class="obliteratedFeed2"> ${topList[index].obliterator}  obliterated  ${topList[index].obliterated} </span>`;
+        } else {
+            feedText += `<span class="obliteratedFeed"> ${topList[index].obliterator}  obliterated  ${topList[index].obliterated} </span>`;
+        }
+    }
+    document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
+}
+
 document.addEventListener('mousemove', newPlayerPosition, false);
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener("click", newProjectile);
@@ -255,6 +276,7 @@ socket.on('tick', (data) => {
             clientUseAngel: useAngel
         });
     }
+    drawTopScoreFeed(currentUserPositions);
 });
 
 socket.on('obliterated', (data) => {
