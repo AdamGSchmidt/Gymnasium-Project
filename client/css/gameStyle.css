@@ -130,7 +130,7 @@
     color: tomato;
 }
 
-#obliteratedFeedContainer{
+#topListContainer{
     width: fit-content;
     height: fit-content;
     position: absolute;
@@ -138,21 +138,43 @@
     right: 1%;
 }
 
-.obliteratedFeed{
+.topListContainer{
     width: fit-content;
     height: fit-content;
     display: table;
 }
 
-.obliteratedFeedNumber{
+.topListFeedNumber{
     width: fit-content;
+    height: fit-content;
+    text-align:left;
+}
+
+.topListFeedUsername{
+    width: fit-content;
+    height: fit-content;
+    text-align:right;
+}
+
+.topListFeedScore{
+    width: fit-content;
+    height: fit-content;
+    text-align:right;
+}
+
+.topListFeedNumber2{
     height: fit-content;
     text-align:left;
     color: tomato;
 }
 
-.obliteratedFeedUsername{
-    width: fit-content;
+.topListFeedUsername2{
+    height: fit-content;
+    text-align: left;
+    color: tomato;
+}
+
+.topListFeedScore2{
     height: fit-content;
     text-align:right;
     color: tomato;

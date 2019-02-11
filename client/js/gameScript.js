@@ -29,10 +29,10 @@ let angel;
 let useAngel = true;
 let reload = false;
 let reloadBarValue = 0;
+let topList = new Array();
 
 const defaultScale = 680;
 const feedList = new Array();
-const topList = new Array();
 
 class Projectile {
     constructor() {
@@ -222,29 +222,53 @@ const restart = () => {
 
 // Sätt username på usernameText
 const setUser = (username) => {
-    console.log("asdasasdadsasdadssadsadadsasdsadadsdsadsaadsdsaadsadsadsadsadsgfdsdbv")
     console.log(username)
     document.getElementById('usernameText').innerHTML = username;
 }
 
-const drawTopScoreFeed = (currentUserPositions) => {
+const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
+    topList = [];
     let feedItem = {
-        username: currentUserPositions.username,
-        score: currentUserPositions.score
+        username: playerPosition.username,
+        score: playerPosition.score
     };
     topList.push(feedItem);
-    if (topList.length > 9) {
-        topList.splice(0, 1);
+    for (let index = 0; index < currentUserPositions.length; index++) {
+        let feedItem = {
+            username: currentUserPositions[index].username,
+            score: currentUserPositions[index].score
+        };
+        topList.push(feedItem);
+        topList.sort((a, b) => {
+            if (a.score < b.score) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
     }
+    if (topList.length > 9) {
+        topList.splice(7, topList.length - 1);
+    }
+    topList.sort((a, b) => {
+        if (a.score < b.score) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+    topList.reverse();
     let feedText = '';
     for (let index = 0; index < topList.length; index++) {
-        if (topList[index].obliterator == playerPosition.username) {
-            feedText += `<span class="obliteratedFeed2"> ${topList[index].obliterator}  obliterated  ${topList[index].obliterated} </span>`;
+        if (topList[index].username == playerPosition.username) {
+            feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].username} </span> <span class="topListFeedScore2"> ${topList[index].score} </span> </div>`;
         } else {
-            feedText += `<span class="obliteratedFeed"> ${topList[index].obliterator}  obliterated  ${topList[index].obliterated} </span>`;
+            feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].username} </span> <span class="topListFeedScore"> ${topList[index].score} </span> </div>`;
         }
     }
-    document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
+    console.log(feedText)
+    console.log(topList)
+    document.getElementById('topListContainer').innerHTML = feedText;
 }
 
 document.addEventListener('mousemove', newPlayerPosition, false);
@@ -265,7 +289,8 @@ socket.on('tick', (data) => {
                     xCord: currentUserPositions[index].xCord,
                     yCord: currentUserPositions[index].yCord,
                     radius: currentUserPositions[index].radius,
-                    username: currentUserPositions[index].username
+                    username: currentUserPositions[index].username,
+                    score: currentUserPositions[index].score
                 }
                 currentUserPositions.splice(index, 1);
             }
@@ -275,8 +300,8 @@ socket.on('tick', (data) => {
             clientAngel: angel,
             clientUseAngel: useAngel
         });
+        drawTopScoreFeed(currentUserPositions, playerPosition);
     }
-    drawTopScoreFeed(currentUserPositions);
 });
 
 socket.on('obliterated', (data) => {
