@@ -260,10 +260,12 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
     topList.reverse();
     let feedText = '';
     for (let index = 0; index < topList.length; index++) {
-        if (topList[index].username == playerPosition.username) {
-            feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].username} </span> <span class="topListFeedScore2"> ${topList[index].score} </span> </div>`;
-        } else {
-            feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].username} </span> <span class="topListFeedScore"> ${topList[index].score} </span> </div>`;
+        if (topList[index].score) {
+            if (topList[index].username == playerPosition.username) {
+                feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].username} </span> <span class="topListFeedScore2"> ${topList[index].score.toFixed()} </span> </div>`;
+            } else {
+                feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].username} </span> <span class="topListFeedScore"> ${topList[index].score.toFixed()} </span> </div>`;
+            }
         }
     }
     console.log(feedText)

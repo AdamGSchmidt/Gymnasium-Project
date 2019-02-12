@@ -408,6 +408,7 @@ setInterval(() => {
   playerLootCollisionCheck();
   determinNewProjectile();
   playerProjectileCollisionCheck();
+  increaseScore();
   let clientDataObj = {
     players: usersPositions || [],
     projectiles: projectilePositions || [],
@@ -415,6 +416,12 @@ setInterval(() => {
   };
   io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
+
+const increaseScore = () => {
+  for (let index = 0; index < usersPositions.length; index++) {
+    usersPositions[index].score += config.game.score.perTick;
+  }
+}
 
 const playerLootCollisionCheck = () => {
   for (let index = 0; index < lootPositions.length; index++) {
@@ -443,9 +450,10 @@ const playerLootCollisionCheck = () => {
           if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
-          usersPositions[index2].score += config.game.score.loot;
+          console.log(lootPositions[index].score + "   " +config.game.score.percentage )
+          usersPositions[index2].score += config.game.score.loot + lootPositions[index].score * config.game.score.percentage;
           lootPositions.splice(index, 1);
-          console.log("LOOT PLAYER COLLISION");
+          console.log("LOOT PLAYER COLLISION     " +  usersPositions[index2].score );
         }
       }
     }
@@ -484,7 +492,8 @@ const createLoot = (data) => {
   let loot = {
     radius: config.game.loot.startRadius,
     xCord: data.xCord,
-    yCord: data.yCord
+    yCord: data.yCord,
+    score: data.score
   }
   console.log("LOOT CREATED")
   lootPositions.push(loot);

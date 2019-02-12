@@ -27,7 +27,9 @@
         },
         "score": {
             "loot": 200,
-            "obliteration" : 100
+            "obliteration" : 100,
+            "percentage" : 0.08,
+            "perTick" :  0.003
         },
         "general": {
 
