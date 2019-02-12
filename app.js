@@ -3,8 +3,8 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
+    Fixa timestamps skapar lagg
     error chcking with socket on update
-    tab bugg ändra så att vinkeln finns i objectet för att lösa detta
 */
 
 // Initiala variabler
@@ -315,6 +315,7 @@ io.on('connection', (socket) => {
       yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
       id: socket.id,
       username: usernameSessin,
+      lastMessage: time,
       lastProjectile: time,
       obliterated: false,
       projectileSpeed: config.game.projectile.startSpeed,
@@ -332,8 +333,17 @@ io.on('connection', (socket) => {
     if (data && data.clientAngel && data.clientUseAngel && (typeof data.clientUseAngel === "boolean") && (typeof data.clientAngel === "number")) {
       for (let index = 0; index < usersPositions.length; index++) {
         if (socket.id == usersPositions[index].id) {
-          determinNewPosition(data.clientAngel, data.clientUseAngel, index);
-          console.log("TOO EARLY");
+          data = data;
+          time = new Date();
+          let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 12));
+          time2 = new Date(time2);
+          // if satsen ser till så att man endast kan röra sig om man är i spelet
+          if (time > time2) {
+            determinNewPosition(data.clientAngel, data.clientUseAngel, index);
+          } else {
+            console.log("TOO EARLY");
+          }
+          usersPositions[index].lastMessage = time;
         }
       }
     }
@@ -440,9 +450,10 @@ const playerLootCollisionCheck = () => {
           if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
+          console.log(lootPositions[index].score + "   " +config.game.score.percentage )
           usersPositions[index2].score += config.game.score.loot + lootPositions[index].score * config.game.score.percentage;
           lootPositions.splice(index, 1);
-          console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
+          console.log("LOOT PLAYER COLLISION     " +  usersPositions[index2].score );
         }
       }
     }
