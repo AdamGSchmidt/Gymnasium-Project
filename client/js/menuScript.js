@@ -179,7 +179,7 @@ const drawMenue = () => {
 
     if (selectedMenue === 'profile') {
         // profile content 
-        
+
         // box
         ctx.fillStyle = "#AAAAAA";
         ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
@@ -328,13 +328,24 @@ const changeMenue = (event) => {
 }
 const drawProfileContent = () => {
     let ctx = c.getContext("2d");
+
+    //  title box 1
     ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
-    // text  
+    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 25, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 1
     ctx.fillStyle = "#000000";
-    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText(profieleContent.Username, canvasWidth / 1.73, (canvasHeight / 80) * 45);
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 30);
+
+    //  data box 1
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 25, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 1
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2, (canvasHeight / 80) * 30);
 }
 const getProfieleContent = () => {
     $.ajax({

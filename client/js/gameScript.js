@@ -38,7 +38,7 @@ class Projectile {
         this.angel = angel;
         this.useAngel = useAngel;
         this.id = socketId;
-    }
+    } 
 }
 
 // Get the canvas center and set it to player posision
