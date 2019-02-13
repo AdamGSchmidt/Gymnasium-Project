@@ -3,7 +3,7 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
-    Fixa timestamps skapar lagg
+    Fixa timestamps skapar lagg ta bort ändra determin new position funktionen
     error chcking with socket on update
 */
 
