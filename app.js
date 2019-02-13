@@ -314,8 +314,9 @@ io.on('connection', (socket) => {
       xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
       yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
       id: socket.id,
+      angel: 0,
+      useAngel: false,
       username: usernameSessin,
-      lastMessage: time,
       lastProjectile: time,
       obliterated: false,
       projectileSpeed: config.game.projectile.startSpeed,
@@ -330,20 +331,21 @@ io.on('connection', (socket) => {
   console.log('a user connected, current: ' + currentConections);
 
   socket.on('update', (data) => {
-    if (data && data.clientAngel && data.clientUseAngel && (typeof data.clientUseAngel === "boolean") && (typeof data.clientAngel === "number")) {
+    if (data && data.clientAngel && (typeof data.clientUseAngel === "boolean") && (typeof data.clientAngel === "number")) {
+      console.log("UPDATE:   " + data.clientAngel + "   " + data.clientUseAngel)
       for (let index = 0; index < usersPositions.length; index++) {
         if (socket.id == usersPositions[index].id) {
-          data = data;
-          time = new Date();
-          let time2 = (usersPositions[index].lastMessage.setMilliseconds(usersPositions[index].lastMessage.getMilliseconds() + 12));
-          time2 = new Date(time2);
           // if satsen ser till så att man endast kan röra sig om man är i spelet
-          if (time > time2) {
-            determinNewPosition(data.clientAngel, data.clientUseAngel, index);
-          } else {
-            console.log("TOO EARLY");
-          }
-          usersPositions[index].lastMessage = time;
+          usersPositions[index].angel = data.clientAngel;
+          usersPositions[index].useAngel = data.clientUseAngel;
+        }
+      }
+    } else {
+      for (let index = 0; index < usersPositions.length; index++) {
+        if (socket.id == usersPositions[index].id) {
+          // if satsen ser till så att man endast kan röra sig om man är i spelet
+          usersPositions[index].angel = data.clientAngel;
+          usersPositions[index].useAngel = false;
         }
       }
     }
@@ -405,6 +407,7 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
+  determinNewPlayerPosition();
   playerLootCollisionCheck();
   determinNewProjectile();
   playerProjectileCollisionCheck();
@@ -420,6 +423,74 @@ setInterval(() => {
 const increaseScore = () => {
   for (let index = 0; index < usersPositions.length; index++) {
     usersPositions[index].score += config.game.score.perTick;
+  }
+}
+
+const determinNewPlayerPosition = () => {
+  for (let index = 0; index < usersPositions.length; index++) {
+    let angle = usersPositions[index].angel;
+    let useAngle = usersPositions[index].useAngel;
+    if (useAngle === true) {
+
+      // Kolla om det finns en kollition
+      let collision = false;
+      let moveX = true;
+      let moveY = true;
+
+      if (usersPositions.length != 1) {
+        for (let index2 = 0; index2 < usersPositions.length; index2++) {
+          if (usersPositions[index2].id !== usersPositions[index].id) {
+            // Collision checking algorithim
+            let distanceX = usersPositions[index].xCord - usersPositions[index2].xCord;
+            let distanceY = usersPositions[index].yCord - usersPositions[index2].yCord;
+            let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            if (distance < usersPositions[index].radius + usersPositions[index2].radius) {
+              console.log('COLLISION')
+              collision = true;
+              if (distanceX < 0) {
+                moveX = false
+                usersPositions[index].xCord = usersPositions[index].xCord - 0.07;
+              } else if (distanceX > 0) {
+                moveX = false
+                usersPositions[index].xCord = usersPositions[index].xCord + 0.07;
+              }
+              if (distanceY < 0) {
+                moveY = false
+                usersPositions[index].yCord = usersPositions[index].yCord - 0.07;
+              } else if (distanceY > 0) {
+                moveY = false
+                usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
+              }
+            } else {
+              collision = false;
+            }
+          }
+        }
+      }
+
+      // Om ingen kollition byt position
+      if (!collision) {
+        if ((usersPositions[index].xCord <= config.game.map.xBoundary - usersPositions[index].radius) && (usersPositions[index].xCord >= usersPositions[index].radius) && moveX) {
+          usersPositions[index].xCord += 4 * Math.cos(angle);
+        }
+        if ((usersPositions[index].yCord <= config.game.map.yBoundary - usersPositions[index].radius) && (usersPositions[index].yCord >= usersPositions[index].radius) && moveY) {
+          usersPositions[index].yCord += 4 * Math.sin(angle);
+        }
+      }
+      // Om vid vägg stanna
+      if (usersPositions[index].xCord > config.game.map.xBoundary - usersPositions[index].radius) {
+        usersPositions[index].xCord = config.game.map.xBoundary - usersPositions[index].radius - 1;
+      }
+      if (usersPositions[index].xCord < usersPositions[index].radius) {
+        usersPositions[index].xCord = usersPositions[index].radius + 1;
+      }
+      if (usersPositions[index].yCord > config.game.map.yBoundary - usersPositions[index].radius) {
+        usersPositions[index].yCord = config.game.map.yBoundary - usersPositions[index].radius - 1;
+      }
+      if (usersPositions[index].yCord < usersPositions[index].radius) {
+        usersPositions[index].yCord = usersPositions[index].radius + 1;
+      }
+    }
   }
 }
 
@@ -450,10 +521,10 @@ const playerLootCollisionCheck = () => {
           if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
-          console.log(lootPositions[index].score + "   " +config.game.score.percentage )
+          console.log(lootPositions[index].score + "   " + config.game.score.percentage)
           usersPositions[index2].score += config.game.score.loot + lootPositions[index].score * config.game.score.percentage;
           lootPositions.splice(index, 1);
-          console.log("LOOT PLAYER COLLISION     " +  usersPositions[index2].score );
+          console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
         }
       }
     }

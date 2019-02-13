@@ -1,6 +1,5 @@
 /*
         Fixa scale
-        tab bug fixad men kan utveklas
         Collision controll funkar men bör ändras
         BUGG kulur vid vänster och övre väggen fastnar då de skjuts med en vinkel parallel till väggen
 */
@@ -26,7 +25,7 @@ let playerPosition;
 let mouseX = 0;
 let mouseY = 0;
 let angel;
-let useAngel = true;
+let useAngel = false;
 let reload = false;
 let reloadBarValue = 0;
 let topList = new Array();
@@ -268,8 +267,6 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
             }
         }
     }
-    console.log(feedText)
-    console.log(topList)
     document.getElementById('topListContainer').innerHTML = feedText;
 }
 
