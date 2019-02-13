@@ -182,7 +182,7 @@ const drawMenue = () => {
 
         // box
         ctx.fillStyle = "#AAAAAA";
-        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
+        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 46.5);
         ctx.fillStyle = "#000000";
 
         // content
@@ -331,21 +331,150 @@ const drawProfileContent = () => {
 
     //  title box 1
     ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 25, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 1
     ctx.fillStyle = "#000000";
     ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 30);
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 29);
 
     //  data box 1
     ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 25, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 1
     ctx.fillStyle = "#000000";
     ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2, (canvasHeight / 80) * 30);
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 29);
+
+    //  title box 2
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 2
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 39);
+
+    //  data box 2
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 2
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 39);
+
+    //  title box 3
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 3
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 49);
+
+    //  data box 3
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 3
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 49);
+
+    //  title box 4
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 4
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 59);
+
+    //  data box 4
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 4
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 59);
+
+
+
+    
+    //  title box 5
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 29);
+
+    //  data box 5
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 5
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 29);
+
+    //  title box 6
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 6
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 39);
+
+    //  data box 6
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 6
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 39);
+
+    //  title box 7
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 7
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 49);
+
+    //  data box 7
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 7
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 49);
+
+    //  title box 8
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  title 8
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 59);
+
+    //  data box 8
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+    // text  data 8
+    ctx.fillStyle = "#000000";
+    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 59);
 }
 const getProfieleContent = () => {
     $.ajax({
