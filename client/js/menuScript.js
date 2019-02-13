@@ -188,7 +188,7 @@ const drawMenue = () => {
         // content
         if (login == true) {
             // content
-            getProfieleContent();
+            drawProfileContent();
         } else {
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -483,7 +483,6 @@ const getProfieleContent = () => {
         data: {},
         success: function (data) {
             profieleContent = data[0];
-            drawProfileContent();
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');

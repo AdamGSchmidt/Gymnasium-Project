@@ -3,7 +3,7 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
-    error chcking with socket on update
+    Stäng all conections 
 */
 
 // Initiala variabler
