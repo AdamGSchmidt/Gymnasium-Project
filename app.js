@@ -3,7 +3,6 @@
     SAnatize function 
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
-    Fixa timestamps skapar lagg ta bort ändra determin new position funktionen
     error chcking with socket on update
 */
 
@@ -332,7 +331,6 @@ io.on('connection', (socket) => {
 
   socket.on('update', (data) => {
     if (data && data.clientAngel && (typeof data.clientUseAngel === "boolean") && (typeof data.clientAngel === "number")) {
-      console.log("UPDATE:   " + data.clientAngel + "   " + data.clientUseAngel)
       for (let index = 0; index < usersPositions.length; index++) {
         if (socket.id == usersPositions[index].id) {
           // if satsen ser till så att man endast kan röra sig om man är i spelet
