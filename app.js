@@ -321,7 +321,8 @@ io.on('connection', (socket) => {
       projectileSpeed: config.game.projectile.startSpeed,
       projectileRadius: config.game.projectile.startRadius,
       radius: config.game.player.startRadius,
-      score: 0
+      score: 0,
+      lootNumber: 0
     };
     usersPositions.push(usersPosition);
   });
@@ -521,6 +522,7 @@ const playerLootCollisionCheck = () => {
           }
           console.log(lootPositions[index].score + "   " + config.game.score.percentage)
           usersPositions[index2].score += config.game.score.loot + lootPositions[index].score * config.game.score.percentage;
+          usersPositions[index2].lootNumber += 1;
           lootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
         }
@@ -538,11 +540,17 @@ const playerProjectileCollisionCheck = () => {
       let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
       if (distance < projectilePositions[index].radius + usersPositions[index2].radius) {
         usersPositions[index2].obliterated = true;
+        let experience = usersPositions[index2].score * config.game.reward.experiencePerScore;
+        let currency = usersPositions[index2].lootNumber * config.game.reward.currencyPerLoot;
+        console.log("WHYYYYY: " + currency + "  " + usersPositions[index2].loot + "   " + config.game.reward.currencyPerLoot)
         io.emit('obliterated', {
           obliterated: usersPositions[index2].username,
           obliterator: projectilePositions[index].username,
-          id: usersPositions[index2].id
+          id: usersPositions[index2].id,
+          experience,
+          currency 
         });
+        databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].username);
         for (let index3 = 0; index3 < usersPositions.length; index3++) {
           if (usersPositions[index3].username == projectilePositions[index].username) {
             usersPositions[index3].score += config.game.score.obliteration;
@@ -626,69 +634,4 @@ const determinNewProjectile = () => {
     projectilePositions[index].yCord += (Math.sin(projectilePositions[index].angel) * projectilePositions[index].speed);
   }
 }
-
-function determinNewPosition(angle, useAngle, index) {
-  if (useAngle && angle) {
-
-    // Kolla om det finns en kollition
-    let collision = false;
-    let moveX = true;
-    let moveY = true;
-
-    if (usersPositions.length != 1) {
-      for (let index2 = 0; index2 < usersPositions.length; index2++) {
-        if (usersPositions[index2].id !== usersPositions[index].id) {
-          // Collision checking algorithim
-          let distanceX = usersPositions[index].xCord - usersPositions[index2].xCord;
-          let distanceY = usersPositions[index].yCord - usersPositions[index2].yCord;
-          let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          if (distance < usersPositions[index].radius + usersPositions[index2].radius) {
-            console.log('COLLISION')
-            collision = true;
-            if (distanceX < 0) {
-              moveX = false
-              usersPositions[index].xCord = usersPositions[index].xCord - 0.07;
-            } else if (distanceX > 0) {
-              moveX = false
-              usersPositions[index].xCord = usersPositions[index].xCord + 0.07;
-            }
-            if (distanceY < 0) {
-              moveY = false
-              usersPositions[index].yCord = usersPositions[index].yCord - 0.07;
-            } else if (distanceY > 0) {
-              moveY = false
-              usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
-            }
-          } else {
-            collision = false;
-          }
-        }
-      }
-    }
-
-    // Om ingen kollition byt position
-    if (!collision) {
-      if ((usersPositions[index].xCord <= config.game.map.xBoundary - usersPositions[index].radius) && (usersPositions[index].xCord >= usersPositions[index].radius) && moveX) {
-        usersPositions[index].xCord += 4 * Math.cos(angle);
-      }
-      if ((usersPositions[index].yCord <= config.game.map.yBoundary - usersPositions[index].radius) && (usersPositions[index].yCord >= usersPositions[index].radius) && moveY) {
-        usersPositions[index].yCord += 4 * Math.sin(angle);
-      }
-    }
-    // Om vid vägg stanna
-    if (usersPositions[index].xCord > config.game.map.xBoundary - usersPositions[index].radius) {
-      usersPositions[index].xCord = config.game.map.xBoundary - usersPositions[index].radius - 1;
-    }
-    if (usersPositions[index].xCord < usersPositions[index].radius) {
-      usersPositions[index].xCord = usersPositions[index].radius + 1;
-    }
-    if (usersPositions[index].yCord > config.game.map.yBoundary - usersPositions[index].radius) {
-      usersPositions[index].yCord = config.game.map.yBoundary - usersPositions[index].radius - 1;
-    }
-    if (usersPositions[index].yCord < usersPositions[index].radius) {
-      usersPositions[index].yCord = usersPositions[index].radius + 1;
-    }
-  }
-}
-
 // ****************************************************************************

@@ -31,6 +31,10 @@
             "percentage" : 0.08,
             "perTick" :  0.003
         },
+        "reward" : {
+            "currencyPerLoot": 3,
+            "experiencePerScore" : 0.1
+        },
         "general": {
 
         }

@@ -38,7 +38,7 @@ class Projectile {
         this.angel = angel;
         this.useAngel = useAngel;
         this.id = socketId;
-    } 
+    }
 }
 
 // Get the canvas center and set it to player posision
@@ -306,7 +306,7 @@ socket.on('tick', (data) => {
 socket.on('obliterated', (data) => {
     let feedItem = {
         obliterated: data.obliterated,
-        obliterator: data.obliterator
+        obliterator: data.obliterator,
     };
     feedList.push(feedItem);
     if (feedList.length > 9) {
@@ -323,13 +323,24 @@ socket.on('obliterated', (data) => {
     document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
 
     if (socketId == data.id) {
+        let feedItem = {
+            obliterated: data.obliterated,
+            obliterator: data.obliterator,
+            experience: data.experience,
+            currency: data.currency
+        };
         setTimeout(() => {
             if (feedItem.obliterator == feedItem.obliterated) {
                 document.getElementById('obliteratedMessage3').innerHTML = `by yourself`;
             } else {
                 document.getElementById('obliteratedMessage3').innerHTML = `by ${feedItem.obliterator}`;
             }
+            /* Change the element so that it displays nicely
+            document.getElementById('obliteratedMessage3').innerHTML = `You gained:`;
+            document.getElementById('obliteratedMessage3').innerHTML = `${Math.round(feedItem.experience)} xp`;
+            document.getElementById('obliteratedMessage3').innerHTML = `${Math.round(feedItem.currency)} moneys`;
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
+            */
         }, 32);
     }
 });

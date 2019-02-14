@@ -72,6 +72,7 @@ function createTable() {
    Projectiles int,
    Obliterations int,
    Currency int,
+   Experience int,
    Games int,
    HighScore int,
    ScoreSum int,
@@ -87,10 +88,10 @@ con.end();
 module.exports = {
 
    // Create new users
-   registerNewUser: function (registrationPasswordInput, registrationUsernameInput) {
+   registerNewUser: (registrationPasswordInput, registrationUsernameInput) => {
       bcrypt.hash(registrationPasswordInput, saltRounds).then(function (hash) {
          conDatabseModule.connect(function (err) {
-            let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Games, HighScore, ScoreSum) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0}, ${0} , ${0})`;
+            let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Experience, Games, HighScore, ScoreSum) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0}, ${0} , ${0}, ${0})`;
             conDatabseModule.query(sql, function (err, result, fields) {
                if (err) {
                   console.log(err);
@@ -102,7 +103,7 @@ module.exports = {
       });
    },
 
-   connectToDB: function () {
+   connectToDB: () => {
       let con = mysql.createConnection({
          host: "localhost",
          user: "root",
@@ -110,32 +111,43 @@ module.exports = {
          database: "mydb"
       });
       return con;
-   }
-/*
-   validateLogin: async function (loginUsernameInput, loginPasswordInput) {
-      let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
-      await conDatabseModule.query(sql, function (err, results) {
+   },
+
+   updateUserProfileReward: (experience, currency, username) => {
+      let sql =  `UPDATE User SET Currency = Currency + ${currency}, Experience = Experience + ${experience} WHERE Username = '${username}'`;
+      conDatabseModule.query(sql, function (err, result, fields) {
          if (err) {
-            console.log('Error: Failed to check username, login');
+            console.log(err);
          } else {
-            console.log(results);
-            console.log(results.length);
-            console.log(sql);
-            if (results.length === 1) {
-               let loginPasswordHash = results[0].Password;
-               bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
-                  if (res) {
-                     loginAttemptSuccess();
-                  } else {
-                     loginAttemptFail();
-                  }
-               });
-            } else {
-               loginAttemptFail();
-            }
+            console.log("ACCOUNT UPDATED ");
          }
       });
-   }*/ /*,
+   }
+   /*
+      validateLogin: async function (loginUsernameInput, loginPasswordInput) {
+         let sql = `SELECT Password FROM User WHERE Username = '${loginUsernameInput}'`;
+         await conDatabseModule.query(sql, function (err, results) {
+            if (err) {
+               console.log('Error: Failed to check username, login');
+            } else {
+               console.log(results);
+               console.log(results.length);
+               console.log(sql);
+               if (results.length === 1) {
+                  let loginPasswordHash = results[0].Password;
+                  bcrypt.compare(loginPasswordInput, loginPasswordHash, function (err, res) {
+                     if (res) {
+                        loginAttemptSuccess();
+                     } else {
+                        loginAttemptFail();
+                     }
+                  });
+               } else {
+                  loginAttemptFail();
+               }
+            }
+         });
+      }*/ /*,
    // DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
    checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
       let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
@@ -151,5 +163,5 @@ module.exports = {
             return result;
          }
       });
-   } */ 
+   } */
 }
