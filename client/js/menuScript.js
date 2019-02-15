@@ -47,11 +47,11 @@ const drawMenue = () => {
 
     // currency
     ctx.fillStyle = '#AAAAAA';
-    ctx.fillRect(canvasWidth / 80 * 60, (canvasHeight / 80) * 1, canvasWidth / 80 * 3, (canvasHeight / 80) * 6);
+    ctx.fillRect(canvasWidth / 80 * 58, (canvasHeight / 80) * 1, canvasWidth / 80 * 5, (canvasHeight / 80) * 6);
     ctx.textAlign = "center";
     ctx.fillStyle = '#000000';
-    ctx.font = `${20 * canvasWidth / defaoultScale}px Arial`;
-    ctx.fillText(currency, canvasWidth / 80 * 61.5, (canvasHeight / 80) * 5.2);
+    ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
+    ctx.fillText(currency, canvasWidth / 80 * 60.5, (canvasHeight / 80) * 5.8);
 
     // profile box
     if (selectedMenue === 'profile') {
@@ -493,6 +493,11 @@ const getProfieleContent = () => {
             profieleContent = data[0];
             console.log(profieleContent)
             currency = profieleContent.Currency;
+            if (currency > 1000 && currency < 1000000) {
+                currency = `${Math.round((currency / 100)) / 10}k`
+            } else if (currency > 1000000) {
+                currency = `${Math.round((currency / 100000)) / 10}m`
+            }
             resize();
             drawMenue();
         },
@@ -589,7 +594,7 @@ const play = () => {
         type: "POST",
         url: "/setdisplayname",
         timeout: 2000,
-        data: { displayName: document.getElementById('displayNameInput').value},
+        data: { displayName: document.getElementById('displayNameInput').value },
         success: function (data) {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
         },

@@ -187,12 +187,12 @@ app.post('/login', urlencodedParser, function (req, res) {
 
 // då get /game sckika game.html
 app.get('/game', function (req, res) {
-  if (req.session['login'] === true) {
+ // if (req.session['login'] === true) {
     res.sendFile(__dirname + '/client/html/game.html');
     sessionId = req.session.id;
-  } else {
-    res.redirect('/');
-  }
+  //} else {
+    //res.redirect('/');
+  //}
 });
 
 // kollar om man är loggedin

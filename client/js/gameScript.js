@@ -201,6 +201,9 @@ const getUser = () => {
         success: function (data) {
             data = JSON.parse(data);
             let playerUsername = data.username;
+            if (playerUsername  == undefined) {
+                playerUsername = 'Guest';
+            }
             setUser(playerUsername);
         },
         error: () => {
