@@ -204,7 +204,20 @@ app.get('/getlogin', urlencodedParser, function (req, res) {
   res.end();
 });
 
+app.get('/getdisplayname', function (req, res) {
+  res.send(JSON.stringify({
+    username: req.session['displayName']
+  }));
+  res.end();
+});
 
+app.post('/setdisplayname', urlencodedParser, function (req, res) {
+  let displayName = req.body.displayName;
+  console.log(displayName)
+  console.log('ajhhasdhkakshdhashashjkdhaskdhasdhasdhjaskdahsdhasdk')
+  req.session['displayName'] = displayName;
+  res.end();
+});
 
 app.get('/getprofielecontent', urlencodedParser, function (req, res) {
 
@@ -301,11 +314,13 @@ let time;
 
 io.on('connection', (socket) => {
   let usernameSessin;
+  let displayNameSession;
   storage.get(sessionId, (error, session) => {
     if (error || session == null) {
       console.log('ERROR WHILE GETING USERNAME IN /game')
     } else {
       usernameSessin = session['username'];
+      displayNameSession = session['displayName'] //|| session['username'];
     }
     console.log("USERNAME ::::  " + usernameSessin)
     time = new Date();
@@ -316,6 +331,7 @@ io.on('connection', (socket) => {
       angel: 0,
       useAngel: false,
       username: usernameSessin,
+      displayName: displayNameSession,
       lastProjectile: time,
       obliterated: false,
       projectileSpeed: config.game.projectile.startSpeed,

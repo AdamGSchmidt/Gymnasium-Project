@@ -94,6 +94,7 @@ module.exports = {
             let sql = `INSERT INTO User (Username, Password, Progress, Projectiles, Obliterations, Currency, Experience, Games, HighScore, ScoreSum) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0}, ${0} , ${0}, ${0} , ${0}, ${0})`;
             conDatabseModule.query(sql, function (err, result, fields) {
                if (err) {
+                  console.log("REGISTATION FAILED");
                   console.log(err);
                } else {
                   console.log("ACCOUNT " + registrationUsernameInput + " REGISTERED");

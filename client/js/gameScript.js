@@ -96,7 +96,7 @@ const drawUsers = (currentUserPositions) => {
         if (currentUserPositions[index].id) {
             ctx.font = "15px Arial";
             ctx.textAlign = "center";
-            ctx.fillText(currentUserPositions[index].username, currentUserPositions[index].xCord, currentUserPositions[index].yCord - currentUserPositions[index].radius - 10);
+            ctx.fillText(currentUserPositions[index].displayName, currentUserPositions[index].xCord, currentUserPositions[index].yCord - currentUserPositions[index].radius - 10);
 
             ctx.beginPath();
             ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, currentUserPositions[index].radius, 0, 2 * Math.PI, false);

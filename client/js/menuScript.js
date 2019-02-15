@@ -78,7 +78,8 @@ const drawMenue = () => {
     ctx.fillText('Loadout', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 24.2 / 0.75);
 
     // play box
-    if (selectedMenue === 'play') {
+    if (selectedMenue === 'play') { 
+        document.getElementById('displayNameInput').style.visibility = 'visible';
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 7, (canvasHeight / 80) * 14.8);
 
@@ -93,6 +94,7 @@ const drawMenue = () => {
         ctx.fillText('Play!', ((canvasWidth / 24) * 12) + ((canvasWidth / 24 * 2) / 2), ((canvasHeight / 80) * 43.7) + ((canvasHeight / 80) * 7.4 / 1.5));
         ctx.fillStyle = "#000000";
     } else {
+        document.getElementById('displayNameInput').style.visibility = "hidden";
         ctx.fillStyle = "#777777";
         ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 8, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#FFFFFF";
@@ -553,7 +555,18 @@ const getNumberOfUsers = () => {
 }
 
 const play = () => {
-    window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
+    $.ajax({
+        type: "POST",
+        url: "/setdisplayname",
+        timeout: 2000,
+        data: {displayName: document.getElementById('displayNameInput').value || 'Guest'},
+        success: function (data) {
+            window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
+        },
+        error: () => {
+            alert('Error');
+        }
+    });
 }
 
 
