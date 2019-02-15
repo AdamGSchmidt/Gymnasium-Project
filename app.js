@@ -206,23 +206,24 @@ app.get('/getlogin', urlencodedParser, function (req, res) {
 
 app.get('/getdisplayname', function (req, res) {
   res.send(JSON.stringify({
-    username: req.session['displayName']
+    displayName: req.session['displayName']
   }));
   res.end();
 });
 
 app.post('/setdisplayname', urlencodedParser, function (req, res) {
   let displayName = req.body.displayName;
-  console.log(displayName)
-  console.log('ajhhasdhkakshdhashashjkdhaskdhasdhasdhjaskdahsdhasdk')
-  req.session['displayName'] = displayName;
+  if (/[A-Za-z0-9]/.test(displayName)) {
+    req.session['displayName'] = displayName;
+  } else {
+    req.session['displayName'] = req.session['username'] || 'Guest';
+  }
   res.end();
 });
 
 app.get('/getprofielecontent', urlencodedParser, function (req, res) {
-
   let profileUsername = req.session['username'];
-  let sql = `SELECT Username, Progress, Projectiles, Obliterations, Games, ScoreSum, HighScore FROM User WHERE Username = '${profileUsername}'`;
+  let sql = `SELECT Username, Projectiles, Obliterations, Games, ScoreSum, HighScore, Experience, Currency FROM User WHERE Username = '${profileUsername}'`;
   databaseModule.connectToDB().query(sql, function (err, results) {
     if (err) {
       console.log('Error: Failed to get profile content,');
@@ -398,6 +399,7 @@ io.on('connection', (socket) => {
                 speed: usersPositions[index].projectileSpeed,
                 id: projectile.id,
                 username: usersPositions[index].username,
+                displayName: usersPositions[index].displayName
               }
               socket.emit('startreload');
               projectilePositions.push(newProjectile);
@@ -558,13 +560,12 @@ const playerProjectileCollisionCheck = () => {
         usersPositions[index2].obliterated = true;
         let experience = usersPositions[index2].score * config.game.reward.experiencePerScore;
         let currency = usersPositions[index2].lootNumber * config.game.reward.currencyPerLoot;
-        console.log("WHYYYYY: " + currency + "  " + usersPositions[index2].loot + "   " + config.game.reward.currencyPerLoot)
         io.emit('obliterated', {
-          obliterated: usersPositions[index2].username,
-          obliterator: projectilePositions[index].username,
+          obliterated: usersPositions[index2].displayName,
+          obliterator: projectilePositions[index].displayName,
           id: usersPositions[index2].id,
           experience,
-          currency 
+          currency
         });
         databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].username);
         for (let index3 = 0; index3 < usersPositions.length; index3++) {

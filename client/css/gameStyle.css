@@ -89,6 +89,24 @@
     margin: 0 auto;
 }
 
+#obliteratedMessage4{
+    font-weight: bold;
+    display: table;
+    margin: 0 auto;
+}
+
+#obliteratedMessage5{
+    font-weight: bold;
+    display: table;
+    margin: 0 auto;
+}
+
+#obliteratedMessage6{
+    font-weight: bold;
+    display: table;
+    margin: 0 auto;
+}
+
 #restartBtn {
     border: solid black 1px;
     width: 60%;

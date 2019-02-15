@@ -6,6 +6,7 @@ let username;
 let login;
 let selectedMenue = 'play';
 let profieleContent;
+let currency = 0;
 
 const defaoultScale = 680;
 
@@ -13,9 +14,6 @@ const defaoultScale = 680;
 const startup = () => {
     // Hämntar användarnamn och anropar andera functioner
     getLogin();
-    if (login == true) {
-        getProfieleContent();
-    }
 
     // hämtar antalet nuvarande spelare varje sekund
     /* getNumberOfUsers();
@@ -46,6 +44,14 @@ const drawMenue = () => {
     ctx.lineTo(0, 0);
     ctx.stroke();
     ctx.fill();
+
+    // currency
+    ctx.fillStyle = '#AAAAAA';
+    ctx.fillRect(canvasWidth / 80 * 60, (canvasHeight / 80) * 1, canvasWidth / 80 * 3, (canvasHeight / 80) * 6);
+    ctx.textAlign = "center";
+    ctx.fillStyle = '#000000';
+    ctx.font = `${20 * canvasWidth / defaoultScale}px Arial`;
+    ctx.fillText(currency, canvasWidth / 80 * 61.5, (canvasHeight / 80) * 5.2);
 
     // profile box
     if (selectedMenue === 'profile') {
@@ -78,7 +84,7 @@ const drawMenue = () => {
     ctx.fillText('Loadout', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 24.2 / 0.75);
 
     // play box
-    if (selectedMenue === 'play') { 
+    if (selectedMenue === 'play') {
         document.getElementById('displayNameInput').style.visibility = 'visible';
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 7, (canvasHeight / 80) * 14.8);
@@ -405,7 +411,7 @@ const drawProfileContent = () => {
 
 
 
-    
+
     //  title box 5
     ctx.fillStyle = "#777777";
     ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
@@ -485,11 +491,30 @@ const getProfieleContent = () => {
         data: {},
         success: function (data) {
             profieleContent = data[0];
+            console.log(profieleContent)
+            currency = profieleContent.Currency;
+            resize();
+            drawMenue();
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
-            resize();
-            drawMenue();
+        }
+    });
+};
+
+const getDisplayName = () => {
+    $.ajax({
+        url: "/getdisplayname",
+        timeout: 2000,
+        data: {},
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.displayName) {
+                document.getElementById('displayNameInput').value = data.displayName;
+            }
+        },
+        error: function (jqXHR, textStatus, err) {
+            alert('Error');
         }
     });
 };
@@ -526,9 +551,14 @@ const getLogin = () => {
             data = JSON.parse(data);
             username = data.username || 'Guest';
             login = data.login || false;
-            console.log(username)
-            resize();
-            drawMenue();
+            console.log(username);
+            if (login) {
+                getDisplayName();
+                getProfieleContent();
+            } else {
+                resize();
+                drawMenue();
+            }
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
@@ -559,7 +589,7 @@ const play = () => {
         type: "POST",
         url: "/setdisplayname",
         timeout: 2000,
-        data: {displayName: document.getElementById('displayNameInput').value || 'Guest'},
+        data: { displayName: document.getElementById('displayNameInput').value},
         success: function (data) {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
         },

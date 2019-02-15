@@ -229,13 +229,15 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
     topList = [];
     let feedItem = {
         username: playerPosition.username,
-        score: playerPosition.score
+        score: playerPosition.score,
+        displayName: playerPosition.displayName
     };
     topList.push(feedItem);
     for (let index = 0; index < currentUserPositions.length; index++) {
         let feedItem = {
             username: currentUserPositions[index].username,
-            score: currentUserPositions[index].score
+            score: currentUserPositions[index].score,
+            displayName: currentUserPositions[index].displayName
         };
         topList.push(feedItem);
         topList.sort((a, b) => {
@@ -261,9 +263,10 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
     for (let index = 0; index < topList.length; index++) {
         if (topList[index].score) {
             if (topList[index].username == playerPosition.username) {
-                feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].username} </span> <span class="topListFeedScore2"> ${topList[index].score.toFixed()} </span> </div>`;
+                console.log(topList)
+                feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].displayName} </span> <span class="topListFeedScore2"> ${topList[index].score.toFixed()} </span> </div>`;
             } else {
-                feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].username} </span> <span class="topListFeedScore"> ${topList[index].score.toFixed()} </span> </div>`;
+                feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].displayName} </span> <span class="topListFeedScore"> ${topList[index].score.toFixed()} </span> </div>`;
             }
         }
     }
@@ -289,7 +292,8 @@ socket.on('tick', (data) => {
                     yCord: currentUserPositions[index].yCord,
                     radius: currentUserPositions[index].radius,
                     username: currentUserPositions[index].username,
-                    score: currentUserPositions[index].score
+                    score: currentUserPositions[index].score,
+                    displayName: currentUserPositions[index].displayName
                 }
                 currentUserPositions.splice(index, 1);
             }
@@ -335,12 +339,12 @@ socket.on('obliterated', (data) => {
             } else {
                 document.getElementById('obliteratedMessage3').innerHTML = `by ${feedItem.obliterator}`;
             }
-            /* Change the element so that it displays nicely
-            document.getElementById('obliteratedMessage3').innerHTML = `You gained:`;
-            document.getElementById('obliteratedMessage3').innerHTML = `${Math.round(feedItem.experience)} xp`;
-            document.getElementById('obliteratedMessage3').innerHTML = `${Math.round(feedItem.currency)} moneys`;
+            // Change the element so that it displays nicely
+            document.getElementById('obliteratedMessage4').innerHTML = `You gained:`;
+            document.getElementById('obliteratedMessage5').innerHTML = `${Math.round(feedItem.experience)} xp`;
+            document.getElementById('obliteratedMessage6').innerHTML = `${Math.round(feedItem.currency)} moneys`;
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
-            */
+            
         }, 32);
     }
 });
