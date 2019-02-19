@@ -113,14 +113,34 @@ module.exports = {
       return con;
    },
 
-   updateUserProfileReward: (experience, currency, username) => {
-      let sql =  `UPDATE User SET Currency = Currency + ${currency}, Experience = Experience + ${experience} WHERE Username = '${username}'`;
+   updateUserProfileReward: (experience, currency, score, obliterations, projectiles, username) => {
+      let sql = `UPDATE User SET Currency = Currency + ${currency}, Experience = Experience + ${experience}, ScoreSum = ScoreSum + ${score}, Obliterations = Obliterations + ${obliterations}, Projectiles = Projectiles + ${projectiles}, Games = Games + ${1} WHERE Username = '${username}'`;
       conDatabseModule.query(sql, function (err, result, fields) {
          if (err) {
             console.log(err);
             console.log("ERROR WHILE TRYING TO UPDATE USER INFO")
          } else {
             console.log("ACCOUNT UPDATED ");
+         }
+      });
+      sql = `SELECT HighScore  FROM User WHERE Username = '${username}'`
+      conDatabseModule.query(sql, function (err, result, fields) {
+         if (err) {
+            console.log(err);
+            console.log("ERROR WHILE TRYING TO GET HIGHSCORE")
+         } else {
+            if (score > result[0].HighScore) {
+               let sql = `UPDATE User SET HighScore =  ${score} WHERE Username = '${username}'`;
+               conDatabseModule.query(sql, function (err, result, fields) {
+                  if (err) {
+                     console.log(err);
+                     console.log("ERROR WHILE TRYING TO SET NEW HIGHSCORE")
+                  } else {
+                     console.log("NEW HIGHSCORE");
+
+                  }
+               });
+            }
          }
       });
    }
@@ -149,20 +169,20 @@ module.exports = {
             }
          });
       }*/ /*,
-   // DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
-   checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
-      let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
-      let result;
-      await conDatabseModule.query(sql, function (err, results) {
-         if (err) {
-            console.log('Error: Failed to check username, register');
-         } else {
-            console.log(results);
-            console.log(results.length);
-            console.log(sql);
-            result = results.length;
-            return result;
-         }
-      });
-   } */
+// DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
+checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
+   let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
+   let result;
+   await conDatabseModule.query(sql, function (err, results) {
+      if (err) {
+         console.log('Error: Failed to check username, register');
+      } else {
+         console.log(results);
+         console.log(results.length);
+         console.log(sql);
+         result = results.length;
+         return result;
+      }
+   });
+} */
 }

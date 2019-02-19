@@ -339,7 +339,9 @@ io.on('connection', (socket) => {
       projectileRadius: config.game.projectile.startRadius,
       radius: config.game.player.startRadius,
       score: 0,
-      lootNumber: 0
+      lootNumber: 0,
+      obliterations: 0,
+      projectiles: 0
     };
     usersPositions.push(usersPosition);
   });
@@ -379,6 +381,7 @@ io.on('connection', (socket) => {
           if (usersPositions[index].lastProjectile == null || usersPositions[index].lastProjectile < time2) {
             projectileTime = true;
             usersPositions[index].lastProjectile = time;
+            usersPositions[index].projectiles += 1;
           }
         }
       }
@@ -560,6 +563,9 @@ const playerProjectileCollisionCheck = () => {
         usersPositions[index2].obliterated = true;
         let experience = usersPositions[index2].score * config.game.reward.experiencePerScore;
         let currency = usersPositions[index2].lootNumber * config.game.reward.currencyPerLoot;
+        if (usersPositions[index2].username != projectilePositions[index].username) {
+          usersPositions[index2].obliterations  += 1;
+        }
         io.emit('obliterated', {
           obliterated: usersPositions[index2].displayName,
           obliterator: projectilePositions[index].displayName,
@@ -568,7 +574,7 @@ const playerProjectileCollisionCheck = () => {
           currency
         });
         if (usersPositions[index2].username) {
-        databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].username);
+        databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].score,usersPositions[index2].obliterations, usersPositions[index2].projectiles ,usersPositions[index2].username);
         }
         for (let index3 = 0; index3 < usersPositions.length; index3++) {
           if (usersPositions[index3].username == projectilePositions[index].username) {
