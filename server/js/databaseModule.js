@@ -118,6 +118,7 @@ module.exports = {
       conDatabseModule.query(sql, function (err, result, fields) {
          if (err) {
             console.log(err);
+            console.log("ERROR WHILE TRYING TO UPDATE USER INFO")
          } else {
             console.log("ACCOUNT UPDATED ");
          }

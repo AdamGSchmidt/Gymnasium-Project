@@ -567,7 +567,9 @@ const playerProjectileCollisionCheck = () => {
           experience,
           currency
         });
+        if (usersPositions[index2].username) {
         databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].username);
+        }
         for (let index3 = 0; index3 < usersPositions.length; index3++) {
           if (usersPositions[index3].username == projectilePositions[index].username) {
             usersPositions[index3].score += config.game.score.obliteration;
