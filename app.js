@@ -223,7 +223,7 @@ app.post('/setdisplayname', urlencodedParser, function (req, res) {
 
 app.get('/getprofielecontent', urlencodedParser, function (req, res) {
   let profileUsername = req.session['username'];
-  let sql = `SELECT Username, Projectiles, Obliterations, Games, ScoreSum, HighScore, Experience, Currency FROM User WHERE Username = '${profileUsername}'`;
+  let sql = `SELECT Username, Projectiles, Obliterations, Games, ScoreSum, HighScore, Experience, Level, Currency FROM User WHERE Username = '${profileUsername}'`;
   databaseModule.connectToDB().query(sql, function (err, results) {
     if (err) {
       console.log('Error: Failed to get profile content,');

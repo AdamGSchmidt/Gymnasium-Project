@@ -7,6 +7,7 @@ let login;
 let selectedMenue = 'play';
 let profieleContent;
 let currency = 0;
+let level = 1;
 
 const defaoultScale = 680;
 
@@ -52,6 +53,31 @@ const drawMenue = () => {
     ctx.fillStyle = '#000000';
     ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
     ctx.fillText(currency, canvasWidth / 80 * 60.5, (canvasHeight / 80) * 5.8);
+
+    // level
+    ctx.fillStyle = '#AAAAAA';
+    ctx.fillRect(canvasWidth / 80 * 26, (canvasHeight / 80) * 1, canvasWidth / 80 * 5, (canvasHeight / 80) * 6);
+    ctx.textAlign = "center";
+    ctx.fillStyle = '#000000';
+    ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
+    ctx.fillText(level, canvasWidth / 80 * 28.5, (canvasHeight / 80) * 5.8);
+    // level bar
+    // background
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(canvasWidth / 80 * 30.9, (canvasHeight / 80) * 1, canvasWidth / 80 * 15, (canvasHeight / 80) * 6);
+    ctx.StrokeStyle = '#ff6347';
+    ctx.lineWidth = 3;
+    ctx.rect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14, (canvasHeight / 80) * 3.8);
+    ctx.stroke();
+    // bar
+    ctx.fillRect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14, (canvasHeight / 80) * 3.8);
+    ctx.fillStyle = '#ff6347';
+    let experience = 0;
+    if (profieleContent) {
+        experience = profieleContent.Experience;
+    }
+    ctx.fillRect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14 * (experience / (level * 1000 * Math.pow(1.1, (level - 1)))), (canvasHeight / 80) * 3.8); // has the level formula
+    console.log(experience + " " + level + "    " + (level * 1000 * Math.pow(1.1, (level - 1))))
 
     // profile box
     if (selectedMenue === 'profile') {
@@ -493,6 +519,7 @@ const getProfieleContent = () => {
             profieleContent = data[0];
             console.log(profieleContent)
             currency = profieleContent.Currency;
+            // level = profieleContent.Level;
             if (currency > 1000 && currency < 1000000) {
                 currency = `${Math.round((currency / 100)) / 10}k`
             } else if (currency > 1000000) {
