@@ -275,7 +275,7 @@ const mysql = require('mysql'); // Global databas variabel
 
 // DENNA KOLLAR OM DE BÅDA LÖSENORDEN ÄR SAMMA
 // returnar true om de är det annar false
-function checkPasswordMatchRegistration(registrationPasswordInput, registrationPasswordInputRepete) {
+const checkPasswordMatchRegistration = (registrationPasswordInput, registrationPasswordInputRepete) => {
   if (registrationPasswordInput == registrationPasswordInputRepete) {
     return true;
   } else return false;
@@ -293,7 +293,7 @@ function checkUsernameFormatRegistration(registrationUsernameInput) {
 
 // KOLLAR SÅ ATT PASSWORD ÄR RÄTT FORMAT
 // Om det är det returnar den true annar returnar den false
-function checkPasswordRegistration(registrationPasswordInput) {
+const checkPasswordRegistration = (registrationPasswordInput) => {
   let regExCheckFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
   if (regExCheckFormat.test(registrationPasswordInput)) {
     return true;
