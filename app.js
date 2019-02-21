@@ -321,7 +321,7 @@ io.on('connection', (socket) => {
       console.log('ERROR WHILE GETING USERNAME IN /game')
     } else {
       usernameSessin = session['username'];
-      displayNameSession = session['displayName'] //|| session['username'];
+      displayNameSession = session['displayName'] || 'Guest';
     }
     console.log("USERNAME ::::  " + usernameSessin)
     time = new Date();
