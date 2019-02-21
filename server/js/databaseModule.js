@@ -72,6 +72,7 @@ function createTable() {
    Obliterations int,
    Currency int,
    Experience int,
+   Level int,
    Games int,
    HighScore int,
    ScoreSum int,
@@ -90,7 +91,7 @@ module.exports = {
    registerNewUser: (registrationPasswordInput, registrationUsernameInput) => {
       bcrypt.hash(registrationPasswordInput, saltRounds).then(function (hash) {
          conDatabseModule.connect(function (err) {
-            let sql = `INSERT INTO User (Username, Password, Projectiles, Obliterations, Currency, Experience, Games, HighScore, ScoreSum) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0} , ${0}, ${0} , ${0}, ${0})`;
+            let sql = `INSERT INTO User (Username, Password, Projectiles, Obliterations, Currency, Experience, Games, HighScore, ScoreSum, Level) VALUES ('${registrationUsernameInput}', '${hash}', ${0}, ${0}, ${0} , ${0}, ${0} , ${0}, ${0}, ${1})`;
             conDatabseModule.query(sql, function (err, result, fields) {
                if (err) {
                   console.log("REGISTATION FAILED");

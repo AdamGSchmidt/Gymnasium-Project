@@ -35,6 +35,10 @@
             "currencyPerLoot": 3,
             "experiencePerScore" : 0.1
         },
+        "level" : {
+            "perLevelIncresse" : 100,
+            "perLevelPercentMultiplier": 1.1
+        },
         "general": {
 
         }
