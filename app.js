@@ -310,7 +310,6 @@ let currentConections = 0;
 const usersPositions = new Array();
 const projectilePositions = new Array();
 const lootPositions = new Array();
-
 let time;
 
 io.on('connection', (socket) => {

@@ -60,6 +60,9 @@ const drawMenue = () => {
     ctx.textAlign = "center";
     ctx.fillStyle = '#000000';
     ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
+    if (profieleContent) {
+        level = profieleContent.Level;
+    }
     ctx.fillText(level, canvasWidth / 80 * 28.5, (canvasHeight / 80) * 5.8);
     // level bar
     // background

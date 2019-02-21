@@ -141,32 +141,28 @@ module.exports = {
                   }
                });
             }
-         }
-      });
-      updateUserProfileLevel(username);
-   },
-   updateUserProfileLevel: (username) => {
-      let sql = `SELECT Level, Experience FROM User WHERE Username = ${username}`;
-      conDatabseModule.query(sql, function (err, result, fields) {
-         if (err) {
-            console.log(err);
-            console.log("ERROR WHILE TRYING TO CHECK LEVEL")
-         } else {
-            let level = result[0].Level;
-            let experience = result[0].Experience;
-            if (experience >= ((level*100) * Math.pow(1.1, (level-1)))) {
-               experience = experience - ((level*100) * Math.pow(1.1, (level-1)));
-               level++;
-               let sql = `UPDATE User SET Level = ${level}, Experience = ${experience} WHERE Username = ${username}`;
-               conDatabseModule.query(sql, function (err, result, fields) {
-                  if (err) {
-                     console.log(err);
-                     console.log("ERROR WHILE TRYING TO LEVEL UP")
-                  } else {
-                     console.log("LEVEL UP ");
+            sql = `SELECT Level, Experience FROM User WHERE Username = '${username}'`;
+            conDatabseModule.query(sql, function (err, result, fields) {
+               if (err) {
+                  console.log(err);
+                  console.log("ERROR WHILE TRYING TO CHECK LEVEL")
+               } else {
+                  let level = result[0].Level;
+                  let experience = result[0].Experience;
+                  if (experience >= ((level * 100) * Math.pow(1.1, (level - 1)))) {
+                     experience = experience - ((level * 100) * Math.pow(1.1, (level - 1)));
+                     let sql = `UPDATE User SET Level = Level + ${1}, Experience = ${experience} WHERE Username = '${username}'`;
+                     conDatabseModule.query(sql, function (err, result, fields) {
+                        if (err) {
+                           console.log(err);
+                           console.log("ERROR WHILE TRYING TO LEVEL UP")
+                        } else {
+                           console.log("LEVEL UP ");
+                        }
+                     });
                   }
-               });
-            }
+               }
+            });
          }
       });
    }
@@ -197,18 +193,18 @@ module.exports = {
       }*/ /*,
 // DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
 checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
-   let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
-   let result;
-   await conDatabseModule.query(sql, function (err, results) {
-      if (err) {
-         console.log('Error: Failed to check username, register');
-      } else {
-         console.log(results);
-         console.log(results.length);
-         console.log(sql);
-         result = results.length;
-         return result;
-      }
-   });
+let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;
+let result;
+await conDatabseModule.query(sql, function (err, results) {
+if (err) {
+   console.log('Error: Failed to check username, register');
+} else {
+   console.log(results);
+   console.log(results.length);
+   console.log(sql);
+   result = results.length;
+   return result;
+}
+});
 } */
 }
