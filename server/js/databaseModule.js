@@ -137,7 +137,32 @@ module.exports = {
                      console.log("ERROR WHILE TRYING TO SET NEW HIGHSCORE")
                   } else {
                      console.log("NEW HIGHSCORE");
-
+                  }
+               });
+            }
+         }
+      });
+      updateUserProfileLevel(username);
+   },
+   updateUserProfileLevel: (username) => {
+      let sql = `SELECT Level, Experience FROM User WHERE Username = ${username}`;
+      conDatabseModule.query(sql, function (err, result, fields) {
+         if (err) {
+            console.log(err);
+            console.log("ERROR WHILE TRYING TO CHECK LEVEL")
+         } else {
+            let level = result[0].Level;
+            let experience = result[0].Experience;
+            if (experience >= ((level*100) * Math.pow(1.1, (level-1)))) {
+               experience = experience - ((level*100) * Math.pow(1.1, (level-1)));
+               level++;
+               let sql = `UPDATE User SET Level = ${level}, Experience = ${experience} WHERE Username = ${username}`;
+               conDatabseModule.query(sql, function (err, result, fields) {
+                  if (err) {
+                     console.log(err);
+                     console.log("ERROR WHILE TRYING TO LEVEL UP")
+                  } else {
+                     console.log("LEVEL UP ");
                   }
                });
             }
