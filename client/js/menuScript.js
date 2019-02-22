@@ -72,16 +72,20 @@ const drawMenue = () => {
     ctx.lineWidth = 3;
     ctx.rect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14, (canvasHeight / 80) * 3.8);
     ctx.stroke();
-    // bar
-    ctx.fillRect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14, (canvasHeight / 80) * 3.8);
-    ctx.fillStyle = '#ff6347';
     let experience = 0;
     if (profieleContent) {
         experience = profieleContent.Experience;
     }
+    // bar
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14, (canvasHeight / 80) * 3.8);
+    ctx.fillStyle = '#ff6347';
     ctx.fillRect(canvasWidth / 80 * 31.4, (canvasHeight / 80) * 2, canvasWidth / 80 * 14 * (experience / (level * 1000 * Math.pow(1.1, (level - 1)))), (canvasHeight / 80) * 3.8); // has the level formula
-    console.log(experience + " " + level + "    " + (level * 1000 * Math.pow(1.1, (level - 1))))
-
+    // bar text
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `${14 * canvasWidth / defaoultScale}px Arial`;
+    ctx.fillText(`${Math.floor(experience / (level * 1000 * Math.pow(1.1, (level - 1))) * 100)}%`, canvasWidth / 80 * 33.5, (canvasHeight / 80) * 5.2);
+    console.log(experience)
     // profile box
     if (selectedMenue === 'profile') {
         ctx.fillStyle = "#ff6347";
