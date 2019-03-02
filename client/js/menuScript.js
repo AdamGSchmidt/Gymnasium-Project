@@ -1,3 +1,11 @@
+/*
+REMOVE ???
+EXTEND NAME TAB
+INNCLUDE LEVEL NAME AND LEVEL BAR IN TAB
+REMOVE FRIENDS FOR NOW
+Make bacground into gameplay ??
+*/
+
 // Globala variabler
 let canvasWidth;
 let canvasHeight;
