@@ -12,7 +12,7 @@
     width: 100%;
 }
 
-#displayNameInput{
+#displayNameInput {
     position: absolute;
     height: fit-content;
     width: 10%;
@@ -21,4 +21,76 @@
     padding: 1%;
     border: solid tomato 0.2vw;
     font-size: 1vw;
+}
+
+#loadoutContainer {
+    background-color: #777777;
+    width: 55%;
+    height: 70vh;
+    position: absolute;
+    top: 20vh;
+    left: 30%;
+    display: none;
+    overflow-y: scroll;
+}
+
+#skinSelector {
+    background-color: #ff6347;
+    width: 50%;
+    height: 10%;
+    position: relative;
+    float: left;
+    text-align: center;
+    display: table;
+    cursor: pointer;
+}
+
+#skinSelectorText {
+    display: table-cell;
+    vertical-align: middle;
+    color: #FFFFFF;
+    font-size: 3vw;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#weaponSelector {
+    background-color: #AAAAAA;
+    width: 50%;
+    height: 10%;
+    position: relative;
+    float: left;
+    text-align: center;
+    display: table;
+    cursor: pointer;
+}
+
+#weaponSelectorText {
+    display: table-cell;
+    vertical-align: middle;
+    color: #ff6347;
+    font-size: 3vw;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+    background: #AAAAAA;
+    border-left: solid black 1px;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: #000000;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff6347;
 }

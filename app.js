@@ -720,7 +720,7 @@ const determinNewProjectile = () => {
       continue;
     }
     if (projectilePositions[index].yCord <= (0 + projectilePositions[index].radius + 1)) {
-      projectilePositions[index].angel = Math.abs((Math.PI - projectilePositions[index].angel));
+      projectilePositions[index].angel = Math.PI - (-1 * (Math.PI - projectilePositions[index].angel));
       projectilePositions[index].speed *= config.game.projectile.speedChange;
       projectilePositions[index].yCord = 0 + projectilePositions[index].radius;
       continue;

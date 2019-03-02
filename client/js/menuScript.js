@@ -32,6 +32,9 @@ const startup = () => {
 }
 
 const drawMenue = () => {
+    // Hide shit
+    document.getElementById('loadoutContainer').style.display = 'none';
+
     console.log(canvasHeight + " , " + canvasWidth + " " + selectedMenue)
     let ctx = c.getContext("2d");
     ctx.clearRect(-10000, -10000, 26000, 26000);
@@ -257,15 +260,13 @@ const drawMenue = () => {
     if (selectedMenue === 'loadout') {
         // loadout content 
 
-        // box
-        ctx.fillStyle = "#AAAAAA";
-        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
-        ctx.fillStyle = "#000000";
-
         // content
         if (login == true) {
-
+            document.getElementById('loadoutContainer').style.display = 'initial';
         } else {
+            ctx.fillStyle = "#AAAAAA";
+            ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
+            ctx.fillStyle = "#000000";
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
             ctx.textAlign = "center";
@@ -659,6 +660,19 @@ const resize = () => {
     c.width = canvasWidth;
     c.height = canvasHeight;
     drawMenue();
+}
+const changeLoadoutDisplay = data => {
+    if (data) {
+        document.getElementById('skinSelector').style.backgroundColor = '#ff6347';
+        document.getElementById('skinSelectorText').style.color = '#FFFFFF';
+        document.getElementById('weaponSelector').style.backgroundColor = '#AAAAAA';
+        document.getElementById('weaponSelectorText').style.color = '#ff6347';
+    } else {
+        document.getElementById('skinSelector').style.backgroundColor = '#AAAAAA';
+        document.getElementById('skinSelectorText').style.color = '#ff6347';
+        document.getElementById('weaponSelector').style.backgroundColor = '#ff6347';
+        document.getElementById('weaponSelectorText').style.color = '#FFFFFF';
+    }
 }
 
 window.onload = () => {
