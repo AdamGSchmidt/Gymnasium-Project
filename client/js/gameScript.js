@@ -44,11 +44,14 @@ class Projectile {
 
 // Get the canvas center and set it to player posision
 const getCenterCanvas = () => {
-    middlePosition = { xCord: (canvasWidth / 2), yCord: (canvasHeight / 2) };
+    middlePosition = {
+        xCord: (canvasWidth / 2),
+        yCord: (canvasHeight / 2)
+    };
 }
 
 // Draw all objects 
-const draw = (currentUserPositions, currentProjectilePositions, currentLootPositions) => {
+const draw = (currentUserPositions, currentProjectilePositions, currentPrimaryLootPositions, currentSecondaryLootPositions) => {
     getCenterCanvas();
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
@@ -56,7 +59,8 @@ const draw = (currentUserPositions, currentProjectilePositions, currentLootPosit
     ctx.save();
     ctx.translate((middlePosition.xCord - playerPosition.xCord), (middlePosition.yCord - playerPosition.yCord));
     drawGrid();
-    drawLoot(currentLootPositions);
+    drawPrimaryLoot(currentPrimaryLootPositions);
+    drawSecondaryLoot(currentSecondaryLootPositions);
     drawProjectiles(currentProjectilePositions);
     drawUsers(currentUserPositions);
     // ctx.scale((canvasWidth / defaultScale), (canvasWidth / defaultScale));
@@ -135,23 +139,39 @@ const drawProjectiles = (currentProjectilePositions) => {
     }
 }
 
-const drawLoot = (currentLootPositions) => {
+const drawPrimaryLoot = (currentPrimaryLootPositions) => {
     c = document.getElementById("gameCanvas");
     ctx = c.getContext("2d");
-    for (let index = 0; index < currentLootPositions.length; index++) {
+    for (let index = 0; index < currentPrimaryLootPositions.length; index++) {
         ctx.beginPath();
-        ctx.arc(currentLootPositions[index].xCord, currentLootPositions[index].yCord, currentLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.arc(currentPrimaryLootPositions[index].xCord, currentPrimaryLootPositions[index].yCord, currentPrimaryLootPositions[index].radius, 0, 2 * Math.PI, false);
         ctx.closePath();
-        ctx.fillStyle = "#FFFF00";
+        ctx.fillStyle = "#FFD700";
         ctx.fill();
         ctx.fillStyle = "#000000";
         ctx.beginPath();
-        ctx.arc(currentLootPositions[index].xCord, currentLootPositions[index].yCord, currentLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.arc(currentPrimaryLootPositions[index].xCord, currentPrimaryLootPositions[index].yCord, currentPrimaryLootPositions[index].radius, 0, 2 * Math.PI, false);
         ctx.strokeStyle = "#000000";
         ctx.stroke();
     }
 };
 
+const drawSecondaryLoot = (currentSecondaryLootPositions) => {
+    c = document.getElementById("gameCanvas");
+    ctx = c.getContext("2d");
+    for (let index = 0; index < currentSecondaryLootPositions.length; index++) {
+        ctx.beginPath();
+        ctx.arc(currentSecondaryLootPositions[index].xCord, currentSecondaryLootPositions[index].yCord, currentSecondaryLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fillStyle = "#bec2cb";
+        ctx.fill();
+        ctx.fillStyle = "#000000";
+        ctx.beginPath();
+        ctx.arc(currentSecondaryLootPositions[index].xCord, currentSecondaryLootPositions[index].yCord, currentSecondaryLootPositions[index].radius, 0, 2 * Math.PI, false);
+        ctx.strokeStyle = "#000000";
+        ctx.stroke();
+    }
+};
 
 const newPlayerPosition = (event) => {
     getCenterCanvas();
@@ -202,7 +222,7 @@ const getUser = () => {
         success: function (data) {
             data = JSON.parse(data);
             let playerUsername = data.username;
-            if (playerUsername  == undefined) {
+            if (playerUsername == undefined) {
                 playerUsername = 'Guest';
             }
             setUser(playerUsername);
@@ -267,7 +287,6 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
     for (let index = 0; index < topList.length; index++) {
         if (topList[index].score) {
             if (topList[index].username == playerPosition.username) {
-                console.log(topList)
                 feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].displayName} </span> <span class="topListFeedScore2"> ${topList[index].score.toFixed()} </span> </div>`;
             } else {
                 feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].displayName} </span> <span class="topListFeedScore"> ${topList[index].score.toFixed()} </span> </div>`;
@@ -280,14 +299,17 @@ const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
 document.addEventListener('mousemove', newPlayerPosition, false);
 document.addEventListener('contextmenu', event => event.preventDefault());
 document.addEventListener("click", newProjectile);
-document.addEventListener('mousedown', (event) => { event.preventDefault(); }, false);
+document.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+}, false);
 
 socket.on('tick', (data) => {
     let parsedData = JSON.parse(data);
     let currentUserPositions = [];
     currentUserPositions = parsedData.players;
     let currentProjectilePositions = parsedData.projectiles;
-    let currentLootPositions = parsedData.loot;
+    let currentPrimaryLootPositions = parsedData.primaryLoot;
+    let currentSecondaryLootPositions = parsedData.secondaryLoot;
     if (currentUserPositions) {
         for (let index = 0; index < currentUserPositions.length; index++) {
             if (currentUserPositions[index].id == socketId) {
@@ -302,7 +324,7 @@ socket.on('tick', (data) => {
                 currentUserPositions.splice(index, 1);
             }
         }
-        draw(currentUserPositions, currentProjectilePositions, currentLootPositions);
+        draw(currentUserPositions, currentProjectilePositions, currentPrimaryLootPositions, currentSecondaryLootPositions);
         socket.emit('update', {
             clientAngel: angel,
             clientUseAngel: useAngel
@@ -348,7 +370,7 @@ socket.on('obliterated', (data) => {
             document.getElementById('obliteratedMessage5').innerHTML = `${Math.round(feedItem.experience)} xp`;
             document.getElementById('obliteratedMessage6').innerHTML = `${Math.round(feedItem.currency)} moneys`;
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
-            
+
         }, 32);
     }
 });

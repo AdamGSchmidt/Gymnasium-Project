@@ -11,22 +11,30 @@
             "minSpeed": 1
         },
         "loot": {
-            "startRadius": 10
+            "startRadius": 10,
+            "projectileRadiusMultiplier": 1.2,
+            "projectileSpeedMultiplier": 1.2,
+            "playerRadiusMultipler": 0.9
+        },
+        "secondaryLoot": {
+            "startRadius": 6,
+            "ammountPerUser":8,
+            "projectileRadiusMultiplier": 1.02,
+            "projectileSpeedMultiplier": 1.02,
+            "playerRadiusMultipler": 0.99
         },
         "upgrade" :{
             "maxRadiusProjectile": 40,
             "maxSpeedProjectile": 10,
-            "minRadiusPlayer": 10,
-            "projectileRadiusMultiplier": 1.2,
-            "projectileSpeedMultiplier": 1.2,
-            "playerRadiusMultipler": 0.9
+            "minRadiusPlayer": 10
         },
         "map": {
             "xBoundary": 2600,
             "yBoundary": 2600
         },
         "score": {
-            "loot": 200,
+            "primaryLoot": 200,
+            "secondaryLoot": 40,
             "obliteration" : 100,
             "percentage" : 0.08,
             "perTick" :  0.003

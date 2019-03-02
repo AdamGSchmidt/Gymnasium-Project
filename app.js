@@ -1,10 +1,17 @@
 /*
   DET SOM MÅSTE GÖRAS
-    SAnatize function 
+    SAnatize function (byt till annan mysqql)
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
     Stäng all conections 
-*/
+    Fisa secondary loot
+    Fixa studds bugg
+    Fixa skins
+    Fixa loadouts
+    Fixa store
+    Fixa ny login och regestration
+    Fixa css och canvas utseende
+    */
 
 // Initiala variabler
 // Globala variabler
@@ -18,7 +25,9 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const saltRounds = 10;
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const urlencodedParser = bodyParser.urlencoded({
+  extended: false
+});
 const databaseModule = require('./server/js/databaseModule.js');
 
 // config
@@ -168,7 +177,9 @@ app.post('/login', urlencodedParser, function (req, res) {
 
   // login fail
   function loginAttemptFail() {
-    res.send({ login: false });
+    res.send({
+      login: false
+    });
     res.end();
     console.log("User login fail");
   }
@@ -180,18 +191,20 @@ app.post('/login', urlencodedParser, function (req, res) {
     req.session['login'] = true;
     req.session['username'] = loginUsernameInput;
     console.log(req.session);
-    res.send({ redirect: '/menu' });
+    res.send({
+      redirect: '/menu'
+    });
     res.end();
   }
 });
 
 // då get /game sckika game.html
 app.get('/game', function (req, res) {
- // if (req.session['login'] === true) {
-    res.sendFile(__dirname + '/client/html/game.html');
-    sessionId = req.session.id;
+  // if (req.session['login'] === true) {
+  res.sendFile(__dirname + '/client/html/game.html');
+  sessionId = req.session.id;
   //} else {
-    //res.redirect('/');
+  //res.redirect('/');
   //}
 });
 
@@ -244,7 +257,9 @@ app.post('/logout', urlencodedParser, function (req, res) {
 });
 
 app.get('/getnumberofcurrentusers', urlencodedParser, function (req, res) {
-  res.send({ users: currentConections });
+  res.send({
+    users: currentConections
+  });
   res.end();
 });
 
@@ -309,7 +324,8 @@ const checkPasswordRegistration = (registrationPasswordInput) => {
 let currentConections = 0;
 const usersPositions = new Array();
 const projectilePositions = new Array();
-const lootPositions = new Array();
+const primaryLootPositions = new Array();
+const secondaryLootPositions = new Array();
 let time;
 
 io.on('connection', (socket) => {
@@ -427,14 +443,17 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
   determinNewPlayerPosition();
-  playerLootCollisionCheck();
+  playerPrimaryLootCollisionCheck();
+  playerSecondaryLootCollisionCheck();
   determinNewProjectile();
   playerProjectileCollisionCheck();
   increaseScore();
+  createSecondaryLoot();
   let clientDataObj = {
     players: usersPositions || [],
     projectiles: projectilePositions || [],
-    loot: lootPositions || []
+    primaryLoot: primaryLootPositions || [],
+    secondaryLoot: secondaryLootPositions || [],
   };
   io.emit('tick', JSON.stringify(clientDataObj));
 }, 16);
@@ -513,37 +532,75 @@ const determinNewPlayerPosition = () => {
   }
 }
 
-const playerLootCollisionCheck = () => {
-  for (let index = 0; index < lootPositions.length; index++) {
+const playerPrimaryLootCollisionCheck = () => {
+  for (let index = 0; index < primaryLootPositions.length; index++) {
     for (let index2 = 0; index2 < usersPositions.length; index2++) {
-      if (lootPositions[index] && usersPositions[index2]) {
+      if (primaryLootPositions[index] && usersPositions[index2]) {
         // Collision checking algorithim
-        let distanceX = lootPositions[index].xCord - usersPositions[index2].xCord;
-        let distanceY = lootPositions[index].yCord - usersPositions[index2].yCord;
+        let distanceX = primaryLootPositions[index].xCord - usersPositions[index2].xCord;
+        let distanceY = primaryLootPositions[index].yCord - usersPositions[index2].yCord;
         let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        if (distance < lootPositions[index].radius + usersPositions[index2].radius) {
+        if (distance < primaryLootPositions[index].radius + usersPositions[index2].radius) {
           if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
-            usersPositions[index2].projectileSpeed *= config.game.upgrade.projectileSpeedMultiplier; // INCREASE BY 10%
+            usersPositions[index2].projectileSpeed *= config.game.loot.projectileSpeedMultiplier; // INCREASE BY 10%
           }
           if (usersPositions[index2].projectileSpeed >= config.game.upgrade.maxSpeedProjectile) {
             usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
           }
           if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
-            usersPositions[index2].projectileRadius *= config.game.upgrade.projectileRadiusMultiplier; // INCREASE BY 10%
+            usersPositions[index2].projectileRadius *= config.game.loot.projectileRadiusMultiplier; // INCREASE BY 10%
           }
           if (usersPositions[index2].projectileRadius >= config.game.upgrade.maxRadiusProjectile) {
             usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
           }
           if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
-            usersPositions[index2].radius *= config.game.upgrade.playerRadiusMultipler;
+            usersPositions[index2].radius *= config.game.loot.playerRadiusMultipler;
           }
           if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
-          console.log(lootPositions[index].score + "   " + config.game.score.percentage)
-          usersPositions[index2].score += config.game.score.loot + lootPositions[index].score * config.game.score.percentage;
+          console.log(primaryLootPositions[index].score + "   " + config.game.score.percentage)
+          usersPositions[index2].score += config.game.score.primaryLoot + primaryLootPositions[index].score * config.game.score.percentage;
           usersPositions[index2].lootNumber += 1;
-          lootPositions.splice(index, 1);
+          primaryLootPositions.splice(index, 1);
+          console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
+        }
+      }
+    }
+  }
+};
+
+const playerSecondaryLootCollisionCheck = () => {
+  for (let index = 0; index < secondaryLootPositions.length; index++) {
+    for (let index2 = 0; index2 < usersPositions.length; index2++) {
+      if (secondaryLootPositions[index] && usersPositions[index2]) {
+        // Collision checking algorithim
+        let distanceX = secondaryLootPositions[index].xCord - usersPositions[index2].xCord;
+        let distanceY = secondaryLootPositions[index].yCord - usersPositions[index2].yCord;
+        let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        if (distance < secondaryLootPositions[index].radius + usersPositions[index2].radius) {
+          if (usersPositions[index2].projectileSpeed <= config.game.upgrade.maxSpeedProjectile) { // max speed
+            usersPositions[index2].projectileSpeed *= config.game.secondaryLoot.projectileSpeedMultiplier; // INCREASE BY 10%
+          }
+          if (usersPositions[index2].projectileSpeed >= config.game.upgrade.maxSpeedProjectile) {
+            usersPositions[index2].projectileSpeed = config.game.upgrade.maxSpeedProjectile;
+          }
+          if (usersPositions[index2].projectileRadius <= config.game.upgrade.maxRadiusProjectile) { // max radius
+            usersPositions[index2].projectileRadius *= config.game.secondaryLoot.projectileRadiusMultiplier; // INCREASE BY 10%
+          }
+          if (usersPositions[index2].projectileRadius >= config.game.upgrade.maxRadiusProjectile) {
+            usersPositions[index2].projectileRadius = config.game.upgrade.maxRadiusProjectile;
+          }
+          if (usersPositions[index2].radius >= config.game.upgrade.minRadiusPlayer) {
+            usersPositions[index2].radius *= config.game.secondaryLoot.playerRadiusMultipler;
+          }
+          if (usersPositions[index2].radius <= config.game.upgrade.minRadiusPlayer) {
+            usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
+          }
+          console.log(secondaryLootPositions[index].score + "   " + config.game.score.percentage)
+          usersPositions[index2].score += config.game.score.primaryLoot + secondaryLootPositions[index].score * config.game.score.percentage;
+          usersPositions[index2].lootNumber += 1;
+          secondaryLootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
         }
       }
@@ -563,7 +620,7 @@ const playerProjectileCollisionCheck = () => {
         let experience = usersPositions[index2].score * config.game.reward.experiencePerScore;
         let currency = usersPositions[index2].lootNumber * config.game.reward.currencyPerLoot;
         if (usersPositions[index2].username != projectilePositions[index].username) {
-          usersPositions[index2].obliterations  += 1;
+          usersPositions[index2].obliterations += 1;
         }
         io.emit('obliterated', {
           obliterated: usersPositions[index2].displayName,
@@ -573,7 +630,7 @@ const playerProjectileCollisionCheck = () => {
           currency
         });
         if (usersPositions[index2].username) {
-        databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].score,usersPositions[index2].obliterations, usersPositions[index2].projectiles ,usersPositions[index2].username);
+          databaseModule.updateUserProfileReward(experience, currency, usersPositions[index2].score, usersPositions[index2].obliterations, usersPositions[index2].projectiles, usersPositions[index2].username);
         }
         for (let index3 = 0; index3 < usersPositions.length; index3++) {
           if (usersPositions[index3].username == projectilePositions[index].username) {
@@ -581,7 +638,7 @@ const playerProjectileCollisionCheck = () => {
             break;
           }
         }
-        createLoot(usersPositions[index2]);
+        createPrimaryLoot(usersPositions[index2]);
         usersPositions.splice(index2, 1);
         console.log("PROJECTILE PLAYER COLLISION");
       }
@@ -589,15 +646,32 @@ const playerProjectileCollisionCheck = () => {
   }
 }
 
-const createLoot = (data) => {
+const createPrimaryLoot = (data) => {
   let loot = {
     radius: config.game.loot.startRadius,
     xCord: data.xCord,
     yCord: data.yCord,
     score: data.score
   }
-  console.log("LOOT CREATED")
-  lootPositions.push(loot);
+  console.log("PRIMARY LOOT CREATED")
+  primaryLootPositions.push(loot);
+};
+
+const createSecondaryLoot = (data) => {
+  let ammountPerUser = config.game.secondaryLoot.ammountPerUser;
+  if ((secondaryLootPositions.length * ammountPerUser) < (currentConections * ammountPerUser)) {
+    let difference = Math.abs((secondaryLootPositions.length * ammountPerUser) - (currentConections * ammountPerUser));
+    for (let index = 0; index < difference; index++) {
+      let loot = {
+        radius: config.game.secondaryLoot.startRadius,
+        xCord: Math.floor(Math.random() * (config.game.map.xBoundary - 2 * config.game.secondaryLoot.startRadius) + config.game.secondaryLoot.startRadius),
+        yCord: Math.floor(Math.random() * (config.game.map.yBoundary - 2 * config.game.secondaryLoot.startRadius) + config.game.secondaryLoot.startRadius),
+        score: config.game.score.secondaryLoot
+      }
+      console.log("SECONDARY LOOT CREATED")
+      secondaryLootPositions.push(loot);
+    }
+  }
 };
 
 const determinNewProjectile = () => {
