@@ -598,7 +598,7 @@ const playerSecondaryLootCollisionCheck = () => {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
           console.log(secondaryLootPositions[index].score + "   " + config.game.score.percentage)
-          usersPositions[index2].score += config.game.score.primaryLoot + secondaryLootPositions[index].score * config.game.score.percentage;
+          usersPositions[index2].score += config.game.score.secondaryLoot; 
           usersPositions[index2].lootNumber += 1;
           secondaryLootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
@@ -657,10 +657,10 @@ const createPrimaryLoot = (data) => {
   primaryLootPositions.push(loot);
 };
 
-const createSecondaryLoot = (data) => {
+const createSecondaryLoot = () => {
   let ammountPerUser = config.game.secondaryLoot.ammountPerUser;
-  if ((secondaryLootPositions.length * ammountPerUser) < (currentConections * ammountPerUser)) {
-    let difference = Math.abs((secondaryLootPositions.length * ammountPerUser) - (currentConections * ammountPerUser));
+  if ((secondaryLootPositions.length) < (currentConections * ammountPerUser)) {
+    let difference = Math.abs((secondaryLootPositions.length) - (currentConections * ammountPerUser));
     for (let index = 0; index < difference; index++) {
       let loot = {
         radius: config.game.secondaryLoot.startRadius,

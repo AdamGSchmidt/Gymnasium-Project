@@ -1,0 +1,19 @@
+[{
+        "id": 1,
+        "name": "Singel shot",
+        "requierment": 2,
+        "image": ""
+    },
+    {
+        "id": 2,
+        "name": "Dubble shot",
+        "requierment": 4,
+        "image": ""
+    },
+    {
+        "id": 3,
+        "name": "Tripple shot",
+        "requierment": 6,
+        "image": ""
+    }
+]
