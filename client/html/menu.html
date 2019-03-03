@@ -18,8 +18,41 @@
         <canvas id="menuCanvas"></canvas>
         <input type="text" id="displayNameInput" placeholder="Display name" spellcheck="false">
         <div id="loadoutContainer">
-            <div id="skinSelector" onclick=changeLoadoutDisplay(true)><span id="skinSelectorText">Skin</span></div>
-            <div id="weaponSelector" onclick=changeLoadoutDisplay(false)><span id="weaponSelectorText">Weapon</span></div>
+            <div id="selectedWeaponContainer" class="selectedLoadoutContainer">
+                <div class="selectedTitleContainer">
+                    <span id="selectedWeponTitle" class="selectedTitle">Weapon</span>
+                </div>
+                <div id="selectedWeapon" class="selectedLoadout">
+                    <img id="selectedWeaponImg" class="selectedImg" src="" alt="">
+                    <div class="selectedTxtContainer">
+                        <span id="selectedWeaponTxt" class="selectedTxt"></span>
+                    </div>
+                </div>
+                <input onclick=changeWeapon() type="button" id="changeWeapon" class="changeLoadoutBtn" value="Change">
+            </div>
+            <div id="selectedPlayerSkinContainer" class="selectedLoadoutContainer">
+                <div class="selectedTitleContainer">
+                    <span id="selectedPlayerSkinTitle" class="selectedTitle">Player Skin</span>
+                </div>
+                <div id="selectedPlayerSkin" class="selectedLoadout">
+                    <img id="selectedPlayerSkinImg" class="selectedImg" src="" alt="">
+                    <span id="selectedPlayerSkinTxt" class="selectedTxt"></span>
+                </div>
+                <input type="button" id="changePlayerSkin" class="changeLoadoutBtn" value="Change">
+            </div>
+            <div id="selectedProjectileSkinContainer" class="selectedLoadoutContainer">
+                <div class="selectedTitleContainer">
+                    <span id="selectedProjectileSkinTitle" class="selectedTitle">Projectile Skin</span>
+                </div>
+                <div id="selectedProjectileSkin" class="selectedLoadout">
+                    <img id="selectedProjectileSkinImg" class="selectedImg" src="" alt="">
+                    <span id="selectedProjectileSkinTxt" class="selectedTxt"></span>
+                </div>
+                <input type="button" id="changeProjectileSkin" class="changeLoadoutBtn" value="Change">
+            </div>
+        </div>
+        <div id="changeWeaponContainer">
+            
         </div>
     </div>
 </body>

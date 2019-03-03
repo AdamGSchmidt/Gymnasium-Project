@@ -11,6 +11,7 @@
     Fixa store
     Fixa ny login och regestration
     Fixa css och canvas utseende
+    Fixa score top list
     */
 
 // Initiala variabler
@@ -248,6 +249,29 @@ app.get('/getprofielecontent', urlencodedParser, function (req, res) {
   });
 });
 
+app.get('/getloadouts', urlencodedParser, function (req, res) {
+  let sql = `SELECT * FROM Loadout`;
+  let con = databaseModule.connectToDB();
+  con.query(sql, function (err, results) {
+    if (err) {
+      console.log('Error: Failed to get loadout content,');
+      console.log(err);
+    } else {
+      console.log(results);
+      res.send(results);
+    }
+  });
+  con.end();
+});
+
+app.get('/getcurrentloadouts', urlencodedParser, function (req, res) {
+  let response = req.session['weapon'];
+  if (response == undefined) {
+    req.session['weapon'] = 0;
+    response = 0;
+  }
+  res.send(JSON.stringify(response));
+});
 
 // loggar ut
 app.post('/logout', urlencodedParser, function (req, res) {

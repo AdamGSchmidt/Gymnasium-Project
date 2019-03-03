@@ -1,10 +1,11 @@
 /*
-         ***   I DENNA FIL SKA FUNKTIONERA SOM HAR ATT GÖRA MED DATABASEN VARA   ***
-*/
+ ***   I DENNA FIL SKA FUNKTIONERA SOM HAR ATT GÖRA MED DATABASEN VARA   ***
+ */
 
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const mysql = require('mysql'); // Global databas variabel
+const loadouts = require('../../loadouts.json');
 
 // skapa anslutnong
 let con = mysql.createConnection({
@@ -65,7 +66,8 @@ function createTable() {
       database: "mydb"
    });
    console.log("CREATING TABLE");
-   let sql = `CREATE TABLE User (Username VARCHAR(255) NOT NULL, 
+   let sql = `CREATE TABLE User (
+   Username VARCHAR(255) NOT NULL, 
    UserID int NOT NULL AUTO_INCREMENT, 
    Password VARCHAR(255) NOT NULL, 
    Projectiles int,
@@ -82,7 +84,45 @@ function createTable() {
       if (err) throw err;
       console.log("TABLE CREATED");
    });
+   console.log("CREATING TABLE");
+   sql = `CREATE TABLE Loadout (
+   Name VARCHAR(255) NOT NULL, 
+   ID int NOT NULL, 
+   Requierment int NOT NULL,
+   Image VARCHAR(255) NOT NULL,
+   PRIMARY KEY(ID) );`;
+   con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("TABLE CREATED");
+   });
+   con.end();
 }
+
+const insertLoadout = () => {
+   let sql;
+   sql = 'TRUNCATE TABLE Loadout';
+   conDatabseModule.query(sql, function (err, result, fields) {
+      if (err) {
+         console.log("ERROR WHILE DELETINNG LOADOUTS");
+         console.log(err);
+      } else {
+      }
+   });
+   for (let index = 0; index < loadouts.length; index++) {
+      sql = `INSERT INTO Loadout (Name, ID, Requierment, Image) VALUES ('${loadouts[index].name}', '${loadouts[index].id}', ${loadouts[index].requierment}, '${loadouts[index].image}')`;
+      conDatabseModule.query(sql, function (err, result, fields) {
+         if (err) {
+            console.log("ERROR WHILE INSERTING LOADOUTS");
+            console.log(err);
+         } else {
+         }
+      });
+   }
+}
+
+insertLoadout();
+
+
 con.end();
 
 module.exports = {
@@ -190,7 +230,8 @@ module.exports = {
                }
             }
          });
-      }*/ /*,
+      }*/
+   /*,
 // DENNA FUNGERAR EJ https://www.quora.com/How-can-I-check-if-a-username-existed-with-Node-js
 checkIfUsernameTaken: async function (registrationPasswordInput, registrationPasswordInputRepete, registrationUsernameInput) {
 let sql = `SELECT Username FROM User WHERE Username = '${registrationUsernameInput}'`;

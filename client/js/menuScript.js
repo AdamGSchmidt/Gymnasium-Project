@@ -14,6 +14,8 @@ let username;
 let login;
 let selectedMenue = 'play';
 let profieleContent;
+let loadouts;
+let currentLoadout = 0;
 let currency = 0;
 let level = 1;
 
@@ -23,6 +25,7 @@ const defaoultScale = 680;
 const startup = () => {
     // Hämntar användarnamn och anropar andera functioner
     getLogin();
+    getLoaduts()
 
     // hämtar antalet nuvarande spelare varje sekund
     /* getNumberOfUsers();
@@ -34,6 +37,7 @@ const startup = () => {
 const drawMenue = () => {
     // Hide shit
     document.getElementById('loadoutContainer').style.display = 'none';
+    document.getElementById('changeWeaponContainer').style.display = 'none';
 
     console.log(canvasHeight + " , " + canvasWidth + " " + selectedMenue)
     let ctx = c.getContext("2d");
@@ -262,7 +266,10 @@ const drawMenue = () => {
 
         // content
         if (login == true) {
+            console.log(currentLoadout)
             document.getElementById('loadoutContainer').style.display = 'initial';
+            document.getElementById('selectedWeaponTxt').innerHTML = loadouts[currentLoadout].Name;
+            document.getElementById('selectedWeaponImg').src = loadouts[currentLoadout].Image;
         } else {
             ctx.fillStyle = "#AAAAAA";
             ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
@@ -451,9 +458,6 @@ const drawProfileContent = () => {
     ctx.textAlign = "center";
     ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 59);
 
-
-
-
     //  title box 5
     ctx.fillStyle = "#777777";
     ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
@@ -550,6 +554,34 @@ const getProfieleContent = () => {
     });
 };
 
+const getLoaduts = () => {
+    $.ajax({
+        url: "/getloadouts",
+        timeout: 2000,
+        data: {},
+        success: function (data) {
+            loadouts = data;
+        },
+        error: function (jqXHR, textStatus, err) {
+            alert('Error');
+        }
+    });
+};
+
+const getCurrentLoaduts = () => {
+    $.ajax({
+        url: "/getcurrentloadouts",
+        timeout: 2000,
+        data: {},
+        success: function (data) {
+            currentLoadout = data;
+        },
+        error: function (jqXHR, textStatus, err) {
+            alert('Error');
+        }
+    });
+};
+
 const getDisplayName = () => {
     $.ajax({
         url: "/getdisplayname",
@@ -566,6 +598,10 @@ const getDisplayName = () => {
         }
     });
 };
+
+const changeWeapon = () => {
+    document.getElementById('changeWeaponContainer').style.display = 'initial';
+}
 
 const registerFunc = () => {
     window.location.replace(window.location.protocol + "//" + window.location.host + '/register');
@@ -603,6 +639,7 @@ const getLogin = () => {
             if (login) {
                 getDisplayName();
                 getProfieleContent();
+                getCurrentLoaduts();
             } else {
                 resize();
                 drawMenue();
@@ -637,7 +674,9 @@ const play = () => {
         type: "POST",
         url: "/setdisplayname",
         timeout: 2000,
-        data: { displayName: document.getElementById('displayNameInput').value },
+        data: {
+            displayName: document.getElementById('displayNameInput').value
+        },
         success: function (data) {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
         },
