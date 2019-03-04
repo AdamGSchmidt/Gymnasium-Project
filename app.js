@@ -625,7 +625,6 @@ const playerSecondaryLootCollisionCheck = () => {
           }
           console.log(secondaryLootPositions[index].score + "   " + config.game.score.percentage)
           usersPositions[index2].score += config.game.score.secondaryLoot; 
-          usersPositions[index2].lootNumber += 1;
           secondaryLootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
         }
