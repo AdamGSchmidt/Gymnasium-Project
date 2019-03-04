@@ -1,5 +1,6 @@
 /*
   DET SOM MÅSTE GÖRAS
+    TOP LIST IS BROKEN WHEN NOT LOGGED IN FIX, USE ID INSTEED OF Username MORE BUGS ALSO
     SAnatize function (byt till annan mysqql)
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
@@ -368,10 +369,11 @@ io.on('connection', (socket) => {
       xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
       yCord: Math.floor((Math.random() * (config.game.map.yBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
       id: socket.id,
+      //socket, För att sckika data till spesific spelare
       angel: 0,
       useAngel: false,
-      username: usernameSessin,
-      displayName: displayNameSession,
+      username: usernameSessin || 'Guest',
+      displayName: displayNameSession || 'Guest',
       lastProjectile: time,
       obliterated: false,
       projectileSpeed: config.game.projectile.startSpeed,
