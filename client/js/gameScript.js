@@ -2,7 +2,6 @@
         Fixa scale
         Collision controll funkar men bör ändras
         Add login button when player dies and is not logged in
-        BUGG kulur vid vänster och övre väggen fastnar då de skjuts med en vinkel parallel till väggen
 */
 
 /* AOUTO CLICKER FOR TESTING 

@@ -5,8 +5,6 @@
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
     Stäng all conections 
-    Fisa secondary loot
-    Fixa studds bugg
     Fixa skins
     Fixa loadouts
     Fixa store

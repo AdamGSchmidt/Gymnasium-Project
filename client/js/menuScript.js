@@ -25,7 +25,7 @@ const defaoultScale = 680;
 const startup = () => {
     // Hämntar användarnamn och anropar andera functioner
     getLogin();
-    getLoaduts()
+    getLoaduts();
 
     // hämtar antalet nuvarande spelare varje sekund
     /* getNumberOfUsers();
@@ -561,6 +561,19 @@ const getLoaduts = () => {
         data: {},
         success: function (data) {
             loadouts = data;
+            console.log(loadouts)
+            let element = document.getElementById('changeWeaponContainer');
+            for (i of loadouts) {
+                element.innerHTML += `<div class="selectedLoadoutContainer2">
+                                        <div class="selectedTitleContainer">
+                                            <span class="selectedTitle">${i.Name}</span>
+                                        </div>
+                                        <div class="selectedLoadout">
+                                            <img class="selectedImg2" src="${i.Image}" alt="">
+                                        </div>
+                                        <input type="button" class="changeLoadoutBtn" value="Change">
+                                     </div>`;
+            }§
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
