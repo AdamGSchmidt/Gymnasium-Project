@@ -573,7 +573,7 @@ const getLoaduts = () => {
                                         </div>
                                         <input type="button" class="changeLoadoutBtn" value="Change">
                                      </div>`;
-            }§
+            }
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
