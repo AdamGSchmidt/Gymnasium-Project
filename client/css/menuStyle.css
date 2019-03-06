@@ -72,6 +72,20 @@
     cursor: pointer;
 }
 
+.changeLoadoutSelected{
+    background-color: lime;
+    width: 80%;
+    height: 15%;
+    left: 10%;
+    position: absolute;
+    top: 80%;
+    border-style: none;
+    font-weight: bold;
+    font-size: 2vw;
+    border: solid black 1px;
+    text-align: center;
+}
+
 .changeLoadoutBtn:hover {
     box-shadow: 0 0 1vh 0 rgba(0, 0, 0, 0.24), 0 0 1vh 0 rgba(0, 0, 0, 0.19);
 }

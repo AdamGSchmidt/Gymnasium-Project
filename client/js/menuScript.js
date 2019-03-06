@@ -562,18 +562,6 @@ const getLoaduts = () => {
         success: function (data) {
             loadouts = data;
             console.log(loadouts)
-            let element = document.getElementById('changeWeaponContainer');
-            for (i of loadouts) {
-                element.innerHTML += `<div class="selectedLoadoutContainer2">
-                                        <div class="selectedTitleContainer">
-                                            <span class="selectedTitle">${i.Name}</span>
-                                        </div>
-                                        <div class="selectedLoadout">
-                                            <img class="selectedImg2" src="${i.Image}" alt="">
-                                        </div>
-                                        <input type="button" class="changeLoadoutBtn" value="Change">
-                                     </div>`;
-            }
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
@@ -588,6 +576,25 @@ const getCurrentLoaduts = () => {
         data: {},
         success: function (data) {
             currentLoadout = data;
+            let element = document.getElementById('changeWeaponContainer');
+            element.innerHTML = '';
+            for (i of loadouts) {
+                let selectedOrNot;
+                if (currentLoadout == i.ID) {
+                    selectedOrNot = `<div class="changeLoadoutSelected">Selected</div>`;
+                } else {
+                    selectedOrNot = `<input type="button" class="changeLoadoutBtn" value="Select">`;
+                }
+                element.innerHTML += `<div class="selectedLoadoutContainer2">
+                                        <div class="selectedTitleContainer">
+                                            <span class="selectedTitle">${i.Name}</span>
+                                        </div>
+                                        <div class="selectedLoadout">
+                                            <img class="selectedImg2" src="${i.Image}" alt="">
+                                        </div>
+                                        ${selectedOrNot}
+                                     </div>`;
+            }
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
