@@ -547,6 +547,7 @@ const getProfieleContent = () => {
             }
             resize();
             drawMenue();
+            getCurrentLoaduts();
         },
         error: function (jqXHR, textStatus, err) {
             alert('Error');
@@ -582,8 +583,11 @@ const getCurrentLoaduts = () => {
                 let selectedOrNot;
                 if (currentLoadout == i.ID) {
                     selectedOrNot = `<div class="changeLoadoutSelected">Selected</div>`;
+                } else if (level < i.Requierment) {
+                    console.log(profieleContent.level + ":::::::::" + i.Requierment)
+                    selectedOrNot = `<div class="changeLoadoutRequires">Requiers lvl ${i.Requierment}</div>`
                 } else {
-                    selectedOrNot = `<input type="button" class="changeLoadoutBtn" value="Select">`;
+                    selectedOrNot = `<input onclick=changeLoadout(${i.ID}) type="button" class="changeLoadoutBtn" value="Select">`;
                 }
                 element.innerHTML += `<div class="selectedLoadoutContainer2">
                                         <div class="selectedTitleContainer">
@@ -659,7 +663,6 @@ const getLogin = () => {
             if (login) {
                 getDisplayName();
                 getProfieleContent();
-                getCurrentLoaduts();
             } else {
                 resize();
                 drawMenue();
