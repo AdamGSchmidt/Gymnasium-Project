@@ -272,6 +272,32 @@ app.get('/getcurrentloadouts', urlencodedParser, function (req, res) {
   res.send(JSON.stringify(response));
 });
 
+app.post('/changeweapon', urlencodedParser, function (req, res) {
+  let id = req.body.id;
+  let username = req.session['username'];
+  let sql = `SELECT Requierment, Level FROM Loadout, User WHERE Loadout.ID = ${id} AND User.Username = '${username}';`;
+  let con = databaseModule.connectToDB();
+  con.query(sql, function (err, results) {
+    if (err) {
+      console.log('Error: Failed to change loadout,');
+      console.log(err);
+    } else {
+      console.log(results)
+      console.log(results.length + "::::::::" + results[0])
+      if (results.length != 0) {
+        if (results[0].Level >= results[0].Requierment) {
+          req.session['weapon'] = id;
+          console.log("WEAPON CHANGED")
+        } else {
+          console.log("LEVEL TO LOW TO CHANGE WEAPON")
+        }
+      }
+      res.end();
+    }
+  });
+  con.end();
+});
+
 // loggar ut
 app.post('/logout', urlencodedParser, function (req, res) {
   req.session['login'] = false;
@@ -622,7 +648,7 @@ const playerSecondaryLootCollisionCheck = () => {
             usersPositions[index2].radius = config.game.upgrade.minRadiusPlayer;
           }
           console.log(secondaryLootPositions[index].score + "   " + config.game.score.percentage)
-          usersPositions[index2].score += config.game.score.secondaryLoot; 
+          usersPositions[index2].score += config.game.score.secondaryLoot;
           secondaryLootPositions.splice(index, 1);
           console.log("LOOT PLAYER COLLISION     " + usersPositions[index2].score);
         }

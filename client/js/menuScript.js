@@ -576,16 +576,17 @@ const getCurrentLoaduts = () => {
         timeout: 2000,
         data: {},
         success: function (data) {
-            currentLoadout = data;
+            currentLoadout = JSON.parse(data);
             let element = document.getElementById('changeWeaponContainer');
             element.innerHTML = '';
             for (i of loadouts) {
                 let selectedOrNot;
+                console.log(currentLoadout + "..." + i.ID)
                 if (currentLoadout == i.ID) {
-                    selectedOrNot = `<div class="changeLoadoutSelected">Selected</div>`;
+                    selectedOrNot = `<div class="changeLoadoutSelectedContainer"><span class="changeLoadoutSelected">Selected</span></div>`;
                 } else if (level < i.Requierment) {
-                    console.log(profieleContent.level + ":::::::::" + i.Requierment)
-                    selectedOrNot = `<div class="changeLoadoutRequires">Requiers lvl ${i.Requierment}</div>`
+                    console.log(profieleContent.Level + ":::::::::" + i.Requierment)
+                    selectedOrNot = `<div class="changeLoadoutRequiresContainer"><span class="changeLoadoutRequires">Requiers lvl ${i.Requierment}</span></div>`
                 } else {
                     selectedOrNot = `<input onclick=changeLoadout(${i.ID}) type="button" class="changeLoadoutBtn" value="Select">`;
                 }
@@ -605,6 +606,22 @@ const getCurrentLoaduts = () => {
         }
     });
 };
+
+const changeLoadout = (id) => {
+    $.ajax({
+        type: "POST",
+        url: "/changeweapon",
+        timeout: 2000,
+        data: {id},
+        success: (data) => {
+            getCurrentLoaduts();
+        },
+        error: (jqXHR, textStatus, err) =>{
+            alert('Error');
+        }
+    });
+}
+
 
 const getDisplayName = () => {
     $.ajax({

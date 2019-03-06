@@ -65,39 +65,48 @@
     left: 10%;
     position: absolute;
     top: 80%;
-    border-style: none;
     font-weight: bold;
     font-size: 2vw;
     border: solid black 1px;
     cursor: pointer;
 }
 
-.changeLoadoutSelected{
+.changeLoadoutSelectedContainer{
     background-color: lime;
+    display: table;
     width: 80%;
     height: 15%;
     left: 10%;
     position: absolute;
     top: 80%;
-    border-style: none;
-    font-weight: bold;
-    font-size: 2vw;
     border: solid black 1px;
+}
+
+.changeLoadoutSelected{
+    font-weight: bold;
+    font-size: 1.8vw;
     text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.changeLoadoutRequiresContainer{
+    background-color: lightblue;
+    display: table;
+    width: 80%;
+    height: 15%;
+    left: 10%;
+    position: absolute;
+    top: 80%;
+    border: solid black 1px;
 }
 
 .changeLoadoutRequires{
-    background-color: lightblue;
-    width: 80%;
-    height: 15%;
-    left: 10%;
-    position: absolute;
-    top: 80%;
-    border-style: none;
     font-weight: bold;
     font-size: 1.8vw;
-    border: solid black 1px;
     text-align: center;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .changeLoadoutBtn:hover {
