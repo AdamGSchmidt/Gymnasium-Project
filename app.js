@@ -1,14 +1,13 @@
 /*
   DET SOM MÅSTE GÖRAS
-    TOP LIST IS BROKEN WHEN NOT LOGGED IN FIX, USE ID INSTEED OF Username MORE BUGS ALSO
-    SAnatize function (byt till annan mysqql)
+    SAnatize function (byt till annan mysql)
     Fixa kod skapa moduler
     Förbättra kollision (se komentar vid functionen)
     Stäng all conections 
     Fixa skins
     Fixa loadouts
     Fixa store
-    Fixa ny login och regestration
+    Fixa ny login och regestration                             
     Fixa css och canvas utseende
     Fixa score top list
     */
@@ -674,7 +673,8 @@ const playerProjectileCollisionCheck = () => {
         io.emit('obliterated', {
           obliterated: usersPositions[index2].displayName,
           obliterator: projectilePositions[index].displayName,
-          id: usersPositions[index2].id,
+          obliteratorID: projectilePositions[index].id,
+          obliteratedID: usersPositions[index2].id,
           experience,
           currency
         });

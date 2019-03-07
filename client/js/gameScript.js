@@ -248,44 +248,31 @@ const setUser = (username) => {
     document.getElementById('usernameText').innerHTML = username;
 }
 
-const drawTopScoreFeed = (currentUserPositions, playerPosition) => {
+const drawTopScoreFeed = (currentUserPositions) => {
     topList = [];
-    let feedItem = {
-        username: playerPosition.username,
-        score: playerPosition.score,
-        displayName: playerPosition.displayName
-    };
-    topList.push(feedItem);
     for (let index = 0; index < currentUserPositions.length; index++) {
         let feedItem = {
             username: currentUserPositions[index].username,
             score: currentUserPositions[index].score,
-            displayName: currentUserPositions[index].displayName
+            displayName: currentUserPositions[index].displayName,
+            id: currentUserPositions[index].id
         };
         topList.push(feedItem);
-        topList.sort((a, b) => {
-            if (a.score < b.score) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-    }
-    if (topList.length > 9) {
-        topList.splice(7, topList.length - 1);
-    }
-    topList.sort((a, b) => {
-        if (a.score < b.score) {
-            return -1;
-        } else {
-            return 0;
+        if (topList.length >= 2) {
+            topList.sort((a, b) => {
+                if (a.score < b.score) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
         }
-    });
+    }
     topList.reverse();
     let feedText = '';
-    for (let index = 0; index < topList.length; index++) {
-        if (topList[index].score) {
-            if (topList[index].username == playerPosition.username) {
+    for (let index = 0; index < 6; index++) {
+        if (topList[index]) {
+            if (topList[index].id == socketId) {
                 feedText += `<div class="topListContainer"> <span class="topListFeedNumber2"> ${index + 1}. </span> <span class="topListFeedUsername2">  ${topList[index].displayName} </span> <span class="topListFeedScore2"> ${topList[index].score.toFixed()} </span> </div>`;
             } else {
                 feedText += `<div class="topListContainer"> <span class="topListFeedNumber"> ${index + 1}. </span> <span class="topListFeedUsername">  ${topList[index].displayName} </span> <span class="topListFeedScore"> ${topList[index].score.toFixed()} </span> </div>`;
@@ -309,6 +296,7 @@ socket.on('tick', (data) => {
     let currentProjectilePositions = parsedData.projectiles;
     let currentPrimaryLootPositions = parsedData.primaryLoot;
     let currentSecondaryLootPositions = parsedData.secondaryLoot;
+    drawTopScoreFeed(currentUserPositions);
     if (currentUserPositions) {
         for (let index = 0; index < currentUserPositions.length; index++) {
             if (currentUserPositions[index].id == socketId) {
@@ -328,7 +316,6 @@ socket.on('tick', (data) => {
             clientAngel: angel,
             clientUseAngel: useAngel
         });
-        drawTopScoreFeed(currentUserPositions, playerPosition);
     }
 });
 
@@ -336,6 +323,8 @@ socket.on('obliterated', (data) => {
     let feedItem = {
         obliterated: data.obliterated,
         obliterator: data.obliterator,
+        obliteratorID: data.obliteratorID,
+        obliteratedID: data.obliteratedID
     };
     feedList.push(feedItem);
     if (feedList.length > 9) {
@@ -343,23 +332,25 @@ socket.on('obliterated', (data) => {
     }
     let feedText = '';
     for (let index = 0; index < feedList.length; index++) {
-        if (feedList[index].obliterator == playerPosition.username) {
+        if (feedList[index].id == socketId) {
             feedText += `<span class="obliteratedFeed2"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
         } else {
             feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
         }
     }
     document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
-
-    if (socketId == data.id) {
+    console.log(socketId + "==" + data.obliteratedID)
+    if (socketId == data.obliteratedID) {
         let feedItem = {
             obliterated: data.obliterated,
             obliterator: data.obliterator,
             experience: data.experience,
-            currency: data.currency
+            currency: data.currency,
+            obliteratorID: data.obliteratorID,
+            obliteratedID: data.obliteratedID
         };
         setTimeout(() => {
-            if (feedItem.obliterator == feedItem.obliterated) {
+            if (feedItem.obliteratedID == feedItem.obliteratorID && feedItem.obliteratorID == socketId) {
                 document.getElementById('obliteratedMessage3').innerHTML = `by yourself`;
             } else {
                 document.getElementById('obliteratedMessage3').innerHTML = `by ${feedItem.obliterator}`;
