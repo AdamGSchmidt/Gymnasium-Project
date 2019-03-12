@@ -9,7 +9,6 @@
     Fixa store
     Fixa ny login och regestration                             
     Fixa css och canvas utseende
-    Fixa score top list
     */
 
 // Initiala variabler
