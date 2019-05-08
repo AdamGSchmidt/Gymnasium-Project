@@ -35,7 +35,6 @@ const startup = () => {
 
 const drawMenue = () => {
     // Hide shit
-    document.getElementById('loadoutContainer').style.display = 'none';
     document.getElementById('changeWeaponContainer').style.display = 'none';
 
     console.log(canvasHeight + " , " + canvasWidth + " " + selectedMenue)
@@ -113,23 +112,23 @@ const drawMenue = () => {
     // profile box
     if (selectedMenue === 'profile') {
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 8.4, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 14, canvasWidth / 7, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 8.4, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 14, canvasWidth / 8, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#FFFFFF";
     }
     // text
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('Profile', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 14.8 / 0.9);
+    ctx.fillText('Profile', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 20.4 / 0.9);
 
     // play box
     if (selectedMenue === 'play') {
         document.getElementById('displayNameInput').style.visibility = 'visible';
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 36.5, canvasWidth / 7, (canvasHeight / 80) * 14.8);
 
         // Play button
         ctx.fillStyle = "#ff6347";
@@ -144,28 +143,29 @@ const drawMenue = () => {
     } else {
         document.getElementById('displayNameInput').style.visibility = "hidden";
         ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 40, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 36.5, canvasWidth / 8, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#FFFFFF";
     }
     // text
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('Play', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 43.7 / 0.9);
+    ctx.fillText('Play', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 39 / 0.877);
 
     // store box
     if (selectedMenue === 'store') {
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 55.8, canvasWidth / 7, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 58.9, canvasWidth / 7, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#000000";
+        changeWeapon();
     } else {
         ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 55.8, canvasWidth / 8, (canvasHeight / 80) * 14.8);
+        ctx.fillRect(0, (canvasHeight / 80) * 58.9, canvasWidth / 8, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#FFFFFF";
     }
     // text
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('Store', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 55.8 / 0.867);
+    ctx.fillText('Store', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 58.9 / 0.877);
 
     // username
     ctx.fillStyle = "#FFFFFF";
@@ -225,7 +225,7 @@ const drawMenue = () => {
             ctx.fillStyle = "#ff6347";
             ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
             ctx.rect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
-            ctx.stroke(); r
+            ctx.stroke();
             // text  
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -235,14 +235,12 @@ const drawMenue = () => {
     }
 
     if (selectedMenue === 'store') {
-
         // content
         if (login == true) {
             console.log(currentLoadout)
-            document.getElementById('loadoutContainer').style.display = 'initial';
-            document.getElementById('selectedWeaponTxt').innerHTML = loadouts[currentLoadout].Name;
-            document.getElementById('selectedWeaponImg').src = loadouts[currentLoadout].Image;
+
         } else {
+            document.getElementById('changeWeaponContainer').style.display = 'none';
             // box
             ctx.fillStyle = "#AAAAAA";
             ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
@@ -273,11 +271,11 @@ const changeMenue = (event) => {
     let mouseY = event.clientY;
     console.log(mouseX + " mouse click " + mouseY);
 
-    if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 8.4) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 14.8) + ((canvasHeight / 80) * 8.4))) {
+    if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 14) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 14.8) + ((canvasHeight / 80) * 14))) {
         selectedMenue = 'profile';
-    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 40) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 40) + ((canvasHeight / 80) * 14.8))) {
+    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 36.5) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 36.5) + ((canvasHeight / 80) * 14.8))) {
         selectedMenue = 'play';
-    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 55.8) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 55.8) + ((canvasHeight / 80) * 14.8)) {
+    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 58.9) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 58.9) + ((canvasHeight / 80) * 14.8)) {
         selectedMenue = 'store';
     }
 
@@ -514,17 +512,27 @@ const getCurrentLoaduts = () => {
             currentLoadout = JSON.parse(data);
             let element = document.getElementById('changeWeaponContainer');
             element.innerHTML = '';
+            let ownedSkins = JSON.parse(profieleContent.OwnedSkins);
+            console.log(ownedSkins)
             for (i of loadouts) {
                 let selectedOrNot;
                 console.log(currentLoadout + "..." + i.ID)
                 console.log(currentLoadout)
+                let owned = false;
+                for (let index = 0; index < ownedSkins.length; index++) {
+                    if (ownedSkins[index] == i.ID) {
+                        owned = true;
+                    }
+                }
                 if (currentLoadout == i.ID) {
                     selectedOrNot = `<div class="changeLoadoutSelectedContainer"><span class="changeLoadoutSelected">Selected</span></div>`;
                 } else if (level < i.Requierment) {
                     console.log(profieleContent.Level + ":::::::::" + i.Requierment)
                     selectedOrNot = `<div class="changeLoadoutRequiresContainer"><span class="changeLoadoutRequires">Requiers lvl ${i.Requierment}</span></div>`
-                } else {
+                } else if (owned){
                     selectedOrNot = `<input onclick=changeLoadout(${i.ID}) type="button" class="changeLoadoutBtn" value="Select">`;
+                } else {
+                    selectedOrNot = `<input onclick=buyLoadout(${i.ID}) type="button" class="buyLoadoutBtn" value="${i.Cost} $">`;
                 }
                 element.innerHTML += `<div class="selectedLoadoutContainer2">
                                         <div class="selectedTitleContainer">
@@ -554,6 +562,21 @@ const changeLoadout = (id) => {
         },
         error: (jqXHR, textStatus, err) => {
             alert('Error changeLoadout');
+        }
+    });
+}
+
+const buyLoadout = (id) => {
+    $.ajax({
+        type: "POST",
+        url: "/buyskin",
+        timeout: 2000,
+        data: { id },
+        success: (data) => {
+            getCurrentLoaduts();
+        },
+        error: (jqXHR, textStatus, err) => {
+            alert('Error buyLoadout');
         }
     });
 }
@@ -612,10 +635,11 @@ const getLogin = () => {
             data = JSON.parse(data);
             username = data.username || 'Guest';
             login = data.login || false;
-            console.log(username);
+            console.log(data);
             if (login) {
                 getDisplayName();
                 getProfieleContent();
+                console.log("login Success")
             } else {
                 resize();
                 drawMenue();

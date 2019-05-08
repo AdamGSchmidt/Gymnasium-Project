@@ -201,6 +201,7 @@ app.get('/game', function (req, res) {
   // if (req.session['login'] === true) {
   res.sendFile(__dirname + '/client/html/game.html');
   sessionId = req.session.id;
+  console.log(session['color'] + " THSIS IS A COLOR")
   //} else {
   //res.redirect('/');
   //}
@@ -234,7 +235,7 @@ app.post('/setdisplayname', urlencodedParser, function (req, res) {
 
 app.get('/getprofielecontent', urlencodedParser, function (req, res) {
   let profileUsername = req.session['username'];
-  let sql = `SELECT Username, Projectiles, Obliterations, Games, ScoreSum, HighScore, Experience, Level, Currency FROM User WHERE Username = '${profileUsername}'`;
+  let sql = `SELECT Username, Projectiles, Obliterations, Games, ScoreSum, HighScore, Experience, Level, Currency, OwnedSkins FROM User WHERE Username = '${profileUsername}'`;
   databaseModule.connectToDB().query(sql, function (err, results) {
     if (err) {
       console.log('Error: Failed to get profile content,');
@@ -247,7 +248,7 @@ app.get('/getprofielecontent', urlencodedParser, function (req, res) {
 });
 
 app.get('/getskins', urlencodedParser, function (req, res) {
-  let sql = `SELECT * FROM skins`;
+  let sql = `SELECT * FROM Skins`;
   let con = databaseModule.connectToDB();
   con.query(sql, function (err, results) {
     if (err) {
@@ -272,20 +273,80 @@ app.get('/getcurrentskins', urlencodedParser, function (req, res) {
 
 app.post('/changeskin', urlencodedParser, function (req, res) {
   let id = req.body.id;
+  let chosenColor;
+  let owned = false;
   let username = req.session['username'];
-  let sql = `SELECT Requierment, Level FROM skins, User WHERE skins.ID = ${id} AND User.Username = '${username}';`;
+  let sql = `SELECT OwnedSkins FROM User WHERE Username = '${username}';`;
+  let con = databaseModule.connectToDB();
+  if (req.session['login'] == true) {
+    con.query(sql, function (err, results) {
+      if (err) {
+        console.log('Error: Failed to change skins,');
+        console.log(err);
+      } else {
+        console.log(results)
+        console.log(results.length + "::::::::" + results[0])
+        let ownedSkins = JSON.parse(results[0].OwnedSkins);
+        for (let index = 0; index < ownedSkins.length; index++) {
+          if (ownedSkins[index] == 1) {
+            owned = true;
+            break;
+          }
+        }
+        if (owned) {
+          let sql = `SELECT Color FROM Skins WHERE ID = '${id}';`;
+          let con = databaseModule.connectToDB();
+          con.query(sql, function (err, results2) {
+            if (err) {
+              console.log('Error: Failed to change skins,');
+              console.log(err);
+            } else {
+              chosenColor = results2[0].Color;
+              setIDandSkin(id, chosenColor);
+              console.log("yes")
+            }
+          });
+        }
+      }
+    });
+  }
+
+  const setIDandSkin = (id, chosenColor) => {
+    req.session['skin'] = id;
+    req.session['color'] = chosenColor;
+    con.end();
+  res.end();
+  }
+
+});
+
+app.post('/buyskin', urlencodedParser, function (req, res) {
+  let id = req.body.id;
+  let username = req.session['username'];
+  let sql = `SELECT Requierment, Cost, Level, Currency, OwnedSkins FROM Skins, User WHERE Skins.ID = ${id} AND User.Username = '${username}';`;
   let con = databaseModule.connectToDB();
   con.query(sql, function (err, results) {
     if (err) {
       console.log('Error: Failed to change skins,');
       console.log(err);
     } else {
-      console.log(results)
-      console.log(results.length + "::::::::" + results[0])
       if (results.length != 0) {
         if (results[0].Level >= results[0].Requierment) {
-          req.session['skin'] = results[0].ID;
-          console.log("SKIN CHANGED")
+          if (results[0].Cost <= results[0].Currency) {
+            let ownedSkins = JSON.parse(results[0].OwnedSkins);
+            ownedSkins.push(id);
+            let sql = `UPDATE User SET OwnedSkins = '${JSON.stringify(ownedSkins)}', Currency = ${results[0].Currency - results[0].Cost} WHERE Username = '${username}'`;
+            let con = databaseModule.connectToDB();
+            con.query(sql, function (err, results2) {
+              if (err) {
+                console.log('Error: Failed to change skins,');
+                console.log(err);
+              } else {
+                console.log("SKIN BUY")
+                res.end();
+              }
+            });
+          }
         } else {
           console.log("LEVEL TO LOW TO CHANGE SKIN")
         }
@@ -301,6 +362,7 @@ app.post('/logout', urlencodedParser, function (req, res) {
   req.session['login'] = false;
   req.session['username'] = null;
   req.session['skin'] = undefined;
+  req.session['color'] = undefined;
   res.end();
 });
 
@@ -379,16 +441,17 @@ let time;
 io.on('connection', (socket) => {
   let usernameSessin;
   let displayNameSession;
-  let color;
+  let colorSession;
   storage.get(sessionId, (error, session) => {
     if (error || session == null) {
       console.log('ERROR WHILE GETING USERNAME IN /game')
     } else {
-      color = session['color'] || '#000000';
+      console.log(session['skin'])
+      colorSession = session['color'] || '#000000';
       usernameSessin = session['username'];
       displayNameSession = session['displayName'] || 'Guest';
     }
-    console.log("USERNAME ::::  " + usernameSessin)
+    console.log("USERNAME ::::  " + usernameSessin + "    COLOR: " + colorSession)
     time = new Date();
     let usersPosition = {
       xCord: Math.floor((Math.random() * (config.game.map.xBoundary - config.game.player.startRadius)) + config.game.player.startRadius),
@@ -396,6 +459,7 @@ io.on('connection', (socket) => {
       id: socket.id,
       //socket, För att sckika data till spesific spelare
       angel: 0,
+      color: colorSession || '#000000',
       useAngel: false,
       username: usernameSessin || 'Guest',
       displayName: displayNameSession || 'Guest',
@@ -409,6 +473,7 @@ io.on('connection', (socket) => {
       obliterations: 0,
       projectiles: 0
     };
+    console.log(usersPosition)
     usersPositions.push(usersPosition);
   });
   currentConections++;
@@ -538,17 +603,17 @@ const determinNewPlayerPosition = () => {
               collision = true;
               if (distanceX < 0) {
                 moveX = false
-                usersPositions[index].xCord = usersPositions[index].xCord - 0.07;
+                usersPositions[index].xCord = usersPositions[index].xCord - 0.01;
               } else if (distanceX > 0) {
                 moveX = false
-                usersPositions[index].xCord = usersPositions[index].xCord + 0.07;
+                usersPositions[index].xCord = usersPositions[index].xCord + 0.01;
               }
               if (distanceY < 0) {
                 moveY = false
-                usersPositions[index].yCord = usersPositions[index].yCord - 0.07;
+                usersPositions[index].yCord = usersPositions[index].yCord - 0.01;
               } else if (distanceY > 0) {
                 moveY = false
-                usersPositions[index].yCord = usersPositions[index].yCord + 0.07;
+                usersPositions[index].yCord = usersPositions[index].yCord + 0.01;
               }
             } else {
               collision = false;

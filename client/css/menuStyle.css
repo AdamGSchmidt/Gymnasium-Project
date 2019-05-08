@@ -84,6 +84,19 @@
     cursor: pointer;
 }
 
+.buyLoadoutBtn {
+    background-color: #85bb65;
+    width: 80%;
+    height: 15%;
+    left: 10%;
+    position: absolute;
+    top: 80%;
+    font-weight: bold;
+    font-size: 2vw;
+    border: solid black 1px;
+    cursor: pointer;
+}
+
 .changeLoadoutSelectedContainer{
     background-color: lime;
     display: table;

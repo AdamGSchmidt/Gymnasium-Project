@@ -105,16 +105,18 @@ const drawUsers = (currentUserPositions) => {
             ctx.beginPath();
             ctx.arc(currentUserPositions[index].xCord, currentUserPositions[index].yCord, currentUserPositions[index].radius, 0, 2 * Math.PI, false);
             ctx.closePath();
-            ctx.fillStyle = "#000000";
+            ctx.fillStyle = currentUserPositions[index].color;
             ctx.fill();
+            ctx.fillStyle = "#000000";
         }
     }
     // draw Player
     ctx.beginPath();
     ctx.arc(playerPosition.xCord, playerPosition.yCord, playerPosition.radius, 0, 2 * Math.PI, false);
     ctx.closePath();
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = playerPosition.color;
     ctx.fill();
+    ctx.fillStyle = "#000000";
     // reload progress bar
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -306,7 +308,8 @@ socket.on('tick', (data) => {
                     radius: currentUserPositions[index].radius,
                     username: currentUserPositions[index].username,
                     score: currentUserPositions[index].score,
-                    displayName: currentUserPositions[index].displayName
+                    displayName: currentUserPositions[index].displayName,
+                    color: currentUserPositions[index].color
                 }
                 currentUserPositions.splice(index, 1);
             }
