@@ -5,7 +5,7 @@
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const mysql = require('mysql'); // Global databas variabel
-const loadouts = require('../../loadouts.json');
+const skins = require('../../skins.json');
 
 // skapa anslutnong
 let con = mysql.createConnection({
@@ -85,11 +85,12 @@ function createTable() {
       console.log("TABLE CREATED");
    });
    console.log("CREATING TABLE");
-   sql = `CREATE TABLE Loadout (
+   sql = `CREATE TABLE Skins (
    Name VARCHAR(255) NOT NULL, 
    ID int NOT NULL, 
    Requierment int NOT NULL,
-   Image VARCHAR(255) NOT NULL,
+   Cost int NOT NULL,
+   Color VARCHAR(255) NOT NULL,
    PRIMARY KEY(ID) );`;
    con.query(sql, function (err, result) {
       if (err) throw err;
@@ -100,19 +101,19 @@ function createTable() {
 
 const insertLoadout = () => {
    let sql;
-   sql = 'TRUNCATE TABLE Loadout';
+   sql = 'TRUNCATE TABLE Skins';
    conDatabseModule.query(sql, function (err, result, fields) {
       if (err) {
-         console.log("ERROR WHILE DELETINNG LOADOUTS");
+         console.log("ERROR WHILE DELETINNG SKINS");
          console.log(err);
       } else {
       }
    });
-   for (let index = 0; index < loadouts.length; index++) {
-      sql = `INSERT INTO Loadout (Name, ID, Requierment, Image) VALUES ('${loadouts[index].name}', '${loadouts[index].id}', ${loadouts[index].requierment}, '${loadouts[index].image}')`;
+   for (let index = 0; index < skins.length; index++) {
+      sql = `INSERT INTO Skins (Name, ID, Requierment, Cost, Color) VALUES ('${skins[index].name}', '${skins[index].id}', ${skins[index].requierment}, ${skins[index].cost}, '${skins[index].color}')`;
       conDatabseModule.query(sql, function (err, result, fields) {
          if (err) {
-            console.log("ERROR WHILE INSERTING LOADOUTS");
+            console.log("ERROR WHILE INSERTING skins");
             console.log(err);
          } else {
          }

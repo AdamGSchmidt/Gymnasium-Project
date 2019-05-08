@@ -2,7 +2,6 @@
 REMOVE ???
 EXTEND NAME TAB
 INNCLUDE LEVEL NAME AND LEVEL BAR IN TAB
-REMOVE FRIENDS FOR NOW
 Make bacground into gameplay ??
 */
 
@@ -62,12 +61,21 @@ const drawMenue = () => {
     ctx.fill();
 
     // currency
-    ctx.fillStyle = '#AAAAAA';
-    ctx.fillRect(canvasWidth / 80 * 58, (canvasHeight / 80) * 1, canvasWidth / 80 * 5, (canvasHeight / 80) * 6);
-    ctx.textAlign = "center";
-    ctx.fillStyle = '#000000';
-    ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
-    ctx.fillText(currency, canvasWidth / 80 * 60.5, (canvasHeight / 80) * 5.8);
+    if (login == true) {
+        ctx.fillStyle = '#AAAAAA';
+        ctx.fillRect(canvasWidth / 80 * 63, (canvasHeight / 80) * 1, canvasWidth / 80 * 5, (canvasHeight / 80) * 6);
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#000000';
+        ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
+        ctx.fillText(`${currency} $`, canvasWidth / 80 * 65.5, (canvasHeight / 80) * 5.8);
+    } else {
+        ctx.fillStyle = '#AAAAAA';
+        ctx.fillRect(canvasWidth / 80 * 58, (canvasHeight / 80) * 1, canvasWidth / 80 * 5, (canvasHeight / 80) * 6);
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#000000';
+        ctx.font = `${18 * canvasWidth / defaoultScale}px Arial`;
+        ctx.fillText(`${currency} $`, canvasWidth / 80 * 60.5, (canvasHeight / 80) * 5.8);
+    }
 
     // level
     ctx.fillStyle = '#AAAAAA';
@@ -101,6 +109,7 @@ const drawMenue = () => {
     ctx.font = `${14 * canvasWidth / defaoultScale}px Arial`;
     ctx.fillText(`${Math.floor(experience / (level * 1000 * Math.pow(1.1, (level - 1))) * 100)}%`, canvasWidth / 80 * 33.5, (canvasHeight / 80) * 5.2);
     console.log(experience)
+
     // profile box
     if (selectedMenue === 'profile') {
         ctx.fillStyle = "#ff6347";
@@ -115,21 +124,6 @@ const drawMenue = () => {
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
     ctx.fillText('Profile', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 14.8 / 0.9);
-
-    // loadout box
-    if (selectedMenue === 'loadout') {
-        ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 24.2, canvasWidth / 7, (canvasHeight / 80) * 14.8);
-        ctx.fillStyle = "#000000";
-    } else {
-        ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 24.2, canvasWidth / 8, (canvasHeight / 80) * 14.8);
-        ctx.fillStyle = "#FFFFFF";
-    }
-    // text
-    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-    ctx.textAlign = "center";
-    ctx.fillText('Loadout', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 24.2 / 0.75);
 
     // play box
     if (selectedMenue === 'play') {
@@ -173,21 +167,6 @@ const drawMenue = () => {
     ctx.textAlign = "center";
     ctx.fillText('Store', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 55.8 / 0.867);
 
-    // ??? box
-    if (selectedMenue === '???') {
-        ctx.fillStyle = "#ff6347";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 7, (canvasHeight / 80) * 8.5);
-        ctx.fillStyle = "#000000";
-    } else {
-        ctx.fillStyle = "#777777";
-        ctx.fillRect(0, (canvasHeight / 80) * 71.6, canvasWidth / 8, (canvasHeight / 80) * 8.5);
-        ctx.fillStyle = "#FFFFFF";
-    }
-    ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-    ctx.textAlign = "center";
-    ctx.fillText('???', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 71.6 / 0.925);
-
-
     // username
     ctx.fillStyle = "#FFFFFF";
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -196,23 +175,14 @@ const drawMenue = () => {
 
     // login buttons
     if (login == true) {
-        // sign up
+        // logout
         ctx.fillStyle = "#ff6347";
-        ctx.fillRect((canvasWidth / 80) * 71.5, (canvasHeight / 80) * 1, canvasWidth / 80 * 8, (canvasHeight / 80) * 6);
-        //text
-        ctx.fillStyle = "#000000";
-        ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-        ctx.textAlign = "center";
-        ctx.fillText('Friends', (canvasWidth / 80) * 75.5, canvasHeight / 16);
-
-        // login
-        ctx.fillStyle = "#ff6347";
-        ctx.fillRect((canvasWidth / 80) * 64, (canvasHeight / 80) * 1, canvasWidth / 80 * 7, (canvasHeight / 80) * 6);
+        ctx.fillRect((canvasWidth / 80) * 69, (canvasHeight / 80) * 1, canvasWidth / 80 * 7, (canvasHeight / 80) * 6);
         // text  
         ctx.fillStyle = "#000000";
         ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
         ctx.textAlign = "center";
-        ctx.fillText('Logout', (canvasWidth / 80) * 67.5, canvasHeight / 16);
+        ctx.fillText('Logout', (canvasWidth / 80) * 72.5, canvasHeight / 16);
     } else {
         // sign up
         ctx.fillStyle = "#ff6347";
@@ -251,36 +221,11 @@ const drawMenue = () => {
             ctx.textAlign = "center";
             ctx.fillText('Login to see profile', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
             // login
+            ctx.beginPath();
             ctx.fillStyle = "#ff6347";
             ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
-            // text  
-            ctx.fillStyle = "#000000";
-            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-            ctx.textAlign = "center";
-            ctx.fillText('Login', canvasWidth / 1.73, (canvasHeight / 80) * 45);
-        }
-    }
-
-    if (selectedMenue === 'loadout') {
-        // loadout content 
-
-        // content
-        if (login == true) {
-            console.log(currentLoadout)
-            document.getElementById('loadoutContainer').style.display = 'initial';
-            document.getElementById('selectedWeaponTxt').innerHTML = loadouts[currentLoadout].Name;
-            document.getElementById('selectedWeaponImg').src = loadouts[currentLoadout].Image;
-        } else {
-            ctx.fillStyle = "#AAAAAA";
-            ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
-            ctx.fillStyle = "#000000";
-            ctx.fillStyle = "#000000";
-            ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
-            ctx.textAlign = "center";
-            ctx.fillText('Login to change loadout', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
-            // login
-            ctx.fillStyle = "#ff6347";
-            ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            ctx.rect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            ctx.stroke(); r
             // text  
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -290,24 +235,30 @@ const drawMenue = () => {
     }
 
     if (selectedMenue === 'store') {
-        // loadout content 
-
-        // box
-        ctx.fillStyle = "#AAAAAA";
-        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
-        ctx.fillStyle = "#000000";
 
         // content
         if (login == true) {
-
+            console.log(currentLoadout)
+            document.getElementById('loadoutContainer').style.display = 'initial';
+            document.getElementById('selectedWeaponTxt').innerHTML = loadouts[currentLoadout].Name;
+            document.getElementById('selectedWeaponImg').src = loadouts[currentLoadout].Image;
         } else {
+            // box
+            ctx.fillStyle = "#AAAAAA";
+            ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 40);
+            ctx.fillStyle = "#000000";
+
+            // Login info
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
             ctx.textAlign = "center";
             ctx.fillText('Login to see store', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
             // login
+            ctx.beginPath();
             ctx.fillStyle = "#ff6347";
             ctx.fillRect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            ctx.rect(canvasWidth / 1.9, (canvasHeight / 80) * 40, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
+            ctx.stroke();
             // text  
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
@@ -324,14 +275,10 @@ const changeMenue = (event) => {
 
     if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 8.4) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 14.8) + ((canvasHeight / 80) * 8.4))) {
         selectedMenue = 'profile';
-    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 24.2) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 14.8)) + (((canvasHeight / 80) * 24.2))) {
-        selectedMenue = 'loadout';
     } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 40) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 40) + ((canvasHeight / 80) * 14.8))) {
         selectedMenue = 'play';
     } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 55.8) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 55.8) + ((canvasHeight / 80) * 14.8)) {
         selectedMenue = 'store';
-    } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 71.6) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 71.6) + ((canvasHeight / 80) * 14.8)) {
-        selectedMenue = '???';
     }
 
     if (login == false) {
@@ -341,9 +288,7 @@ const changeMenue = (event) => {
             loginFunc();
         }
     } else {
-        if (mouseX > (canvasWidth / 80) * 71.5 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 8 + (canvasWidth / 80) * 71.5 && mouseY < (((canvasHeight / 80) * 6) + ((canvasHeight / 80) * 1))) {
-            friendsFunc();
-        } else if (mouseX > (canvasWidth / 80) * 65 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 6 + (canvasWidth / 80) * 65 && mouseY < (((canvasHeight / 80) * 8)) + (((canvasHeight / 80) * 1))) {
+        if (mouseX > (canvasWidth / 80) * 69 && mouseY > ((canvasHeight / 80) * 1) && mouseX < canvasWidth / 80 * 7 + (canvasWidth / 80) * 69 && mouseY < (((canvasHeight / 80) * 8)) + (((canvasHeight / 80) * 1))) {
             logoutFunc();
         }
     }
@@ -351,13 +296,6 @@ const changeMenue = (event) => {
 
     switch (selectedMenue) {
         case 'profile':
-            if (login == false) {
-                if (mouseX > (canvasWidth / 1.9) && mouseY > (canvasHeight / 80 * 40) && mouseX < (canvasWidth / 80 * 8 + (canvasWidth / 1.9)) && mouseY < ((canvasHeight / 80 * 8) + (canvasHeight / 80 * 40))) {
-                    loginFunc();
-                }
-            }
-            break;
-        case 'loadout':
             if (login == false) {
                 if (mouseX > (canvasWidth / 1.9) && mouseY > (canvasHeight / 80 * 40) && mouseX < (canvasWidth / 80 * 8 + (canvasWidth / 1.9)) && mouseY < ((canvasHeight / 80 * 8) + (canvasHeight / 80 * 40))) {
                     loginFunc();
@@ -375,9 +313,6 @@ const changeMenue = (event) => {
                     loginFunc();
                 }
             }
-            break;
-        case '???':
-
             break;
         default:
             break;
@@ -550,14 +485,14 @@ const getProfieleContent = () => {
             getCurrentLoaduts();
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error getprofilecontent');
         }
     });
 };
 
 const getLoaduts = () => {
     $.ajax({
-        url: "/getloadouts",
+        url: "/getskins",
         timeout: 2000,
         data: {},
         success: function (data) {
@@ -565,14 +500,14 @@ const getLoaduts = () => {
             console.log(loadouts)
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error getloadouts');
         }
     });
 };
 
 const getCurrentLoaduts = () => {
     $.ajax({
-        url: "/getcurrentloadouts",
+        url: "/getcurrentskins",
         timeout: 2000,
         data: {},
         success: function (data) {
@@ -582,6 +517,7 @@ const getCurrentLoaduts = () => {
             for (i of loadouts) {
                 let selectedOrNot;
                 console.log(currentLoadout + "..." + i.ID)
+                console.log(currentLoadout)
                 if (currentLoadout == i.ID) {
                     selectedOrNot = `<div class="changeLoadoutSelectedContainer"><span class="changeLoadoutSelected">Selected</span></div>`;
                 } else if (level < i.Requierment) {
@@ -602,7 +538,7 @@ const getCurrentLoaduts = () => {
             }
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error getcurrentloadouts');
         }
     });
 };
@@ -610,14 +546,14 @@ const getCurrentLoaduts = () => {
 const changeLoadout = (id) => {
     $.ajax({
         type: "POST",
-        url: "/changeweapon",
+        url: "/changeskin",
         timeout: 2000,
-        data: {id},
+        data: { id },
         success: (data) => {
             getCurrentLoaduts();
         },
-        error: (jqXHR, textStatus, err) =>{
-            alert('Error');
+        error: (jqXHR, textStatus, err) => {
+            alert('Error changeLoadout');
         }
     });
 }
@@ -635,7 +571,7 @@ const getDisplayName = () => {
             }
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error getdisplay name');
         }
     });
 };
@@ -662,7 +598,7 @@ const logoutFunc = () => {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/');
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error logout');
         }
     });
 }
@@ -686,7 +622,7 @@ const getLogin = () => {
             }
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error login');
             resize();
             drawMenue();
         }
@@ -704,7 +640,7 @@ const getNumberOfUsers = () => {
             setNumberOfUsers(numberOfUsers);
         },
         error: function (jqXHR, textStatus, err) {
-            alert('Error');
+            alert('Error getnumberofusers');
         }
     });
 }
@@ -721,7 +657,7 @@ const play = () => {
             window.location.replace(window.location.protocol + "//" + window.location.host + '/game');
         },
         error: () => {
-            alert('Error');
+            alert('Error setdisplaynamae');
         }
     });
 }

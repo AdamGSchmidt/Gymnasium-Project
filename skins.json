@@ -1,0 +1,23 @@
+[
+    {
+        "id": 0,
+        "name": "Black",
+        "requierment": 0,
+        "cost": 0,
+        "color": "#000000"
+    },
+    {
+        "id": 1,
+        "name": "Green",
+        "requierment": 1,
+        "cost": 20,
+        "color": "#008000"
+    },
+    {
+        "id": 2,
+        "name": "Blue",
+        "requierment": 4,
+        "cost": "34",
+        "color": "#0000FF"
+    }
+]

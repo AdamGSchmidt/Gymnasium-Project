@@ -13,15 +13,28 @@
 }
 
 #displayNameInput {
+    font-size: 3vw;
     position: absolute;
     height: fit-content;
-    width: 10%;
-    top: 40%;
-    left: 47.8%;
+    width: 20%;
+    top: 36%;
+    left: 43%;
     padding: 1%;
     border: solid tomato 0.2vw;
-    font-size: 1vw;
 }
+
+::-webkit-input-placeholder {
+    font-size: 3vw;
+  }
+  ::-moz-placeholder {
+    font-size: 3vw;
+  }
+  :-ms-input-placeholder {
+    font-size: 3vw;
+  }
+  ::placeholder {
+    font-size: 3vw;
+  }
 
 #loadoutContainer {
     background-color: #777777;

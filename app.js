@@ -5,7 +5,7 @@
     Förbättra kollision (se komentar vid functionen)
     Stäng all conections 
     Fixa skins
-    Fixa loadouts
+    Fixa skins
     Fixa store
     Fixa ny login och regestration                             
     Fixa css och canvas utseende
@@ -246,12 +246,12 @@ app.get('/getprofielecontent', urlencodedParser, function (req, res) {
   });
 });
 
-app.get('/getloadouts', urlencodedParser, function (req, res) {
-  let sql = `SELECT * FROM Loadout`;
+app.get('/getskins', urlencodedParser, function (req, res) {
+  let sql = `SELECT * FROM skins`;
   let con = databaseModule.connectToDB();
   con.query(sql, function (err, results) {
     if (err) {
-      console.log('Error: Failed to get loadout content,');
+      console.log('Error: Failed to get skins content,');
       console.log(err);
     } else {
       console.log(results);
@@ -261,33 +261,33 @@ app.get('/getloadouts', urlencodedParser, function (req, res) {
   con.end();
 });
 
-app.get('/getcurrentloadouts', urlencodedParser, function (req, res) {
-  let response = req.session['weapon'];
+app.get('/getcurrentskins', urlencodedParser, function (req, res) {
+  let response = req.session['skin'];
   if (response == undefined) {
-    req.session['weapon'] = 0;
+    req.session['skin'] = 0;
     response = 0;
   }
   res.send(JSON.stringify(response));
 });
 
-app.post('/changeweapon', urlencodedParser, function (req, res) {
+app.post('/changeskin', urlencodedParser, function (req, res) {
   let id = req.body.id;
   let username = req.session['username'];
-  let sql = `SELECT Requierment, Level FROM Loadout, User WHERE Loadout.ID = ${id} AND User.Username = '${username}';`;
+  let sql = `SELECT Requierment, Level FROM skins, User WHERE skins.ID = ${id} AND User.Username = '${username}';`;
   let con = databaseModule.connectToDB();
   con.query(sql, function (err, results) {
     if (err) {
-      console.log('Error: Failed to change loadout,');
+      console.log('Error: Failed to change skins,');
       console.log(err);
     } else {
       console.log(results)
       console.log(results.length + "::::::::" + results[0])
       if (results.length != 0) {
         if (results[0].Level >= results[0].Requierment) {
-          req.session['weapon'] = id;
-          console.log("WEAPON CHANGED")
+          req.session['skin'] = results[0].ID;
+          console.log("SKIN CHANGED")
         } else {
-          console.log("LEVEL TO LOW TO CHANGE WEAPON")
+          console.log("LEVEL TO LOW TO CHANGE SKIN")
         }
       }
       res.end();
@@ -300,6 +300,7 @@ app.post('/changeweapon', urlencodedParser, function (req, res) {
 app.post('/logout', urlencodedParser, function (req, res) {
   req.session['login'] = false;
   req.session['username'] = null;
+  req.session['skin'] = undefined;
   res.end();
 });
 
@@ -378,10 +379,12 @@ let time;
 io.on('connection', (socket) => {
   let usernameSessin;
   let displayNameSession;
+  let color;
   storage.get(sessionId, (error, session) => {
     if (error || session == null) {
       console.log('ERROR WHILE GETING USERNAME IN /game')
     } else {
+      color = session['color'] || '#000000';
       usernameSessin = session['username'];
       displayNameSession = session['displayName'] || 'Guest';
     }
