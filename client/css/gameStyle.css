@@ -57,7 +57,7 @@
     position: absolute;
     top: 27.5%;
     left: 32.5%;
-    height: 45vh;
+    height: fit-content;
     width: 35%;
     box-shadow: 0 0 0.1vh 0 rgba(0, 0, 0, 0.24), 0 0 0.1vh 0 rgba(0, 0, 0, 0.19);
     border: solid black 1px;
@@ -66,9 +66,11 @@
 
 #obliteratedMessage1 {
     padding: 4%;
+    padding-bottom: 0%;
     font-weight: bold;
     display: table;
     margin: 0 auto;
+    font-size: 2vw;
 }
 
 #obliteratedMessage2 {
@@ -77,8 +79,9 @@
     align-self: center;
     color: tomato;
     font-weight: bold;
-    font-size: 300%;
+    font-size: 4.5vw;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    padding: 2%;
 }
 
 #obliteratedMessage3{
@@ -87,32 +90,39 @@
     font-weight: bold;
     display: table;
     margin: 0 auto;
+    font-size: 2vw;
 }
 
 #obliteratedMessage4{
     font-weight: bold;
     display: table;
     margin: 0 auto;
+    font-size: 2vw;
 }
 
 #obliteratedMessage5{
     font-weight: bold;
     display: table;
     margin: 0 auto;
+    font-size: 2vw;
 }
 
 #obliteratedMessage6{
     font-weight: bold;
     display: table;
     margin: 0 auto;
+    font-size: 2vw;
 }
 
 #restartBtn {
     border: solid black 1px;
+    padding: 3%;
+    margin-top: 4%;
+    margin-bottom: 4%;
     width: 60%;
     height: 40%;
     left: 20%;
-    position: absolute;
+    position: relative;
     background-color: tomato;
     font-weight: bold;
     font-size: 200%;

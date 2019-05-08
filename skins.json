@@ -1,5 +1,4 @@
-[
-    {
+[{
         "id": 0,
         "name": "Black",
         "requierment": 0,
@@ -10,14 +9,77 @@
         "id": 1,
         "name": "Green",
         "requierment": 1,
-        "cost": 20,
+        "cost": 50,
         "color": "#008000"
     },
     {
         "id": 2,
         "name": "Blue",
-        "requierment": 4,
-        "cost": "34",
+        "requierment": 2,
+        "cost": "100",
         "color": "#0000FF"
+    }, 
+    {
+        "id": 3,
+        "name": "Coral",
+        "requierment": 2,
+        "cost": 120,
+        "color": "#FF7F50"
+    }, 
+    {
+        "id": 4,
+        "name": "Lawn Green ",
+        "requierment": 4,
+        "cost": 280,
+        "color": "#7CFC00"
+    }, 
+    {
+        "id": 5,
+        "name": "Maroon ",
+        "requierment": 4,
+        "cost": 360,
+        "color": "#800000"
+    },
+    {
+        "id": 6,
+        "name": "Midnight Blue",
+        "requierment": 6,
+        "cost": 440,
+        "color": "#191970"
+    },
+    {
+        "id": 7,
+        "name": "Orange",
+        "requierment": 6,
+        "cost": 500,
+        "color": "#FFA500"
+    },
+    {
+        "id": 8,
+        "name": "Yellow",
+        "requierment": 8,
+        "cost": 600,
+        "color": "#FFFF00"
+    },
+    {
+        "id": 9,
+        "name": "Brown",
+        "requierment": 8,
+        "cost": 600,
+        "color": "#A52A2A"
+    },
+    {
+        "id": 10,
+        "name": "Tomato",
+        "requierment": 10,
+        "cost": 700,
+        "color": "#FF6347"
+    },
+    {
+        "id": 11,
+        "name": "White",
+        "requierment": 10,
+        "cost": 700,
+        "color": "#FFFFFF"
     }
 ]

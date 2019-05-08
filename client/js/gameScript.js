@@ -335,10 +335,12 @@ socket.on('obliterated', (data) => {
     }
     let feedText = '';
     for (let index = 0; index < feedList.length; index++) {
-        if (feedList[index].id == socketId) {
-            feedText += `<span class="obliteratedFeed2"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
+        if (feedList[index].obliteratorID == feedList[index].obliteratedID && feedList[index].obliteratedID == socketId) {
+            feedText += `<span class="obliteratedFeed2"> ${feedList[index].obliterator}  eliminated  themselves </span>`;
+        } else if (feedList[index].obliteratorID == feedList[index].obliteratedID) {
+            feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  eliminated  themselves </span>`;
         } else {
-            feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  obliterated  ${feedList[index].obliterated} </span>`;
+            feedText += `<span class="obliteratedFeed"> ${feedList[index].obliterator}  eliminated  ${feedList[index].obliterated} </span>`;
         }
     }
     document.getElementById('obliteratedFeedContainer').innerHTML = feedText;
@@ -360,8 +362,7 @@ socket.on('obliterated', (data) => {
             }
             // Change the element so that it displays nicely
             document.getElementById('obliteratedMessage4').innerHTML = `You gained:`;
-            document.getElementById('obliteratedMessage5').innerHTML = `${Math.round(feedItem.experience)} xp`;
-            document.getElementById('obliteratedMessage6').innerHTML = `${Math.round(feedItem.currency)} moneys`;
+            document.getElementById('obliteratedMessage5').innerHTML = `${Math.round(feedItem.experience)} xp and ${Math.round(feedItem.currency)} $`;
             document.getElementById('obliteratedMessageContainer').style.visibility = 'visible';
 
         }, 32);

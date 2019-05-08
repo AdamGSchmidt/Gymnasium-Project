@@ -151,8 +151,8 @@ const drawMenue = () => {
     ctx.textAlign = "center";
     ctx.fillText('Play', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 39 / 0.877);
 
-    // store box
-    if (selectedMenue === 'store') {
+    // loadout box
+    if (selectedMenue === 'loadout') {
         ctx.fillStyle = "#ff6347";
         ctx.fillRect(0, (canvasHeight / 80) * 58.9, canvasWidth / 7, (canvasHeight / 80) * 14.8);
         ctx.fillStyle = "#000000";
@@ -165,7 +165,7 @@ const drawMenue = () => {
     // text
     ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('Store', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 58.9 / 0.877);
+    ctx.fillText('Loadout', canvasWidth / 8 / 2.2, (canvasHeight / 80) * 58.9 / 0.877);
 
     // username
     ctx.fillStyle = "#FFFFFF";
@@ -184,14 +184,14 @@ const drawMenue = () => {
         ctx.textAlign = "center";
         ctx.fillText('Logout', (canvasWidth / 80) * 72.5, canvasHeight / 16);
     } else {
-        // sign up
+        // Register
         ctx.fillStyle = "#ff6347";
         ctx.fillRect((canvasWidth / 80) * 71.5, (canvasHeight / 80) * 1, canvasWidth / 80 * 8, (canvasHeight / 80) * 6);
         //text
         ctx.fillStyle = "#000000";
         ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
         ctx.textAlign = "center";
-        ctx.fillText('Sign Up', (canvasWidth / 80) * 75.5, canvasHeight / 16);
+        ctx.fillText('Register', (canvasWidth / 80) * 75.5, canvasHeight / 16);
 
         // login
         ctx.fillStyle = "#ff6347";
@@ -208,7 +208,7 @@ const drawMenue = () => {
 
         // box
         ctx.fillStyle = "#AAAAAA";
-        ctx.fillRect(canvasWidth / 3.5, (canvasHeight / 80) * 20, canvasWidth / 1.7, (canvasHeight / 80) * 46.5);
+        ctx.fillRect(canvasWidth / 4, (canvasHeight / 80) * 20, canvasWidth / 1.6, (canvasHeight / 80) * 46.5);
         ctx.fillStyle = "#000000";
 
         // content
@@ -234,7 +234,7 @@ const drawMenue = () => {
         }
     }
 
-    if (selectedMenue === 'store') {
+    if (selectedMenue === 'loadout') {
         // content
         if (login == true) {
             console.log(currentLoadout)
@@ -250,7 +250,7 @@ const drawMenue = () => {
             ctx.fillStyle = "#000000";
             ctx.font = `${15 * canvasWidth / defaoultScale}px Arial`;
             ctx.textAlign = "center";
-            ctx.fillText('Login to see store', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
+            ctx.fillText('Login to see loadout', (canvasWidth / 1.72), (canvasHeight / 80) * 35);
             // login
             ctx.beginPath();
             ctx.fillStyle = "#ff6347";
@@ -276,7 +276,7 @@ const changeMenue = (event) => {
     } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 36.5) && mouseX < (canvasWidth / 8) && mouseY < (((canvasHeight / 80) * 36.5) + ((canvasHeight / 80) * 14.8))) {
         selectedMenue = 'play';
     } else if (mouseX > 0 && mouseY > ((canvasHeight / 80) * 58.9) && mouseX < (canvasWidth / 8) && mouseY < ((canvasHeight / 80) * 58.9) + ((canvasHeight / 80) * 14.8)) {
-        selectedMenue = 'store';
+        selectedMenue = 'loadout';
     }
 
     if (login == false) {
@@ -305,7 +305,7 @@ const changeMenue = (event) => {
                 play();
             }
             break;
-        case 'store':
+        case 'loadout':
             if (login == false) {
                 if (mouseX > (canvasWidth / 1.9) && mouseY > (canvasHeight / 80 * 40) && mouseX < (canvasWidth / 80 * 8 + (canvasWidth / 1.9)) && mouseY < ((canvasHeight / 80 * 8) + (canvasHeight / 80 * 40))) {
                     loginFunc();
@@ -319,149 +319,101 @@ const changeMenue = (event) => {
 const drawProfileContent = () => {
     let ctx = c.getContext("2d");
 
-    //  title box 1
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 1
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 29);
+    ctx.fillText('Games Played:', canvasWidth / 2.8, (canvasHeight / 80) * 29);
 
-    //  data box 1
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 1
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 29);
+    ctx.fillText(profieleContent.Games, canvasWidth / 2.1, (canvasHeight / 80) * 29);
 
-    //  title box 2
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 2
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 39);
+    ctx.fillText('Eliminations:', canvasWidth / 2.8, (canvasHeight / 80) * 39);
 
-    //  data box 2
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 2
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 39);
+    ctx.fillText(profieleContent.Obliterations, canvasWidth / 2.1, (canvasHeight / 80) * 39);
 
-    //  title box 3
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 3
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 49);
+    ctx.fillText('K/D:', canvasWidth / 2.8, (canvasHeight / 80) * 49);
 
-    //  data box 3
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 3
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 49);
+    ctx.fillText(profieleContent.Obliterations / profieleContent.Games, canvasWidth / 2.1, (canvasHeight / 80) * 49);
 
-    //  title box 4
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 3.2, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 4
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.8, (canvasHeight / 80) * 59);
+    ctx.fillText('Highscore:', canvasWidth / 2.8, (canvasHeight / 80) * 59);
 
-    //  data box 4
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 2.3, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 4
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 2.1, (canvasHeight / 80) * 59);
+    ctx.fillText(profieleContent.HighScore, canvasWidth / 2.1, (canvasHeight / 80) * 59);
 
-    //  title box 5
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 29);
+    ctx.fillText('Score/Game:', canvasWidth / 1.6, (canvasHeight / 80) * 29);
 
-    //  data box 5
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 24, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 5
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 29);
+    ctx.fillText(Math.floor(profieleContent.ScoreSum / profieleContent.Games * 100) / 100, canvasWidth / 1.3, (canvasHeight / 80) * 29);
 
-    //  title box 6
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 6
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 39);
+    ctx.fillText('Projectiles:', canvasWidth / 1.6, (canvasHeight / 80) * 39);
 
-    //  data box 6
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 34, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 6
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 39);
+    ctx.fillText(profieleContent.Projectiles, canvasWidth / 1.3, (canvasHeight / 80) * 39);
 
-    //  title box 7
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 7
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 49);
+    ctx.fillText('Projectiles/Game:', canvasWidth / 1.6, (canvasHeight / 80) * 49);
 
-    //  data box 7
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 44, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 7
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 49);
+    ctx.fillText(Math.floor(profieleContent.Projectiles / profieleContent.Games * 100) / 100, canvasWidth / 1.3, (canvasHeight / 80) * 49);
 
-    //  title box 8
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.7, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  title 8
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.6, (canvasHeight / 80) * 59);
+    ctx.fillText('XP:', canvasWidth / 1.6, (canvasHeight / 80) * 59);
 
-    //  data box 8
-    ctx.fillStyle = "#777777";
-    ctx.fillRect(canvasWidth / 1.4, (canvasHeight / 80) * 54, canvasWidth / 80 * 8, canvasHeight / 80 * 8);
     // text  data 8
     ctx.fillStyle = "#000000";
-    ctx.font = `${10 * canvasWidth / defaoultScale}px Arial`;
+    ctx.font = `${13 * canvasWidth / defaoultScale}px Arial`;
     ctx.textAlign = "center";
-    ctx.fillText('PLACEHOLDER', canvasWidth / 1.3, (canvasHeight / 80) * 59);
+    ctx.fillText(profieleContent.Experience, canvasWidth / 1.3, (canvasHeight / 80) * 59);
 }
 const getProfieleContent = () => {
     $.ajax({
@@ -529,7 +481,7 @@ const getCurrentLoaduts = () => {
                 } else if (level < i.Requierment) {
                     console.log(profieleContent.Level + ":::::::::" + i.Requierment)
                     selectedOrNot = `<div class="changeLoadoutRequiresContainer"><span class="changeLoadoutRequires">Requiers lvl ${i.Requierment}</span></div>`
-                } else if (owned){
+                } else if (owned) {
                     selectedOrNot = `<input onclick=changeLoadout(${i.ID}) type="button" class="changeLoadoutBtn" value="Select">`;
                 } else {
                     selectedOrNot = `<input onclick=buyLoadout(${i.ID}) type="button" class="buyLoadoutBtn" value="${i.Cost} $">`;
@@ -539,7 +491,7 @@ const getCurrentLoaduts = () => {
                                             <span class="selectedTitle">${i.Name}</span>
                                         </div>
                                         <div class="selectedLoadout">
-                                            <img class="selectedImg2" src="${i.Image}" alt="">
+                                            <img class="selectedImg2" style="background-color:${i.Color};">
                                         </div>
                                         ${selectedOrNot}
                                      </div>`;
@@ -556,9 +508,11 @@ const changeLoadout = (id) => {
         type: "POST",
         url: "/changeskin",
         timeout: 2000,
-        data: { id },
+        data: {
+            id
+        },
         success: (data) => {
-            getCurrentLoaduts();
+            getProfieleContent();
         },
         error: (jqXHR, textStatus, err) => {
             alert('Error changeLoadout');
@@ -571,9 +525,11 @@ const buyLoadout = (id) => {
         type: "POST",
         url: "/buyskin",
         timeout: 2000,
-        data: { id },
+        data: {
+            id
+        },
         success: (data) => {
-            getCurrentLoaduts();
+            getProfieleContent();
         },
         error: (jqXHR, textStatus, err) => {
             alert('Error buyLoadout');
