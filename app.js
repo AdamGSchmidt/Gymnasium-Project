@@ -52,11 +52,7 @@ app.use(express.static(clientPath));
 
 // Start är index, när man kommer till sidan så börjar man på index
 app.get('/', function (req, res) {
-  if (req.session['login'] === true) {
-    res.sendFile(__dirname + '/client/html/menu.html');
-  } else {
-    res.redirect('/');
-  }
+  res.sendFile(__dirname + '/client/html/menu.html');
 });
 
 // menu route
