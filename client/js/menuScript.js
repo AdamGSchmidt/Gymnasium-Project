@@ -469,7 +469,7 @@ const getCurrentLoaduts = () => {
             for (i of loadouts) {
                 let selectedOrNot;
                 console.log(currentLoadout + "..." + i.ID)
-                console.log(currentLoadout)
+                console.log(ownedSkins)
                 let owned = false;
                 for (let index = 0; index < ownedSkins.length; index++) {
                     if (ownedSkins[index] == i.ID) {
@@ -512,6 +512,7 @@ const changeLoadout = (id) => {
             id
         },
         success: (data) => {
+            getCurrentLoaduts();
             getProfieleContent();
         },
         error: (jqXHR, textStatus, err) => {
@@ -529,6 +530,7 @@ const buyLoadout = (id) => {
             id
         },
         success: (data) => {
+            getCurrentLoaduts();
             getProfieleContent();
         },
         error: (jqXHR, textStatus, err) => {

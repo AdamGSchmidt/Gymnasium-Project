@@ -288,9 +288,11 @@ app.post('/changeskin', urlencodedParser, function (req, res) {
         console.log(results.length + "::::::::" + results[0])
         let ownedSkins = JSON.parse(results[0].OwnedSkins);
         for (let index = 0; index < ownedSkins.length; index++) {
-          if (ownedSkins[index] == 1) {
+          if (ownedSkins[index] == id) {
             owned = true;
             break;
+          } else {
+            console.log("ERROR NOT OWNED")
           }
         }
         if (owned) {
@@ -304,6 +306,8 @@ app.post('/changeskin', urlencodedParser, function (req, res) {
               chosenColor = results2[0].Color;
               setIDandSkin(id, chosenColor);
               console.log("yes")
+              con.end();
+              res.end();
             }
           });
         }
@@ -314,8 +318,6 @@ app.post('/changeskin', urlencodedParser, function (req, res) {
   const setIDandSkin = (id, chosenColor) => {
     req.session['skin'] = id;
     req.session['color'] = chosenColor;
-    con.end();
-  res.end();
   }
 
 });
