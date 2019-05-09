@@ -11,7 +11,7 @@ const skins = require('../../skins.json');
 let con = mysql.createConnection({
    host: "localhost",
    user: "root",
-   password: "hej123"
+   password: "password"
 });
 
 // testar och skapar anslutiningen
@@ -24,7 +24,7 @@ con.connect(function (err) {
 let conDatabseModule = mysql.createConnection({
    host: "localhost",
    user: "root",
-   password: "hej123",
+   password: "password",
    database: "mydb"
 });
 // OM DATABASEN INTE FINNS SÅ SKAPA DEN
@@ -36,7 +36,7 @@ conDatabseModule.connect(function (err) {
       con = mysql.createConnection({
          host: "localhost",
          user: "root",
-         password: "hej123",
+         password: "password",
          database: "mydb"
       });
    }
@@ -48,7 +48,7 @@ function createDatabase() {
    con = mysql.createConnection({
       host: "localhost",
       user: "root",
-      password: "hej123"
+      password: "password"
    });
    con.query("CREATE DATABASE mydb", function (err, result) {
       if (err) throw err;
@@ -62,7 +62,7 @@ function createTable() {
    con = mysql.createConnection({
       host: "localhost",
       user: "root",
-      password: "hej123",
+      password: "password",
       database: "mydb"
    });
    console.log("CREATING TABLE");
@@ -150,7 +150,7 @@ module.exports = {
       let con = mysql.createConnection({
          host: "localhost",
          user: "root",
-         password: "hej123",
+         password: "password",
          database: "mydb"
       });
       return con;
