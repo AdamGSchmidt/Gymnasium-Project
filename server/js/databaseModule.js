@@ -184,32 +184,38 @@ module.exports = {
                      }
                   });
                }
+            } else {
+            console.log("NO NEW HIGHSCORE")
             }
-            sql = `SELECT Level, Experience FROM User WHERE Username = '${username}'`;
-            conDatabseModule.query(sql, function (err, result, fields) {
-               if (err) {
-                  console.log(err);
-                  console.log("ERROR WHILE TRYING TO CHECK LEVEL")
-               } else {
-                  if (result[0] =! undefined) {
-                     let level = result[0].Level;
-                     let experience2 = result[0].Experience;
-                     if (experience2 >= ((level * 1000) * Math.pow(1.2, (level - 1)))) {
-                        experience2 -= ((level * 1000) * Math.pow(1.2, (level - 1)));
-                        let sql = `UPDATE User SET Level = Level + ${1}, Experience = ${experience2} WHERE Username = '${username}'`;
-                        conDatabseModule.query(sql, function (err, result, fields) {
-                           if (err) {
-                              console.log(err);
-                              console.log("ERROR WHILE TRYING TO LEVEL UP")
-                           } else {
-                              console.log("LEVEL UP ");
-                           }
-                        });
-                     }
-                  }
-               }
-            });
          }
+      });
+      sql = `SELECT Level, Experience FROM User WHERE Username = '${username}'`;
+      conDatabseModule.query(sql, function (err, result, fields) {
+         if (err) {
+            console.log(err);
+            console.log("ERROR WHILE TRYING TO CHECK LEVEL")
+         } else {
+            console.log("DEBUG2")
+            if (result[0] != undefined) {
+               let level = result[0].Level;
+               let experience2 = result[0].Experience;
+               if (experience2 >= ((level * 1000) * Math.pow(1.2, (level - 1)))) {
+                  experience2 -= ((level * 1000) * Math.pow(1.2, (level - 1)));
+                  let sql = `UPDATE User SET Level = Level + ${1}, Experience = ${experience2} WHERE Username = '${username}'`;
+                  conDatabseModule.query(sql, function (err, result, fields) {
+                     if (err) {
+                        console.log(err);
+                        console.log("ERROR WHILE TRYING TO LEVEL UP")
+                     } else {
+                        console.log("LEVEL UP ");
+                     }
+                  });
+               }
+            } else {
+               console.log("ERROR")
+            }
+         }
+         console.log("DEBUG")
       });
    }
    /*
